@@ -1,0 +1,77 @@
+[tool.poetry]
+name = "kirlent_docutils"
+version = "0.1.0"
+description = "Custom writers for docutils."
+readme = "README.rst"
+
+authors = ["H. Turgut Uyar <uyar@tekir.org>"]
+license = "BSD-3-Clause"
+
+homepage = "https://tekir.org/kirlent_docutils/"
+repository = "https://repo.tekir.org/kirlent/kirlent_docutils"
+
+keywords = ["markup", "html", "rst", "restructuredtext", "docutils"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.6",
+    "Topic :: Text Processing :: Markup",
+    "Topic :: Text Processing :: Markup :: HTML"
+]
+
+[tool.poetry.dependencies]
+python = "^3.6.2"
+docutils = "^0.16"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.2"
+pytest-cov = "^2.11.1"
+flake8 = "^3.9.0"
+flake8-isort = "^4.0.0"
+tox = "^3.23.0"
+black = "^21.9b0"
+
+[tool.isort]
+lines_after_imports = 2
+known_test = "pytest,unittest"
+sections = "TEST,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = py{39,38,37,36}, style
+isolated_build = True
+
+[testenv]
+deps =
+    pytest
+commands =
+    pytest {posargs:tests}
+
+[testenv:coverage]
+basepython = python3.8
+deps =
+    {[testenv]deps}
+    pytest-cov
+commands =
+    pytest --cov={envsitepackagesdir}/kirlent_docutils --cov-report=term-missing tests
+
+[testenv:style]
+basepython = python3.8
+deps =
+    flake8
+    flake8-isort
+commands =
+    flake8 kirlent_docutils
+"""
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
