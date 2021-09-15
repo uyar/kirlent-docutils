@@ -60,35 +60,6 @@ def test_writer_should_not_put_space_before_closing_slash_in_void_element():
     assert "<hr/>" in html["body"]
 
 
-def test_writer_should_generate_main_instead_of_document_div():
-    html = publish_html("text\n")
-    prefix, suffix = html["body_prefix"].strip(), html["body_suffix"].strip()
-    html_body = html["html_body"].strip()
-    opening, closing = "<main>", "</main>"
-    assert (
-        prefix.endswith(opening)
-        and suffix.startswith(closing)
-        and html_body.startswith(opening)
-        and html_body.endswith(closing)
-    )
-
-
-def test_writer_should_preserve_attributes_for_main():
-    html = publish_html(".. class:: chapter\n\n" + CHAPTER + SECTION)
-    assert '<main class="chapter" id="chapter-title">' in html["html_body"]
-
-
-def test_writer_should_generate_section_instead_of_section_div():
-    html = publish_html(CHAPTER + SECTION)
-    part = html["body"]
-    assert ('<section id="section-title">' in part) and ("</section>" in part)
-
-
-def test_writer_should_preserve_attributes_for_section():
-    html = publish_html(CHAPTER + ".. class:: section\n\n" + SECTION)
-    assert '<section class="section" id="section-title">' in html["html_body"]
-
-
 def test_writer_should_not_generate_paragraph_for_single_paragraph_list_item():
     html = publish_html("- text\n")
     assert "<li>text</li>" in html["body"]

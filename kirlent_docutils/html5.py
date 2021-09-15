@@ -10,7 +10,6 @@ The differences are:
 
 - No classes other than user-defined classes.
 - No space before the slash at the end of self-closing tags.
-- "main" and "section" elements instead of "div" elements.
 - "br" elements instead of line block "div" elements.
 - No "p" elements in single paragraph list items and table entries.
 """
@@ -117,26 +116,6 @@ class HTMLTranslator(HTML5Translator):
         if meta:
             tag = HTMLTranslator._remove_closing_space(self.meta[-1])
             self.meta[-1] = self.head[-1] = tag
-
-    def depart_document(self, node):
-        prefix_size, suffix_size = len(self.body_prefix), len(self.body_suffix)
-
-        super().depart_document(node)
-
-        # replace '<div class="document">' with '<main>'
-        tag = self.starttag(node, "main")
-        self.body_prefix[-1] = self.html_body[prefix_size - 1] = tag
-        self.body_suffix[0] = self.html_body[-suffix_size] = "</main>\n"
-
-    def visit_section(self, node):
-        super().visit_section(node)
-
-        # replace '<div class="section">' with '<section>'
-        self.body[-1] = self.starttag(node, "section")
-
-    def depart_section(self, node):
-        super().depart_section(node)
-        self.body[-1] = "</section>\n"
 
     def visit_paragraph(self, node):
         # suppress '<p>' in single paragraph simple blocks
