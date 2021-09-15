@@ -3,7 +3,7 @@ from functools import partial
 
 from docutils.core import publish_parts
 
-from kirlent_docutils.html5 import Writer
+from kirlent.docutils.html5 import Writer
 
 
 publish_html = partial(publish_parts, writer=Writer())

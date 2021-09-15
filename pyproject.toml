@@ -26,6 +26,10 @@ classifiers = [
     "Topic :: Text Processing :: Markup :: HTML"
 ]
 
+packages = [
+    { include = "kirlent" }
+]
+
 [tool.poetry.dependencies]
 python = "^3.6.2"
 docutils = "^0.17"
@@ -39,7 +43,7 @@ tox = "^3.23.0"
 black = "^21.9b0"
 
 [tool.poetry.scripts]
-rst2kirlenthtml5 = "kirlent_docutils:publish_cmdline_html5"
+rst2kirlenthtml5 = "kirlent.docutils:publish_cmdline_html5"
 
 [tool.isort]
 lines_after_imports = 2
@@ -64,7 +68,7 @@ deps =
     {[testenv]deps}
     pytest-cov
 commands =
-    pytest --cov={envsitepackagesdir}/kirlent_docutils --cov-report=term-missing tests
+    pytest --cov={envsitepackagesdir}/kirlent/docutils --cov-report=term-missing tests
 
 [testenv:style]
 basepython = python3.8
@@ -72,7 +76,7 @@ deps =
     flake8
     flake8-isort
 commands =
-    flake8 kirlent_docutils
+    flake8 kirlent/docutils
 """
 
 [build-system]
