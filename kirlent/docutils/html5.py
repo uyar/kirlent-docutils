@@ -16,7 +16,6 @@ The differences are:
 
 import re
 from functools import partial
-from pathlib import Path
 
 from docutils.writers.html5_polyglot import HTMLTranslator as HTML5Translator
 from docutils.writers.html5_polyglot import Writer as HTML5Writer
@@ -28,9 +27,6 @@ class Writer(HTML5Writer):
     """Writer for generating HTML5 output."""
 
     supported = ("html", "html5")
-
-    default_stylesheets = ["kirlent_minimal.css"]
-    default_stylesheet_dirs = [".", str(Path(__file__).parent)]
 
     settings_default_overrides = {
         "xml_declaration": False,
@@ -55,22 +51,7 @@ class Writer(HTML5Writer):
                 "--table-style",
                 "--cloak-email-addresses",
             },
-            overrides={
-                "--stylesheet-path": {
-                    "options": {"default": default_stylesheets},
-                    "message_sub": (
-                        re.compile(r'(.*\bDefault: )".*"$'),
-                        '"%s"' % ",".join(default_stylesheets),
-                    ),
-                },
-                "--stylesheet-dirs": {
-                    "options": {"default": default_stylesheet_dirs},
-                    "message_sub": (
-                        re.compile(r'(.*\bDefault: )".*"$'),
-                        '"%s"' % ",".join(default_stylesheet_dirs),
-                    ),
-                },
-            },
+            overrides={},
         ),
     )
 
