@@ -40,9 +40,7 @@ def test_writer_should_not_put_space_before_closing_slash_in_meta():
 
 def test_writer_should_not_put_space_before_closing_slash_in_stylesheet_link():
     html = publish_html("text\n", settings_overrides={"embed_stylesheet": False})
-    assert (
-        re.search(r'<link rel="stylesheet" href=".*"/>', html["stylesheet"]) is not None
-    )
+    assert re.search(r'<link rel="stylesheet".*[^ ]/>', html["stylesheet"]) is not None
 
 
 def test_writer_should_not_generate_type_attribute_for_stylesheet_link():
@@ -110,41 +108,46 @@ def test_writer_should_not_generate_colgroup_under_table():
     assert "<colgroup>" not in html["body"]
 
 
-def test_writer_should_not_generate_docutils_class_for_container_div():
-    html = publish_html(".. container:: name\n\n   text\n")
-    assert "docutils" not in html["body"]
-
-
-def test_writer_should_not_generate_container_class_for_container_div():
-    html = publish_html(".. container:: name\n\n   text\n")
-    assert "container" not in html["body"]
-
-
-def test_writer_should_generate_container_class_for_container_div_when_explicit():
-    html = publish_html(".. container:: container\n\n   text\n")
-    assert '<div class="container">' in html["body"]
-
-
-def test_writer_should_not_generate_custom_class_for_anchor():
-    html = publish_html("https://tekir.org/\n")
-    assert '<a href="https://tekir.org/">https://tekir.org/</a>' in html["body"]
-
-
-def test_writer_should_not_generate_custom_class_for_heading():
-    html = publish_html(CHAPTER + SECTION)
-    assert "<h1>Chapter Title</h1>" in html["body_pre_docinfo"]
-
-
-def test_writer_should_not_generate_custom_class_for_list():
+def test_writer_should_not_generate_custom_classes_for_list():
     html = publish_html("- text\n")
     assert "<ul>" in html["body"]
 
 
-def test_writer_should_not_generate_custom_class_for_table():
+def test_writer_should_not_generate_custom_classes_for_table():
     html = publish_html("+------+\n| text |\n+------+\n")
     assert "<table>" in html["body"]
 
 
-def test_writer_should_not_generate_custom_class_for_table_head_cell():
+def test_writer_should_not_generate_container_class_for_container():
+    html = publish_html(".. container:: name\n\n   text\n")
+    assert "container" not in html["body"]
+
+
+def test_writer_should_generate_container_class_for_container_when_explicit():
+    html = publish_html(".. container:: container\n\n   text\n")
+    assert '<div class="container">' in html["body"]
+
+
+def test_writer_should_not_generate_docutils_class_for_container():
+    html = publish_html(".. container:: name\n\n   text\n")
+    assert "docutils" not in html["body"]
+
+
+def test_writer_should_not_generate_docutils_class_for_literal():
+    html = publish_html("``text``\n")
+    assert "docutils" not in html["body"]
+
+
+def test_writer_should_not_generate_docutils_class_for_transition():
+    html = publish_html("text 1\n\n----\n\ntext 2\n\n")
+    assert "docutils" not in html["body"]
+
+
+def test_writer_should_not_generate_custom_classes_for_table_head_entry():
     html = publish_html("+------+\n| head |\n+======+\n| text |\n+------+\n")
     assert "<th>head</th>" in html["body"]
+
+
+def test_writer_should_not_generate_custom_classes_for_reference():
+    html = publish_html("https://tekir.org/\n")
+    assert '<a href="https://tekir.org/">https://tekir.org/</a>' in html["body"]

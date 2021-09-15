@@ -8,10 +8,10 @@
 This writer modifies the html5_polyglot writer in docutils.
 The differences are:
 
-- No classes other than user-defined classes.
-- No space before the slash at the end of self-closing tags.
-- "br" elements instead of line block "div" elements.
-- No "p" elements in single paragraph list items and table entries.
+- Puts no space before the slash at the end of self-closing tags.
+- Uses "br" instead of line-block and line "div"s.
+- Uses no "p" in single paragraph list items and table entries.
+- Removes some docutils-specific classes.
 """
 
 import re
@@ -85,7 +85,6 @@ class HTMLTranslator(HTML5Translator):
     _remove_closing_space = partial(re.sub, re.compile(r"\s+/>$"), "/>")
     _remove_xml = partial(re.sub, re.compile(r'\s*\bxml(ns|:\w+)="[^"]*"'), "")
     _remove_type = partial(re.sub, re.compile(r'\s*\btype="[^"]*"'), "")
-    _remove_class = partial(re.sub, re.compile(r'(\s*\bclass="[^"]*")'), "")
 
     head_prefix_template = _remove_xml(HTML5Translator.head_prefix_template)
     content_type = _remove_closing_space(HTML5Translator.content_type)
@@ -98,10 +97,26 @@ class HTMLTranslator(HTML5Translator):
     # no '<p>' under these if single paragraph
     SIMPLE_BLOCKS = {"definition", "entry", "field_body", "list_item"}
 
-    def starttag(self, *args, **kwargs):
+    UNWANTED_CLASSES = (
+        ({"container"}, "container"),
+        ({"container", "literal", "transition"}, "docutils"),
+        ({"entry"}, "head"),
+        ({"reference"}, "external"),
+        ({"reference"}, "reference"),
+        ({"table"}, "colwidths-auto"),
+    )
+
+    def starttag(self, node, *args, **kwargs):
         # remove custom docutils classes
-        _ = kwargs.pop("CLASS", None)
-        return super().starttag(*args, **kwargs)
+        classes = kwargs.pop("CLASS", "").split()
+        classes.extend(kwargs.pop("class", "").split())
+        if len(classes) > 0:
+            for tagnames, classname in HTMLTranslator.UNWANTED_CLASSES:
+                if (node.tagname in tagnames) and (classname in classes):
+                    classes.remove(classname)
+            if len(classes) > 0:
+                kwargs["CLASS"] = " ".join(classes)
+        return super().starttag(node, *args, **kwargs)
 
     def emptytag(self, *args, **kwargs):
         tag = super().emptytag(*args, **kwargs)
@@ -145,14 +160,3 @@ class HTMLTranslator(HTML5Translator):
     def depart_line(self, node):
         # add '<br/>' to end of line
         self.body.append("<br/>\n")
-
-    def visit_reference(self, node):
-        # remove custom classes in anchors
-        href = node["refuri"] if "refuri" in node else "#" + node["refid"]
-        self.body.append(self.starttag(node, "a", "", href=href))
-
-    def visit_entry(self, node):
-        super().visit_entry(node)
-
-        # remove all classes in table entries
-        self.body[-1] = HTMLTranslator._remove_class(self.body[-1])
