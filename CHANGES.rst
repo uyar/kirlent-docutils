@@ -1,4 +1,4 @@
 0.1.0 (unreleased)
 ------------------
 
-- Initial release on PyPI.
+- Custom HTML5 writer.

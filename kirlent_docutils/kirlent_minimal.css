@@ -1,0 +1,12 @@
+/* Minimal style sheet for the Kirlent-HTML output of Docutils. */
+
+html {
+  font-family: system-ui, sans-serif;
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: monospace;
+}
