@@ -69,6 +69,7 @@ class HTMLTranslator(HTML5Translator):
 
     head_prefix_template = _remove_xml(HTML5Translator.head_prefix_template)
     content_type = _remove_closing_space(HTML5Translator.content_type)
+    viewport = _remove_closing_space(HTML5Translator.viewport)
     generator = _remove_closing_space(HTML5Translator.generator)
     stylesheet_link = _remove_closing_space(
         _remove_type(HTML5Translator.stylesheet_link)
@@ -122,6 +123,25 @@ class HTMLTranslator(HTML5Translator):
         if meta:
             tag = HTMLTranslator._remove_closing_space(self.meta[-1])
             self.meta[-1] = self.head[-1] = tag
+
+    def visit_authors(self, node):
+        super().visit_authors(node)
+
+        # remove space before closing slash
+        for i in range(1, len(node) + 1):
+            self.meta[-i] = HTMLTranslator._remove_closing_space(self.meta[-i])
+
+    def visit_copyright(self, node):
+        super().visit_copyright(node)
+
+        # remove space before closing slash
+        self.meta[-1] = HTMLTranslator._remove_closing_space(self.meta[-1])
+
+    def visit_date(self, node):
+        super().visit_date(node)
+
+        # remove space before closing slash
+        self.meta[-1] = HTMLTranslator._remove_closing_space(self.meta[-1])
 
     def visit_paragraph(self, node):
         # suppress '<p>' in single paragraph simple blocks

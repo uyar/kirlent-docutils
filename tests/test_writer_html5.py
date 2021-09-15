@@ -28,6 +28,11 @@ def test_writer_should_not_put_space_before_closing_slash_in_meta_content_type()
     assert '<meta charset="utf-8"/>' in html["meta"]
 
 
+def test_writer_should_not_put_space_before_closing_slash_in_meta_viewport():
+    html = publish_html("text\n")
+    assert re.search(r'<meta name="viewport".*[^ ]/>', html["meta"]) is not None
+
+
 def test_writer_should_not_put_space_before_closing_slash_in_meta_generator():
     html = publish_html("text\n")
     assert re.search(r'<meta name="generator" content=".*"/>', html["meta"]) is not None
@@ -36,6 +41,23 @@ def test_writer_should_not_put_space_before_closing_slash_in_meta_generator():
 def test_writer_should_not_put_space_before_closing_slash_in_meta():
     html = publish_html(":author: Author\n\ntext\n")
     assert '<meta name="author" content="Author"/>' in html["meta"]
+
+
+def test_writer_should_not_put_space_before_closing_slash_in_meta_authors():
+    html = publish_html(":authors: Author 1, Author 2\n\ntext\n")
+    assert ('<meta name="author" content="Author 1"/>' in html["meta"]) and (
+        '<meta name="author" content="Author 2"/>' in html["meta"]
+    )
+
+
+def test_writer_should_not_put_space_before_closing_slash_in_meta_copyright():
+    html = publish_html(":copyright: Holder\n\ntext\n")
+    assert '<meta name="dcterms.rights" content="Holder"/>' in html["meta"]
+
+
+def test_writer_should_not_put_space_before_closing_slash_in_meta_date():
+    html = publish_html(":date: 2021\n\ntext\n")
+    assert '<meta name="dcterms.date" content="2021"/>' in html["meta"]
 
 
 def test_writer_should_not_put_space_before_closing_slash_in_stylesheet_link():
