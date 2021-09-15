@@ -44,6 +44,7 @@ black = "^21.9b0"
 
 [tool.poetry.scripts]
 rst2kirlenthtml5 = "kirlent.docutils:publish_cmdline_html5"
+kirlent2impressjs = "kirlent.docutils:publish_cmdline_impressjs"
 
 [tool.isort]
 lines_after_imports = 2

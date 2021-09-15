@@ -75,6 +75,9 @@ class HTMLTranslator(HTML5Translator):
     )
     embedded_stylesheet = _remove_type(HTML5Translator.embedded_stylesheet)
 
+    script = "<script%(mode)s>%(code)s</script>\n"
+    script_external = '<script%(mode)s src="%(src)s"></script>\n'
+
     # no '<p>' under these if single paragraph
     SIMPLE_BLOCKS = {"definition", "entry", "field_body", "list_item"}
 
@@ -97,6 +100,9 @@ class HTMLTranslator(HTML5Translator):
                     classes.remove(classname)
             if len(classes) > 0:
                 kwargs["CLASS"] = " ".join(classes)
+
+        # add custom properties if any
+        kwargs.update(node.attributes.pop("custom", {}))
         return super().starttag(node, *args, **kwargs)
 
     def emptytag(self, *args, **kwargs):
