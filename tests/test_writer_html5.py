@@ -108,6 +108,11 @@ def test_writer_should_not_generate_colgroup_under_table():
     assert "<colgroup>" not in html["body"]
 
 
+def test_writer_should_not_generate_custom_classes_for_docinfo():
+    html = publish_html(":author: Author\n\ntext\n")
+    assert '<dl class="docinfo">' in html["html_body"]
+
+
 def test_writer_should_not_generate_custom_classes_for_list():
     html = publish_html("- text\n")
     assert "<ul>" in html["body"]

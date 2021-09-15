@@ -105,6 +105,10 @@ class HTMLTranslator(HTML5Translator):
         # remove space before closing slash
         return HTMLTranslator._remove_closing_space(tag)
 
+    def is_compactable(self, *args, **kwargs):
+        # suppress generation of "simple" classes for all elements
+        return False
+
     def visit_docinfo_item(self, node, name, meta=True):
         super().visit_docinfo_item(node, name, meta=meta)
 
