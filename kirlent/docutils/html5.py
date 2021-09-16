@@ -63,9 +63,9 @@ class Writer(HTML5Writer):
 class HTMLTranslator(HTML5Translator):
     """HTML5 translator for customizing generated output."""
 
-    _remove_closing_space = partial(re.sub, re.compile(r"\s+/>$"), "/>")
-    _remove_xml = partial(re.sub, re.compile(r'\s*\bxml(ns|:\w+)="[^"]*"'), "")
-    _remove_type = partial(re.sub, re.compile(r'\s*\btype="[^"]*"'), "")
+    _remove_closing_space = partial(re.sub, re.compile(r'\s+/>$'), '/>')
+    _remove_xml = partial(re.sub, re.compile(r'\s*\bxml(ns|:\w+)="[^"]*"'), '')
+    _remove_type = partial(re.sub, re.compile(r'\s*\btype="[^"]*"'), '')
 
     head_prefix_template = _remove_xml(HTML5Translator.head_prefix_template)
     content_type = _remove_closing_space(HTML5Translator.content_type)
@@ -76,7 +76,7 @@ class HTMLTranslator(HTML5Translator):
     )
     embedded_stylesheet = _remove_type(HTML5Translator.embedded_stylesheet)
 
-    script = "<script%(mode)s>%(code)s</script>\n"
+    script = '<script%(mode)s>%(code)s</script>\n'
     script_external = '<script%(mode)s src="%(src)s"></script>\n'
 
     # no '<p>' under these if single paragraph
@@ -170,4 +170,4 @@ class HTMLTranslator(HTML5Translator):
 
     def depart_line(self, node):
         # add '<br/>' to end of line
-        self.body.append("<br/>\n")
+        self.body.append('<br/>\n')

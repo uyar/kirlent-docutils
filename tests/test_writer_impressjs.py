@@ -15,20 +15,12 @@ SLIDE = "----\n\n%(f)s\n\nSlide Title %(n)d\n=============\n\nContent %(n)d\n\n"
 
 def test_writer_should_generate_script_for_impressjs():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert (
-        re.search(r'<script defer .*\bsrc=".*\bimpress.js"></script>', html["head"])
-        is not None
-    )
+    assert re.search(r'<script defer .*\bsrc=".*\bimpress.js"></script>', html["head"]) is not None
 
 
 def test_writer_should_generate_script_for_initialiazing_impressjs():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert (
-        re.search(
-            r"<script>.*\bimpress\(\).init\(\);.*</script>", html["head"], re.DOTALL
-        )
-        is not None
-    )
+    assert re.search(r'<script>.*\bimpress\(\).init\(\);.*</script>', html["head"], re.DOTALL) is not None
 
 
 def test_writer_should_generate_root_with_id_impress():
@@ -49,45 +41,42 @@ def test_writer_should_set_default_height_on_root():
 def test_writer_should_wrap_docinfo_in_a_step():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
     print(html["html_body"])
-    assert (
-        re.search(r'<section .*\bclass="step\b.*\bid="docinfo"', html["html_body"])
-        is not None
-    )
+    assert re.search(r'<section .*\bclass="step\b.*\bid="docinfo"', html["html_body"]) is not None
 
 
 def test_writer_should_generate_title_heading_in_docinfo_step():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert "<h1>Document Title</h1>" in html["html_body"]
+    assert '<h1>Document Title</h1>' in html["html_body"]
 
 
 def test_writer_should_not_generate_markup_for_transition():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert "<hr" not in html["body"]
+    assert '<hr' not in html["body"]
 
 
 def test_writer_should_not_generate_markup_for_field_list():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ":key: val"}))
-    assert ("<dl" not in html["body"]) and ("</dl" not in html["body"])
+    assert ('<dl' not in html["body"]) and ('</dl' not in html["body"])
 
 
 def test_writer_should_not_generate_markup_for_field_name():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ":key: val"}))
-    assert ("<dt" not in html["body"]) and ("</dt" not in html["body"])
+    assert ('<dt' not in html["body"]) and ('</dt' not in html["body"])
 
 
 def test_writer_should_not_generate_markup_for_field_body():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ":key: val"}))
-    assert ("<dd" not in html["body"]) and ("</dd" not in html["body"])
+    assert ('<dd' not in html["body"]) and ('</dd' not in html["body"])
 
 
 def test_writer_should_not_generate_text_for_field_name():
     html = publish_html(PREAMBLE + ":key: val\n")
-    assert "key" not in html["body"]
+    assert 'key' not in html["body"]
 
 
 def test_writer_should_not_generate_text_for_field_body():
     html = publish_html(PREAMBLE + ":key: val\n")
-    assert "val" not in html["body"]
+    assert 'val' not in html["body"]
 
 
 def test_writer_should_generate_step_for_section():
@@ -107,31 +96,19 @@ def test_writer_should_add_fields_to_step_as_attributes():
 
 def test_writer_should_generate_script_for_rough_notation():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert (
-        re.search(
-            r'<script defer src=".*\brough-notation\b.*.js"></script>', html["head"]
-        )
-        is not None
-    )
+    assert re.search(r'<script defer src=".*\brough-notation\b.*.js"></script>', html["head"]) is not None
 
 
 def test_writer_should_generate_script_for_annotating_an_element():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert (
-        re.search(r"<script>.*function annotate\b.*</script>", html["head"], re.DOTALL)
-        is not None
-    )
+    assert re.search(r'<script>.*function annotate\b.*</script>', html["head"], re.DOTALL) is not None
 
 
 def test_writer_should_generate_onclick_event_for_reference_with_annotation():
-    html = publish_html(
-        PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "`Tekir <annotate://box>`_\n"
-    )
-    assert "<span onclick=\"annotate(event, this, 'box')\">Tekir</span>" in html["body"]
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "`Tekir <annotate://box>`_\n")
+    assert '<span onclick="annotate(event, this, \'box\')">Tekir</span>' in html["body"]
 
 
 def test_writer_should_generate_regular_link_for_reference_without_annotation():
-    html = publish_html(
-        PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "`Tekir <https://tekir.org/>`_\n"
-    )
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "`Tekir <https://tekir.org/>`_\n")
     assert '<a href="https://tekir.org/">Tekir</a>' in html["body"]

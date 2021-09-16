@@ -15,7 +15,7 @@ SECTION = "Section Title\n-------------\n\nsection text\n\n"
 
 def test_writer_should_not_generate_xml_declaration():
     html = publish_html("text\n")
-    assert "<?xml" not in html["head_prefix"]
+    assert '<?xml' not in html["head_prefix"]
 
 
 def test_writer_should_not_generate_xml_attributes():
@@ -45,9 +45,8 @@ def test_writer_should_not_put_space_before_closing_slash_in_meta():
 
 def test_writer_should_not_put_space_before_closing_slash_in_meta_authors():
     html = publish_html(":authors: Author 1, Author 2\n\ntext\n")
-    assert ('<meta name="author" content="Author 1"/>' in html["meta"]) and (
-        '<meta name="author" content="Author 2"/>' in html["meta"]
-    )
+    assert ('<meta name="author" content="Author 1"/>' in html["meta"]) and \
+           ('<meta name="author" content="Author 2"/>' in html["meta"])
 
 
 def test_writer_should_not_put_space_before_closing_slash_in_meta_copyright():
@@ -67,67 +66,67 @@ def test_writer_should_not_put_space_before_closing_slash_in_stylesheet_link():
 
 def test_writer_should_not_generate_type_attribute_for_stylesheet_link():
     html = publish_html("text\n", settings_overrides={"embed_stylesheet": False})
-    assert "type=" not in html["stylesheet"]
+    assert 'type=' not in html["stylesheet"]
 
 
 def test_writer_should_not_generate_type_attribute_for_style():
     html = publish_html("text\n")
-    assert "type=" not in html["stylesheet"]
+    assert 'type=' not in html["stylesheet"]
 
 
 def test_writer_should_not_put_space_before_closing_slash_in_void_element():
     html = publish_html("text 1\n\n----\n\ntext 2\n\n")
-    assert "<hr/>" in html["body"]
+    assert '<hr/>' in html["body"]
 
 
 def test_writer_should_not_generate_paragraph_for_single_paragraph_list_item():
     html = publish_html("- text\n")
-    assert "<li>text</li>" in html["body"]
+    assert '<li>text</li>' in html["body"]
 
 
 def test_writer_should_generate_paragraphs_for_multiple_paragraph_list_item():
     html = publish_html("- par 1\n\n  par 2\n")
-    assert "<li><p>par 1</p>\n<p>par 2</p>\n</li>" in html["body"]
+    assert '<li><p>par 1</p>\n<p>par 2</p>\n</li>' in html["body"]
 
 
 def test_writer_should_not_generate_paragraph_for_single_paragraph_table_entry():
     html = publish_html("+------+\n| text |\n+------+\n")
-    assert "<td>text</td>" in html["body"]
+    assert '<td>text</td>' in html["body"]
 
 
 def test_writer_should_generate_paragraphs_for_multiple_paragraph_table_entry():
     html = publish_html("+-------+\n| par 1 |\n|       |\n| par 2 |\n+-------+\n")
-    assert "<td><p>par 1</p>\n<p>par 2</p>\n</td>" in html["body"]
+    assert '<td><p>par 1</p>\n<p>par 2</p>\n</td>' in html["body"]
 
 
 def test_writer_should_not_generate_paragraph_for_single_paragraph_definition():
     html = publish_html("term\n  text\n")
-    assert "<dd>text</dd>" in html["body"]
+    assert '<dd>text</dd>' in html["body"]
 
 
 def test_writer_should_generate_paragraphs_for_multiple_paragraph_definition():
     html = publish_html("term\n  par 1\n\n  par 2\n")
-    assert "<dd><p>par 1</p>\n<p>par 2</p>\n</dd>" in html["body"]
+    assert '<dd><p>par 1</p>\n<p>par 2</p>\n</dd>' in html["body"]
 
 
 def test_writer_should_not_generate_paragraph_for_single_paragraph_field_body():
     html = publish_html(SECTION + ":field: text\n")
-    assert "<dd>text</dd>" in html["body"]
+    assert '<dd>text</dd>' in html["body"]
 
 
 def test_writer_should_generate_paragraphs_for_multiple_paragraph_field_body():
     html = publish_html(SECTION + ":field: par 1\n\n      par 2\n")
-    assert "<dd><p>par 1</p>\n<p>par 2</p>\n</dd>" in html["body"]
+    assert '<dd><p>par 1</p>\n<p>par 2</p>\n</dd>' in html["body"]
 
 
 def test_writer_should_generate_break_instead_of_line_block_div():
     html = publish_html("| line 1\n| line 2\n")
-    assert "line 1<br/>\nline 2<br/>" in html["body"]
+    assert 'line 1<br/>\nline 2<br/>' in html["body"]
 
 
 def test_writer_should_not_generate_colgroup_under_table():
     html = publish_html("+------+\n| text |\n+------+\n")
-    assert "<colgroup>" not in html["body"]
+    assert '<colgroup>' not in html["body"]
 
 
 def test_writer_should_not_generate_custom_classes_for_docinfo():
@@ -137,17 +136,17 @@ def test_writer_should_not_generate_custom_classes_for_docinfo():
 
 def test_writer_should_not_generate_custom_classes_for_list():
     html = publish_html("- text\n")
-    assert "<ul>" in html["body"]
+    assert '<ul>' in html["body"]
 
 
 def test_writer_should_not_generate_custom_classes_for_table():
     html = publish_html("+------+\n| text |\n+------+\n")
-    assert "<table>" in html["body"]
+    assert '<table>' in html["body"]
 
 
 def test_writer_should_not_generate_container_class_for_container():
     html = publish_html(".. container:: name\n\n   text\n")
-    assert "container" not in html["body"]
+    assert 'container' not in html["body"]
 
 
 def test_writer_should_generate_container_class_for_container_when_explicit():
@@ -157,22 +156,22 @@ def test_writer_should_generate_container_class_for_container_when_explicit():
 
 def test_writer_should_not_generate_docutils_class_for_container():
     html = publish_html(".. container:: name\n\n   text\n")
-    assert "docutils" not in html["body"]
+    assert 'docutils' not in html["body"]
 
 
 def test_writer_should_not_generate_docutils_class_for_literal():
     html = publish_html("``text``\n")
-    assert "docutils" not in html["body"]
+    assert 'docutils' not in html["body"]
 
 
 def test_writer_should_not_generate_docutils_class_for_transition():
     html = publish_html("text 1\n\n----\n\ntext 2\n\n")
-    assert "docutils" not in html["body"]
+    assert 'docutils' not in html["body"]
 
 
 def test_writer_should_not_generate_custom_classes_for_table_head_entry():
     html = publish_html("+------+\n| head |\n+======+\n| text |\n+------+\n")
-    assert "<th>head</th>" in html["body"]
+    assert '<th>head</th>' in html["body"]
 
 
 def test_writer_should_not_generate_custom_classes_for_reference():

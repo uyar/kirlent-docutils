@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "stylelint-config-rational-order"
+  ],
+  "rules": {
+    "block-opening-brace-space-before": "always",
+    "declaration-colon-space-after": "always"
+  }
+}

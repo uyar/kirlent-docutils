@@ -19,9 +19,7 @@ IMPRESS_JS_INIT = """
     }, false);
 """
 
-ROUGH_NOTATION_URL = (
-    "https://unpkg.com/rough-notation/lib/rough-notation.iife.js"  # noqa
-)
+ROUGH_NOTATION_URL = "https://unpkg.com/rough-notation/lib/rough-notation.iife.js"  # noqa
 ROUGH_NOTATION_ANNOTATE = """
     function annotate(event, element, type) {
         event.preventDefault();
@@ -31,7 +29,7 @@ ROUGH_NOTATION_ANNOTATE = """
 """
 
 ANNOTATION_PREFIX = "annotate://"
-ANNOTATION_MARKUP = "<span onclick=\"annotate(event, this, '%(type)s')\">"
+ANNOTATION_MARKUP = '<span onclick="annotate(event, this, \'%(type)s\')">'
 
 DEFAULT_STEP_WIDTH, DEFAULT_STEP_HEIGHT = 1920, 1080
 DEFAULT_STEP_DEPTH = 1000
@@ -51,14 +49,18 @@ class Writer(html5.Writer):
             skip={},
             overrides={
                 "--stylesheet-path": {
-                    "options": {"default": default_stylesheets},
+                    "options": {
+                        "default": default_stylesheets,
+                    },
                     "message_sub": (
                         re.compile(r'(.*\bDefault: )".*"$'),
                         '"%s"' % ",".join(default_stylesheets),
                     ),
                 },
                 "--stylesheet-dirs": {
-                    "options": {"default": default_stylesheet_dirs},
+                    "options": {
+                        "default": default_stylesheet_dirs,
+                    },
                     "message_sub": (
                         re.compile(r'(.*\bDefault: )".*"$'),
                         '"%s"' % ",".join(default_stylesheet_dirs),
@@ -133,8 +135,8 @@ class ImpressJSTranslator(html5.HTMLTranslator):
         # wrap docinfo in a step with a title
         super().depart_docinfo(node)
         self.docinfo.insert(0, '<section class="step" id="docinfo">\n')
-        self.docinfo.insert(1, "<h1>%(t)s</h1>\n" % {"t": self.title[0]})
-        self.docinfo.append("</section>\n")
+        self.docinfo.insert(1, '<h1>%(t)s</h1>\n' % {"t": self.title[0]})
+        self.docinfo.append('</section>\n')
 
     def visit_transition(self, node):
         # suppress '<hr/>'
@@ -187,7 +189,7 @@ class ImpressJSTranslator(html5.HTMLTranslator):
         if not annotation:
             super().visit_reference(node)
         else:
-            annotation_type = refuri[len(ANNOTATION_PREFIX) :]
+            annotation_type = refuri[len(ANNOTATION_PREFIX):]
             self.body.append(ANNOTATION_MARKUP % {"type": annotation_type})
         node.attributes["_annotation"] = annotation
 
@@ -196,4 +198,4 @@ class ImpressJSTranslator(html5.HTMLTranslator):
         if not annotation:
             super().depart_reference(node)
         else:
-            self.body.append("</span>")
+            self.body.append('</span>')
