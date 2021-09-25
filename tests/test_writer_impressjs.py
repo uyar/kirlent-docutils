@@ -40,7 +40,6 @@ def test_writer_should_set_default_height_on_root():
 
 def test_writer_should_wrap_docinfo_in_a_step():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    print(html["html_body"])
     assert re.search(r'<section .*\bclass="step\b.*\bid="docinfo"', html["html_body"]) is not None
 
 

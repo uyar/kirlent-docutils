@@ -13,5 +13,3 @@ build
 dist
 prof
 coverage.xml
-
-.vscode
