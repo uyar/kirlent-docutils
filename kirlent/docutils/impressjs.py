@@ -39,7 +39,8 @@ class Writer(html5.Writer):
     """Writer for generating impress.js output."""
 
     default_stylesheets = ["impressjs.css"]
-    default_stylesheet_dirs = [".", str(Path(__file__).parent)]
+    default_stylesheet_dirs = [".", str(Path(__file__).parent)] + \
+        html5.Writer.default_stylesheet_dirs[1:]
 
     settings_spec = (
         "impress.js-Specific Options",
