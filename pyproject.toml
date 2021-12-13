@@ -20,9 +20,6 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.6",
     "Topic :: Text Processing :: Markup",
     "Topic :: Text Processing :: Markup :: HTML"
 ]
@@ -32,15 +29,15 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.6"
-docutils = "^0.17"
+python = "^3.9"
+docutils = "^0.18.1"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.2"
-pytest-cov = "^2.11.1"
-flake8 = "^3.9.0"
-flake8-isort = "^4.0.0"
-tox = "^3.23.0"
+pytest = "^6.2.5"
+pytest-cov = "^3.0.0"
+flake8 = "^4.0.1"
+flake8-isort = "^4.1.1"
+tox = "^3.24.4"
 
 [tool.poetry.scripts]
 rst2kirlenthtml5 = "kirlent.docutils:publish_cmdline_html5"
@@ -54,7 +51,7 @@ sections = "TEST,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py{310,39,38,37,36}, style
+envlist = py{310,39}, style
 isolated_build = True
 
 [testenv]
@@ -64,7 +61,6 @@ commands =
     pytest {posargs:tests}
 
 [testenv:coverage]
-basepython = python3.8
 deps =
     {[testenv]deps}
     pytest-cov
@@ -72,7 +68,6 @@ commands =
     pytest --cov={envsitepackagesdir}/kirlent/docutils --cov-report=term-missing tests
 
 [testenv:style]
-basepython = python3.8
 deps =
     flake8
     flake8-isort
