@@ -1,15 +1,13 @@
-# Copyright 2020-2021 H. Turgut Uyar <uyar@tekir.org>
+# Copyright 2020-2022 H. Turgut Uyar <uyar@tekir.org>
 #
 # kirlent_docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
 
 """impress.js writer for docutils."""
 
-import re
-from pathlib import Path
+from docutils import frontend
 
 from . import html5
-from .utils import modify_spec
 
 
 IMPRESS_JS_URL = "https://impress.js.org/js/impress.js"
@@ -39,36 +37,23 @@ class Writer(html5.Writer):
     """Writer for generating impress.js output."""
 
     default_stylesheets = ["impressjs.css"]
-    default_stylesheet_dirs = [".", str(Path(__file__).parent)] + \
-        html5.Writer.default_stylesheet_dirs[1:]
 
-    settings_spec = (
-        "impress.js-Specific Options",
-        html5.Writer.settings_spec[1],
-        modify_spec(
-            html5.Writer.settings_spec,
-            skip={},
-            overrides={
-                "--stylesheet-path": {
-                    "options": {
-                        "default": default_stylesheets,
-                    },
-                    "message_sub": (
-                        re.compile(r'(.*\bDefault: )".*"$'),
-                        '"%s"' % ",".join(default_stylesheets),
-                    ),
-                },
-                "--stylesheet-dirs": {
-                    "options": {
-                        "default": default_stylesheet_dirs,
-                    },
-                    "message_sub": (
-                        re.compile(r'(.*\bDefault: )".*"$'),
-                        '"%s"' % ",".join(default_stylesheet_dirs),
-                    ),
-                },
-            },
-        ),
+    settings_spec = frontend.filter_settings_spec(
+        html5.Writer.settings_spec,
+        stylesheet_path=(
+            'Comma separated list of stylesheet paths. '
+            'Relative paths are expanded if a matching file is found in '
+            'the --stylesheet-dirs. With --link-stylesheet, '
+            'the path is rewritten relative to the output HTML file. '
+            '(default: "%s")' % ','.join(default_stylesheets),
+            ['--stylesheet-path'],
+            {
+                'metavar': '<file[,file,...]>',
+                'overrides': 'stylesheet',
+                'validator': frontend.validate_comma_separated_list,
+                'default': default_stylesheets
+            }
+        )
     )
 
     def __init__(self):

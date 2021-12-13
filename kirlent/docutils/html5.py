@@ -1,4 +1,4 @@
-# Copyright 2020-2021 H. Turgut Uyar <uyar@tekir.org>
+# Copyright 2020-2022 H. Turgut Uyar <uyar@tekir.org>
 #
 # kirlent_docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
@@ -8,7 +8,6 @@
 This writer modifies the html5_polyglot writer in docutils.
 The differences are:
 
-- Puts no space before the slash at the end of self-closing tags.
 - Uses "br" instead of line-block and line "div"s.
 - Uses no "p" in single paragraph list items and table entries.
 - Removes some docutils-specific classes.
@@ -16,11 +15,11 @@ The differences are:
 
 import re
 from functools import partial
+from pathlib import Path
 
+from docutils import frontend
 from docutils.writers.html5_polyglot import HTMLTranslator as HTML5Translator
 from docutils.writers.html5_polyglot import Writer as HTML5Writer
-
-from .utils import modify_spec
 
 
 class Writer(HTML5Writer):
@@ -28,30 +27,35 @@ class Writer(HTML5Writer):
 
     supported = ("html", "html5")
 
+    default_stylesheet_dirs = [".", str(Path(__file__).parent)] + \
+        HTML5Writer.default_stylesheet_dirs[1:]
+
     settings_default_overrides = {
         "xml_declaration": False,
         "compact_lists": False,
         "compact_field_lists": False,
-        "table_style": "colwidths-auto",
         "cloak_email_addresses": False,
     }
 
-    settings_spec = (
-        "Kirlent HTML5-Specific Options",
-        HTML5Writer.settings_spec[1],
-        modify_spec(
-            HTML5Writer.settings_spec,
-            skip={
-                "--xml-declaration",
-                "--no-xml-declaration",
-                "--compact-lists",
-                "--no-compact-lists",
-                "--compact-field-lists",
-                "--no-compact-field-lists",
-                "--table-style",
-                "--cloak-email-addresses",
-            },
-            overrides={},
+    settings_spec = frontend.filter_settings_spec(
+        HTML5Writer.settings_spec,
+        "xml_declaration",
+        "no_xml_declaration",
+        "compact_lists",
+        "no_compact_lists",
+        "compact_field_lists",
+        "no_compact_field_lists",
+        "cloak_email_addresses",
+        stylesheet_dirs=(
+            'Comma-separated list of directories where stylesheets are found. '
+            'Used by --stylesheet-path when expanding relative path arguments. '
+            '(default: "%s")' % ','.join(default_stylesheet_dirs),
+            ['--stylesheet-dirs'],
+            {
+                'metavar': '<dir[,dir,...]>',
+                'validator': frontend.validate_comma_separated_list,
+                'default': default_stylesheet_dirs
+            }
         ),
     )
 
@@ -63,17 +67,11 @@ class Writer(HTML5Writer):
 class HTMLTranslator(HTML5Translator):
     """HTML5 translator for customizing generated output."""
 
-    _remove_closing_space = partial(re.sub, re.compile(r'\s+/>$'), '/>')
     _remove_xml = partial(re.sub, re.compile(r'\s*\bxml(ns|:\w+)="[^"]*"'), '')
     _remove_type = partial(re.sub, re.compile(r'\s*\btype="[^"]*"'), '')
 
     head_prefix_template = _remove_xml(HTML5Translator.head_prefix_template)
-    content_type = _remove_closing_space(HTML5Translator.content_type)
-    viewport = _remove_closing_space(HTML5Translator.viewport)
-    generator = _remove_closing_space(HTML5Translator.generator)
-    stylesheet_link = _remove_closing_space(
-        _remove_type(HTML5Translator.stylesheet_link)
-    )
+    stylesheet_link = _remove_type(HTML5Translator.stylesheet_link)
     embedded_stylesheet = _remove_type(HTML5Translator.embedded_stylesheet)
 
     script = '<script%(mode)s>%(code)s</script>\n'
@@ -88,13 +86,13 @@ class HTMLTranslator(HTML5Translator):
         ({"entry"}, "head"),
         ({"reference"}, "external"),
         ({"reference"}, "reference"),
-        ({"table"}, "colwidths-auto"),
     )
 
     def starttag(self, node, *args, **kwargs):
         # remove custom docutils classes
         classes = kwargs.pop("CLASS", "").split()
         classes.extend(kwargs.pop("class", "").split())
+        classes.extend(kwargs.pop("classes", []))
         if len(classes) > 0:
             for tagnames, classname in HTMLTranslator.UNWANTED_CLASSES:
                 if (node.tagname in tagnames) and (classname in classes):
@@ -106,48 +104,14 @@ class HTMLTranslator(HTML5Translator):
         kwargs.update(node.attributes.pop("custom", {}))
         return super().starttag(node, *args, **kwargs)
 
-    def emptytag(self, *args, **kwargs):
-        tag = super().emptytag(*args, **kwargs)
-
-        # remove space before closing slash
-        return HTMLTranslator._remove_closing_space(tag)
-
     def is_compactable(self, *args, **kwargs):
         # suppress generation of "simple" classes for all elements
         return False
 
-    def visit_docinfo_item(self, node, name, meta=True):
-        super().visit_docinfo_item(node, name, meta=meta)
-
-        # for '<meta/>' tags, remove space before closing slash
-        if meta:
-            tag = HTMLTranslator._remove_closing_space(self.meta[-1])
-            self.meta[-1] = self.head[-1] = tag
-
-    def visit_authors(self, node):
-        super().visit_authors(node)
-
-        # remove space before closing slash
-        for i in range(1, len(node) + 1):
-            self.meta[-i] = HTMLTranslator._remove_closing_space(self.meta[-i])
-
-    def visit_copyright(self, node):
-        super().visit_copyright(node)
-
-        # remove space before closing slash
-        self.meta[-1] = HTMLTranslator._remove_closing_space(self.meta[-1])
-
-    def visit_date(self, node):
-        super().visit_date(node)
-
-        # remove space before closing slash
-        self.meta[-1] = HTMLTranslator._remove_closing_space(self.meta[-1])
-
     def visit_paragraph(self, node):
         # suppress '<p>' in single paragraph simple blocks
-        single_p = (len(node.parent.children) < 2) and (
-            node.parent.tagname in HTMLTranslator.SIMPLE_BLOCKS
-        )
+        single_p = (len(node.parent.children) < 2) and \
+            (node.parent.tagname in HTMLTranslator.SIMPLE_BLOCKS)
         if not single_p:
             super().visit_paragraph(node)
         node.attributes["_single_p"] = single_p

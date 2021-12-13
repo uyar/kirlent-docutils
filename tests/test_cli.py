@@ -29,12 +29,6 @@ def test_html5_writer_should_not_allow_compact_field_lists_option(capfd):
     assert "no such option: --compact-field-lists" in captured.err
 
 
-def test_html5_writer_should_not_allow_compact_table_style_option(capfd):
-    subprocess.run([kirlent2impressjs, "--table-style"])
-    captured = capfd.readouterr()
-    assert "no such option: --table-style" in captured.err
-
-
 def test_html5_writer_should_not_allow_compact_cloak_email_addresses_option(capfd):
     subprocess.run([kirlent2impressjs, "--cloak-email-addresses"])
     captured = capfd.readouterr()
@@ -57,4 +51,4 @@ def test_impressjs_writer_should_embed_impressjs_stylesheet(capfd):
 def test_impressjs_writer_should_link_default_stylesheet_when_requested(capfd):
     subprocess.run([kirlent2impressjs, "--link-stylesheet"])
     captured = capfd.readouterr()
-    assert re.search(r'<link rel="stylesheet" href=".*\bimpressjs.css"/>\n', captured.out)
+    assert re.search(r'<link rel="stylesheet" href=".*\bimpressjs.css"', captured.out)
