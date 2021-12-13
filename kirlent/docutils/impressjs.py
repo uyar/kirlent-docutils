@@ -36,7 +36,7 @@ DEFAULT_STEP_DEPTH = 1000
 class Writer(html5.Writer):
     """Writer for generating impress.js output."""
 
-    default_stylesheets = ["impressjs.css"]
+    default_stylesheets = ["minimal.css", "impressjs.css"]
 
     settings_spec = frontend.filter_settings_spec(
         html5.Writer.settings_spec,

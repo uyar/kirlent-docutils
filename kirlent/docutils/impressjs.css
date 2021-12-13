@@ -1,18 +1,12 @@
-html {
-  font-size: 45px;
-  line-height: 2;
+img {
+  display: block;
 }
 
-.step {
-  width: 1125px;
-  height: 795px;
-}
-
-#impress .step .substep {
+.substep {
   opacity: 0;
 }
 
-#impress .step .substep.substep-visible {
+.substep.substep-visible {
   opacity: 1;
   transition: opacity 1s;
 }
