@@ -41,6 +41,21 @@ IMPRESSJS_STYLE = dedent("""
     </style>
 """)
 
+IMPRESSJS_ATTRS = {
+    "data-x",
+    "data-y",
+    "data-z",
+    "data-rel-x",
+    "data-rel-y",
+    "data-rel-z",
+    "data-rotate-x",
+    "data-rotate-y",
+    "data-rotate-z",
+    "data-rotate",
+    "data-rotate-order",
+    "data-scale",
+}
+
 
 class Writer(html5.Writer):
     """Writer for generating impress.js output."""
@@ -212,9 +227,45 @@ class ImpressJSTranslator(html5.HTMLTranslator):
     def visit_section(self, node):
         # start a step
         node.attributes["classes"].insert(0, "step")
-        node.attributes["custom"] = self.__fields
+        impressjs_attrs = {}
+        attr_names = {k for k in self.__fields.keys()}
+        for name in attr_names:
+            if name in IMPRESSJS_ATTRS:
+                impressjs_attrs[name] = self.__fields.pop(name)
+        node.attributes["custom"] = impressjs_attrs
         super().visit_section(node)
-        self.__fields = {}
+
+    def depart_section(self, node):
+        # close the slide body contents div
+        self.body.append('</div>\n')
+        super().depart_section(node)
+
+    def visit_title(self, node):
+        # wrap title h1 in a header
+        self.body.append('<header>\n')
+        super().visit_title(node)
+
+    def depart_title(self, node):
+        self.body.append('</header>\n')
+        super().depart_title(node)
+
+        # wrap the slide body contents in a div
+        layout = self.__fields.pop("layout", None)
+        if layout is not None:
+            style = "display: grid; grid-template-areas: '%s';" % layout
+            self.body.append('<div class="main" style="%s">\n' % style)
+        else:
+            self.body.append('<div class="main">\n')
+
+    def visit_container(self, node):
+        classes = node.attributes["classes"]
+        for class_ in classes:
+            if class_.startswith("layout-"):
+                node.attributes["custom"] = {
+                    "style": "grid-area: %s" % class_[7:],
+                }
+                classes.remove(class_)
+        super().visit_container(node)
 
     def visit_reference(self, node):
         # generate '<span>' for annotation
