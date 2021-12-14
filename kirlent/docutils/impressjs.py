@@ -1,9 +1,11 @@
-# Copyright 2020-2022 H. Turgut Uyar <uyar@tekir.org>
+# Copyright 2020-2021 H. Turgut Uyar <uyar@tekir.org>
 #
 # kirlent_docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
 
 """impress.js writer for docutils."""
+
+from textwrap import dedent
 
 from docutils import frontend
 
@@ -11,32 +13,42 @@ from . import html5
 
 
 IMPRESS_JS_URL = "https://impress.js.org/js/impress.js"
-IMPRESS_JS_INIT = """
+IMPRESS_JS_INIT = dedent("""
     window.addEventListener('DOMContentLoaded', function() {
         impress().init();
     }, false);
-"""
+""")
 
 ROUGH_NOTATION_URL = "https://unpkg.com/rough-notation/lib/rough-notation.iife.js"  # noqa
-ROUGH_NOTATION_ANNOTATE = """
+ROUGH_NOTATION_ANNOTATE = dedent("""
     function annotate(event, element, type) {
         event.preventDefault();
         const annotation = RoughNotation.annotate(element, {type: type});
         annotation.show();
     }
-"""
+""")
 
 ANNOTATION_PREFIX = "annotate://"
 ANNOTATION_MARKUP = '<span onclick="annotate(event, this, \'%(type)s\')">'
 
-DEFAULT_STEP_WIDTH, DEFAULT_STEP_HEIGHT = 1920, 1080
-DEFAULT_STEP_DEPTH = 1000
+IMPRESSJS_STYLE = dedent("""
+    <style>
+      .step {
+          width: %(width)dpx;
+          height: %(height)dpx;
+          font-size: %(font_size)s;
+      }
+    </style>
+""")
 
 
 class Writer(html5.Writer):
     """Writer for generating impress.js output."""
 
     default_stylesheets = ["minimal.css", "impressjs.css"]
+
+    default_slide_size = "1920x1080"
+    default_font_size = "45px"
 
     settings_spec = frontend.filter_settings_spec(
         html5.Writer.settings_spec,
@@ -46,13 +58,34 @@ class Writer(html5.Writer):
             'the --stylesheet-dirs. With --link-stylesheet, '
             'the path is rewritten relative to the output HTML file. '
             '(default: "%s")' % ','.join(default_stylesheets),
-            ['--stylesheet-path'],
+            ["--stylesheet-path"],
             {
-                'metavar': '<file[,file,...]>',
-                'overrides': 'stylesheet',
-                'validator': frontend.validate_comma_separated_list,
-                'default': default_stylesheets
+                "metavar": "<file[,file,...]>",
+                "overrides": "stylesheet",
+                "validator": frontend.validate_comma_separated_list,
+                "default": default_stylesheets,
             }
+        ),
+    )
+
+    settings_spec = settings_spec + (
+        "ImpressJS Writer Options",
+        "",
+        (
+            (
+                'Slide size. (default: %s)' % default_slide_size,
+                ["--slide-size"],
+                {
+                    "default": default_slide_size,
+                }
+            ),
+            (
+                'Font size. (default: %s)' % default_font_size,
+                ["--font-size"],
+                {
+                    "default": default_font_size,
+                }
+            ),
         )
     )
 
@@ -87,19 +120,27 @@ class ImpressJSTranslator(html5.HTMLTranslator):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        if self.document.settings.slide_size.lower() == "a4":
+            self.step_width, self.step_height = 1125, 795
+        else:
+            width, height = self.document.settings.slide_size.split("x")
+            self.step_width, self.step_height = int(width), int(height)
+
+        self.font_size = self.document.settings.font_size
+
         # add attributes to keep track of the field data
         self.__fields = {}
         self.__field_name, self.__field_body = None, None
 
         # use a default horizontal step of one step width
-        self.__fields["data-rel-x"] = str(DEFAULT_STEP_WIDTH)
+        self.__fields["data-rel-x"] = self.step_width
 
     def visit_document(self, node):
         # add attributes for impress.js
         node.attributes["ids"].append("impress")
         node.attributes["custom"] = {
-            "data-width": str(DEFAULT_STEP_WIDTH),
-            "data-height": str(DEFAULT_STEP_HEIGHT),
+            "data-width": str(self.step_width),
+            "data-height": str(self.step_height),
         }
         super().visit_document(node)
 
@@ -116,6 +157,13 @@ class ImpressJSTranslator(html5.HTMLTranslator):
         # add code for loading rough notation
         self.head.append(ImpressJSTranslator.script_rough_notation)
         self.head.append(ImpressJSTranslator.script_rough_notation_annotate)
+
+        # add dynamic styles for impress.js
+        self.head.append(IMPRESSJS_STYLE % {
+            "width": self.step_width,
+            "height": self.step_height,
+            "font_size": self.font_size,
+        })
 
     def depart_docinfo(self, node):
         # wrap docinfo in a step with a title

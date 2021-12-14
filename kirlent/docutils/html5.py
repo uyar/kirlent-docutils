@@ -1,4 +1,4 @@
-# Copyright 2020-2022 H. Turgut Uyar <uyar@tekir.org>
+# Copyright 2020-2021 H. Turgut Uyar <uyar@tekir.org>
 #
 # kirlent_docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
@@ -48,13 +48,13 @@ class Writer(HTML5Writer):
         "cloak_email_addresses",
         stylesheet_dirs=(
             'Comma-separated list of directories where stylesheets are found. '
-            'Used by --stylesheet-path when expanding relative path arguments. '
+            'Used by --stylesheet-path when expanding relative path arguments. '  # noqa
             '(default: "%s")' % ','.join(default_stylesheet_dirs),
-            ['--stylesheet-dirs'],
+            ["--stylesheet-dirs"],
             {
-                'metavar': '<dir[,dir,...]>',
-                'validator': frontend.validate_comma_separated_list,
-                'default': default_stylesheet_dirs
+                "metavar": "<dir[,dir,...]>",
+                "validator": frontend.validate_comma_separated_list,
+                "default": default_stylesheet_dirs,
             }
         ),
     )
