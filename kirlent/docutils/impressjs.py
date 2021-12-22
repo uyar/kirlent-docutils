@@ -150,6 +150,35 @@ class ImpressJSTranslator(html5.HTMLTranslator):
         # use a default horizontal step of one step width
         self.__fields["data-rel-x"] = self.step_width
 
+    def starttag(self, node, *args, **kwargs):
+        styles = node.attributes.pop("styles", {})
+
+        translate = self.__fields.pop("translate", None)
+        if translate is not None:
+            dx, dy, dz = [v.strip() for v in translate.split(",")]
+            try:
+                px = round(self.step_width * float(dx))
+                dx = f"{px}px" if px != 0 else "0"
+            except ValueError:
+                pass
+            try:
+                px = round(self.step_height * float(dy))
+                dy = f"{px}px" if px != 0 else "0"
+            except ValueError:
+                pass
+            try:
+                px = round(1000 * float(dz))
+                dz = f"{px}px" if px != 0 else "0"
+            except ValueError:
+                pass
+            styles["transform"] = f"translate3d({dx}, {dy}, {dz})"
+
+        if "custom" not in node.attributes:
+            node.attributes["custom"] = {}
+        style = " ".join(f"{k}: {v};" for k, v in styles.items())
+        node.attributes["custom"]["style"] = style
+        return super().starttag(node, *args, **kwargs)
+
     def visit_document(self, node):
         # add attributes for impress.js
         node.attributes["ids"].append("impress")
@@ -184,7 +213,7 @@ class ImpressJSTranslator(html5.HTMLTranslator):
         # wrap docinfo in a step with a title
         super().depart_docinfo(node)
         self.docinfo.insert(0, '<section class="step" id="docinfo">\n')
-        self.docinfo.insert(1, '<h1>%(t)s</h1>\n' % {"t": self.title[0]})
+        self.docinfo.insert(1, f'<h1>{self.title[0]}</h1>\n')
         self.docinfo.append('</section>\n')
 
     def visit_transition(self, node):
@@ -228,10 +257,9 @@ class ImpressJSTranslator(html5.HTMLTranslator):
         # start a step
         node.attributes["classes"].insert(0, "step")
         impressjs_attrs = {}
-        attr_names = {k for k in self.__fields.keys()}
+        attr_names = {k for k in self.__fields if k in IMPRESSJS_ATTRS}
         for name in attr_names:
-            if name in IMPRESSJS_ATTRS:
-                impressjs_attrs[name] = self.__fields.pop(name)
+            impressjs_attrs[name] = self.__fields.pop(name)
         node.attributes["custom"] = impressjs_attrs
         super().visit_section(node)
 
@@ -250,20 +278,21 @@ class ImpressJSTranslator(html5.HTMLTranslator):
         super().depart_title(node)
 
         # wrap the slide body contents in a div
+        styles = {"perspective": "1000px"}
         layout = self.__fields.pop("layout", None)
         if layout is not None:
-            style = "display: grid; grid-template-areas: '%s';" % layout
-            self.body.append('<div class="main" style="%s">\n' % style)
-        else:
-            self.body.append('<div class="main">\n')
+            styles["display"] = "grid"
+            styles["grid-template-areas"] = f"'{layout}'"
+        style = " ".join(f"{k}: {v};" for k, v in styles.items())
+        self.body.append(f'<div class="main" style="{style}">\n')
 
     def visit_container(self, node):
         classes = node.attributes["classes"]
         for class_ in classes:
-            if class_.startswith("layout-"):
-                node.attributes["custom"] = {
-                    "style": "grid-area: %s" % class_[7:],
-                }
+            prefix = "layout-"
+            if class_.startswith(prefix):
+                area = class_[len(prefix):]
+                node.attributes["styles"] = {"grid-area": area}
                 classes.remove(class_)
         super().visit_container(node)
 
