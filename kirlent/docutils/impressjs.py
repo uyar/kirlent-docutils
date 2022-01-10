@@ -152,27 +152,6 @@ class ImpressJSTranslator(html5.HTMLTranslator):
 
     def starttag(self, node, *args, **kwargs):
         styles = node.attributes.pop("styles", {})
-
-        translate = self.__fields.pop("translate", None)
-        if translate is not None:
-            dx, dy, dz = [v.strip() for v in translate.split(",")]
-            try:
-                px = round(self.step_width * float(dx))
-                dx = f"{px}px" if px != 0 else "0"
-            except ValueError:
-                pass
-            try:
-                px = round(self.step_height * float(dy))
-                dy = f"{px}px" if px != 0 else "0"
-            except ValueError:
-                pass
-            try:
-                px = round(1000 * float(dz))
-                dz = f"{px}px" if px != 0 else "0"
-            except ValueError:
-                pass
-            styles["transform"] = f"translate3d({dx}, {dy}, {dz})"
-
         if "custom" not in node.attributes:
             node.attributes["custom"] = {}
         style = " ".join(f"{k}: {v};" for k, v in styles.items())
