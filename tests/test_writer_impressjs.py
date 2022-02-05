@@ -3,13 +3,11 @@ from functools import partial
 
 from docutils.core import publish_parts
 
-from kirlent.docutils.impressjs import Writer
+
+publish_html = partial(publish_parts, writer_name="kirlent.docutils.impressjs")
 
 
-publish_html = partial(publish_parts, writer=Writer())
-
-
-PREAMBLE = ".. title:: Document Title\n\n:author: Author\n\n" ""
+PREAMBLE = ".. title:: Document Title\n\n:author: Author\n\n"
 SLIDE = "----\n\n%(f)s\n\nSlide Title %(n)d\n=============\n\nContent %(n)d\n\n"
 
 
@@ -21,6 +19,11 @@ def test_writer_should_generate_script_for_impressjs():
 def test_writer_should_generate_script_for_initialiazing_impressjs():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
     assert re.search(r'<script>.*\bimpress\(\).init\(\);.*</script>', html["head"], re.DOTALL) is not None
+
+
+def test_writer_should_generate_style_for_dynamic_impressjs_step_settings():
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
+    assert re.search(r'<style>\s*\.step {[^}]+}\s*</style>', html["head"], re.DOTALL) is not None
 
 
 def test_writer_should_generate_root_with_id_impress():
@@ -88,9 +91,9 @@ def test_writer_should_set_default_rel_x_on_first_step():
     assert re.search(r'<section .*\bdata-rel-x="1920"', html["body"]) is not None
 
 
-def test_writer_should_add_fields_to_step_as_attributes():
-    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ":key: val"}))
-    assert re.search(r'<section .*\bkey="val"', html["body"]) is not None
+# def test_writer_should_add_fields_to_step_as_attributes():
+#     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ":key: val"}))
+#     assert re.search(r'<section .*\bkey="val"', html["body"]) is not None
 
 
 def test_writer_should_generate_script_for_rough_notation():
@@ -105,9 +108,9 @@ def test_writer_should_generate_script_for_annotating_an_element():
 
 def test_writer_should_generate_onclick_event_for_reference_with_annotation():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "`Tekir <annotate://box>`_\n")
-    assert '<span onclick="annotate(event, this, \'box\')">Tekir</span>' in html["body"]
+    assert '<span onclick="annotate(this, event, \'box\')">Tekir</span>' in html["body"]
 
 
-def test_writer_should_generate_regular_link_for_reference_without_annotation():
-    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "`Tekir <https://tekir.org/>`_\n")
-    assert '<a href="https://tekir.org/">Tekir</a>' in html["body"]
+# def test_writer_should_generate_regular_link_for_reference_without_annotation():
+#     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "`Tekir <https://tekir.org/>`_\n")
+#     assert '<a href="https://tekir.org/">Tekir</a>' in html["body"]

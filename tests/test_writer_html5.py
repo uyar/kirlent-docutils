@@ -6,9 +6,6 @@ from docutils.core import publish_parts
 publish_html = partial(publish_parts, writer_name="kirlent.docutils.html5")
 
 
-SECTION = "Section Title\n-------------\n\nsection text\n\n"
-
-
 def test_writer_should_not_generate_xml_declaration():
     html = publish_html("text\n")
     assert '<?xml' not in html["head_prefix"]
@@ -30,8 +27,8 @@ def test_writer_should_not_generate_type_attribute_for_style():
 
 
 def test_writer_should_not_generate_paragraph_for_single_paragraph_list_item():
-    html = publish_html("- text\n")
-    assert '<li>text</li>' in html["body"]
+    html = publish_html("- item\n")
+    assert '<li>item</li>' in html["body"]
 
 
 def test_writer_should_generate_paragraphs_for_multiple_paragraph_list_item():
@@ -40,8 +37,8 @@ def test_writer_should_generate_paragraphs_for_multiple_paragraph_list_item():
 
 
 def test_writer_should_not_generate_paragraph_for_single_paragraph_table_entry():
-    html = publish_html("+------+\n| text |\n+------+\n")
-    assert '<td>text</td>' in html["body"]
+    html = publish_html("+-------+\n| entry |\n+-------+\n")
+    assert '<td>entry</td>' in html["body"]
 
 
 def test_writer_should_generate_paragraphs_for_multiple_paragraph_table_entry():
@@ -50,8 +47,8 @@ def test_writer_should_generate_paragraphs_for_multiple_paragraph_table_entry():
 
 
 def test_writer_should_not_generate_paragraph_for_single_paragraph_definition():
-    html = publish_html("term\n  text\n")
-    assert '<dd>text</dd>' in html["body"]
+    html = publish_html("term\n  def\n")
+    assert '<dd>def</dd>' in html["body"]
 
 
 def test_writer_should_generate_paragraphs_for_multiple_paragraph_definition():
@@ -60,16 +57,16 @@ def test_writer_should_generate_paragraphs_for_multiple_paragraph_definition():
 
 
 def test_writer_should_not_generate_paragraph_for_single_paragraph_field_body():
-    html = publish_html(SECTION + ":field: text\n")
-    assert '<dd>text</dd>' in html["body"]
+    html = publish_html("text\n\n:field: val\n")
+    assert '<dd>val</dd>' in html["body"]
 
 
 def test_writer_should_generate_paragraphs_for_multiple_paragraph_field_body():
-    html = publish_html(SECTION + ":field: par 1\n\n      par 2\n")
+    html = publish_html("text\n\n:field: par 1\n\n      par 2\n")
     assert '<dd><p>par 1</p>\n<p>par 2</p>\n</dd>' in html["body"]
 
 
-def test_writer_should_generate_break_instead_of_line_block_div():
+def test_writer_should_generate_line_break_instead_of_line_block_div():
     html = publish_html("| line 1\n| line 2\n")
     assert 'line 1<br/>\nline 2<br/>' in html["body"]
 
@@ -80,7 +77,7 @@ def test_writer_should_not_generate_simple_class_for_docinfo():
 
 
 def test_writer_should_not_generate_simple_class_for_list():
-    html = publish_html("- text\n")
+    html = publish_html("- item\n")
     assert '<ul>' in html["body"]
 
 
@@ -109,11 +106,16 @@ def test_writer_should_not_generate_docutils_class_for_transition():
     assert 'docutils' not in html["body"]
 
 
-def test_writer_should_not_generate_custom_classes_for_table_head_entry():
+def test_writer_should_not_generate_head_class_for_table_head_entry():
     html = publish_html("+------+\n| head |\n+======+\n| text |\n+------+\n")
     assert '<th>head</th>' in html["body"]
 
 
-def test_writer_should_not_generate_custom_classes_for_reference():
+def test_writer_should_not_generate_internal_reference_classes_for_internal_reference():
+    html = publish_html("text\n\nsection\n-------\n\n`section`_\n")
+    assert '<a href="#section">section</a>' in html["body"]
+
+
+def test_writer_should_not_generate_external_reference_classes_for_external_reference():
     html = publish_html("https://tekir.org/\n")
     assert '<a href="https://tekir.org/">https://tekir.org/</a>' in html["body"]

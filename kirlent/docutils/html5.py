@@ -1,4 +1,4 @@
-# Copyright 2020-2021 H. Turgut Uyar <uyar@tekir.org>
+# Copyright 2020-2022 H. Turgut Uyar <uyar@tekir.org>
 #
 # kirlent_docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
@@ -74,8 +74,9 @@ class HTMLTranslator(HTML5Translator):
     stylesheet_link = _remove_type(HTML5Translator.stylesheet_link)
     embedded_stylesheet = _remove_type(HTML5Translator.embedded_stylesheet)
 
-    script = '<script%(mode)s>%(code)s</script>\n'
-    script_external = '<script%(mode)s src="%(src)s"></script>\n'
+    script = '<script>%s</script>\n'
+    script_external = '<script src="%s"></script>\n'
+    script_defer = '<script defer src="%s"></script>\n'
 
     # no '<p>' under these if single paragraph
     SIMPLE_BLOCKS = {"definition", "entry", "field_body", "list_item"}
@@ -85,6 +86,7 @@ class HTMLTranslator(HTML5Translator):
         ({"container", "literal", "transition"}, "docutils"),
         ({"entry"}, "head"),
         ({"reference"}, "external"),
+        ({"reference"}, "internal"),
         ({"reference"}, "reference"),
     )
 

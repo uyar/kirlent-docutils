@@ -1,45 +1,42 @@
-# Copyright 2020-2021 H. Turgut Uyar <uyar@tekir.org>
+# Copyright 2020-2022 H. Turgut Uyar <uyar@tekir.org>
 #
 # kirlent_docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
 
 """impress.js writer for docutils."""
 
-from textwrap import dedent
-
 from docutils import frontend
 
-from . import html5
+from .html5 import HTMLTranslator
+from .html5 import Writer as HTMLWriter
 
 
 IMPRESS_JS_URL = "https://impress.js.org/js/impress.js"
-IMPRESS_JS_INIT = dedent("""
-    window.addEventListener('DOMContentLoaded', function() {
-        impress().init();
-    }, false);
-""")
+IMPRESS_JS_INIT = """
+  window.addEventListener('DOMContentLoaded', function() {
+      impress().init();
+  }, false);
+"""
 
 ROUGH_NOTATION_URL = "https://unpkg.com/rough-notation/lib/rough-notation.iife.js"  # noqa
-ROUGH_NOTATION_ANNOTATE = dedent("""
-    function annotate(event, element, type) {
-        event.preventDefault();
-        const annotation = RoughNotation.annotate(element, {type: type});
-        annotation.show();
-    }
-""")
+ROUGH_NOTATION_ANNOTATE = """
+  function annotate(element, event, type) {
+      event.preventDefault();
+      const annotation = RoughNotation.annotate(element, {type: type});
+      annotation.show();
+  }
+"""
 
 ANNOTATION_PREFIX = "annotate://"
-ANNOTATION_MARKUP = '<span onclick="annotate(event, this, \'%(type)s\')">'
+ANNOTATION_MARKUP = '<span onclick="annotate(this, event, \'%(type)s\')">'
 
-IMPRESSJS_STYLE = dedent("""
-    <style>
-      .step {
-          width: %(width)dpx;
-          height: %(height)dpx;
-          font-size: %(font_size)s;
-      }
-    </style>
-""")
+IMPRESSJS_STYLE = """
+  .step {
+    width: %(width)dpx;
+    height: %(height)dpx;
+    font-size: %(font_size)s;
+  }
+"""
 
 IMPRESSJS_ATTRS = {
     "data-x",
@@ -57,7 +54,7 @@ IMPRESSJS_ATTRS = {
 }
 
 
-class Writer(html5.Writer):
+class Writer(HTMLWriter):
     """Writer for generating impress.js output."""
 
     default_stylesheets = ["minimal.css", "impressjs.css"]
@@ -66,7 +63,7 @@ class Writer(html5.Writer):
     default_font_size = "45px"
 
     settings_spec = frontend.filter_settings_spec(
-        html5.Writer.settings_spec,
+        HTMLWriter.settings_spec,
         stylesheet_path=(
             'Comma separated list of stylesheet paths. '
             'Relative paths are expanded if a matching file is found in '
@@ -109,28 +106,14 @@ class Writer(html5.Writer):
         self.translator_class = ImpressJSTranslator
 
 
-class ImpressJSTranslator(html5.HTMLTranslator):
+class ImpressJSTranslator(HTMLTranslator):
     """Translator for generating impress.js markup."""
 
-    script_impressjs = html5.HTMLTranslator.script_external % {
-        "mode": " defer",
-        "src": IMPRESS_JS_URL,
-    }
+    script_impressjs = HTMLTranslator.script_defer % IMPRESS_JS_URL
+    script_impressjs_init = HTMLTranslator.script % IMPRESS_JS_INIT
 
-    script_impressjs_init = html5.HTMLTranslator.script % {
-        "mode": "",
-        "code": IMPRESS_JS_INIT,
-    }
-
-    script_rough_notation = html5.HTMLTranslator.script_external % {
-        "mode": " defer",
-        "src": ROUGH_NOTATION_URL,
-    }
-
-    script_rough_notation_annotate = html5.HTMLTranslator.script % {
-        "mode": "",
-        "code": ROUGH_NOTATION_ANNOTATE,
-    }
+    script_rough_notation = HTMLTranslator.script_defer % ROUGH_NOTATION_URL
+    script_rough_notation_annotate = HTMLTranslator.script % ROUGH_NOTATION_ANNOTATE  # noqa
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -182,11 +165,12 @@ class ImpressJSTranslator(html5.HTMLTranslator):
         self.head.append(ImpressJSTranslator.script_rough_notation_annotate)
 
         # add dynamic styles for impress.js
-        self.head.append(IMPRESSJS_STYLE % {
+        impressjs_style = IMPRESSJS_STYLE % {
             "width": self.step_width,
             "height": self.step_height,
             "font_size": self.font_size,
-        })
+        }
+        self.head.append(HTMLTranslator.embedded_stylesheet % impressjs_style)
 
     def depart_docinfo(self, node):
         # wrap docinfo in a step with a title
