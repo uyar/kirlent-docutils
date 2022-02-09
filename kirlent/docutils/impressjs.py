@@ -6,6 +6,7 @@
 """impress.js writer for docutils."""
 
 from docutils import frontend
+from docutils.nodes import container
 
 from .html5 import HTMLTranslator
 from .html5 import Writer as HTMLWriter
@@ -50,6 +51,11 @@ ROUGH_NOTATION_ANNOTATE = """
 """ % {"pre": ANNOTATION_COLOR_PROPERTY_PREFIX}
 
 ANNOTATION_MARKUP = '<span onclick="annotate(this, \'%(eff)s\', \'%(cat)s\')">'
+
+
+SLIDE_SIZES = {
+    "a4": (1125, 795),
+}
 
 
 class Writer(HTMLWriter):
@@ -116,11 +122,11 @@ class ImpressJSTranslator(HTMLTranslator):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        if self.document.settings.slide_size.lower() == "a4":
-            self.step_width, self.step_height = 1125, 795
-        else:
-            width, height = self.document.settings.slide_size.split("x")
-            self.step_width, self.step_height = int(width), int(height)
+        slide_size_key = self.document.settings.slide_size.lower()
+        slide_size = SLIDE_SIZES.get(slide_size_key)
+        if slide_size is None:
+            slide_size = map(int, slide_size_key.split("x"))
+        self.step_width, self.step_height = slide_size
 
         self.font_size = self.document.settings.font_size
 
@@ -131,19 +137,10 @@ class ImpressJSTranslator(HTMLTranslator):
         # use a default horizontal step of one step width
         self.__fields["data-rel-x"] = self.step_width
 
-    def starttag(self, node, *args, **kwargs):
-        styles = node.attributes.pop("styles", {})
-        if len(styles) > 0:
-            if "custom" not in node.attributes:
-                node.attributes["custom"] = {}
-            style = " ".join(f"{k}: {v};" for k, v in styles.items()).strip()
-            node.attributes["custom"]["style"] = style
-        return super().starttag(node, *args, **kwargs)
-
     def visit_document(self, node):
         # add attributes for impress.js
         node.attributes["ids"].append("impress")
-        node.attributes["custom"] = {
+        node.attributes["_custom"] = {
             "data-width": str(self.step_width),
             "data-height": str(self.step_height),
         }
@@ -218,35 +215,35 @@ class ImpressJSTranslator(HTMLTranslator):
     def visit_section(self, node):
         # start a step
         node.attributes["classes"].insert(0, "step")
-        impressjs_attrs = {}
+        step_attrs = {}
         attr_names = {k for k in self.__fields if k in IMPRESS_JS_ATTRS}
         for name in attr_names:
-            impressjs_attrs[name] = self.__fields.pop(name)
-        node.attributes["custom"] = impressjs_attrs
+            step_attrs[name] = self.__fields.pop(name)
+        node.attributes["_custom"] = step_attrs
         super().visit_section(node)
 
     def depart_section(self, node):
-        # close the slide body contents div
-        self.body.append('</div>\n')
+        self.body.append('</div>\n')  # close the slide main contents div
         super().depart_section(node)
 
     def visit_title(self, node):
-        # wrap title h1 in a header
-        self.body.append('<header>\n')
+        self.body.append('<header>\n')  # wrap title in a header
         super().visit_title(node)
 
     def depart_title(self, node):
-        self.body.append('</header>\n')
         super().depart_title(node)
+        self.body.append('</header>\n')
 
-        # wrap the slide body contents in a div
+        # wrap the slide main contents in a div
         styles = {"perspective": "1000px"}
         layout = self.__fields.pop("layout", None)
         if layout is not None:
             styles["display"] = "grid"
             styles["grid-template-areas"] = f"'{layout}'"
-        style = " ".join(f"{k}: {v};" for k, v in styles.items())
-        self.body.append(f'<div class="main" style="{style}">\n')
+        slide_contents = container()
+        slide_contents.attributes["classes"] = ["main"]
+        slide_contents.attributes["_styles"] = styles
+        self.visit_container(slide_contents)
 
     def visit_container(self, node):
         classes = node.attributes["classes"]
@@ -254,7 +251,7 @@ class ImpressJSTranslator(HTMLTranslator):
             prefix = "layout-"
             if class_.startswith(prefix):
                 area = class_[len(prefix):]
-                node.attributes["styles"] = {"grid-area": area}
+                node.attributes["_styles"] = {"grid-area": area}
                 classes.remove(class_)
         super().visit_container(node)
 

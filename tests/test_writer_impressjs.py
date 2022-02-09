@@ -95,9 +95,19 @@ def test_writer_should_set_default_rel_x_on_first_step():
     assert match(r'<section .*\bdata-rel-x="1920"', html["body"])
 
 
-# def test_writer_should_add_fields_to_step_as_attributes():
-#     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ":key: val"}))
-#     assert match(r'<section .*\bkey="val"', html["body"])
+def test_writer_should_generate_wrap_title_in_header():
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
+    assert '<header>\n<h2>Slide Title 1</h2>\n</header>\n' in html["body"]
+
+
+def test_writer_should_generate_div_main_for_slide_contents():
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
+    assert '</header>\n<div class="main"' in html["body"]
+
+
+def test_writer_should_generate_perspective_for_slide_contents():
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
+    assert '<div class="main" style="perspective: 1000px;">' in html["body"]
 
 
 def test_writer_should_generate_script_for_rough_notation():

@@ -102,8 +102,12 @@ class HTMLTranslator(HTML5Translator):
             if len(classes) > 0:
                 kwargs["CLASS"] = " ".join(classes)
 
-        # add custom properties if any
-        kwargs.update(node.attributes.pop("custom", {}))
+        # add custom styles and properties, if any
+        custom = node.attributes.pop("_custom", {})
+        styles = node.attributes.pop("_styles", {})
+        if len(styles) > 0:
+            custom["style"] = " ".join(f"{k}: {v};" for k, v in styles.items())
+        kwargs.update(custom)
         return super().starttag(node, *args, **kwargs)
 
     def is_compactable(self, *args, **kwargs):
