@@ -12,25 +12,14 @@ from .html5 import Writer as HTMLWriter
 
 
 IMPRESS_JS_URL = "https://impress.js.org/js/impress.js"
+
 IMPRESS_JS_INIT = """
-  window.addEventListener('DOMContentLoaded', function() {
+  window.addEventListener('DOMContentLoaded', () => {
       impress().init();
   }, false);
 """
 
-ROUGH_NOTATION_URL = "https://unpkg.com/rough-notation/lib/rough-notation.iife.js"  # noqa
-ROUGH_NOTATION_ANNOTATE = """
-  function annotate(element, event, type) {
-      event.preventDefault();
-      const annotation = RoughNotation.annotate(element, {type: type});
-      annotation.show();
-  }
-"""
-
-ANNOTATION_PREFIX = "annotate://"
-ANNOTATION_MARKUP = '<span onclick="annotate(this, event, \'%(type)s\')">'
-
-IMPRESSJS_STYLE = """
+IMPRESS_JS_STYLE = """
   .step {
     width: %(width)dpx;
     height: %(height)dpx;
@@ -38,20 +27,29 @@ IMPRESSJS_STYLE = """
   }
 """
 
-IMPRESSJS_ATTRS = {
-    "data-x",
-    "data-y",
-    "data-z",
-    "data-rel-x",
-    "data-rel-y",
-    "data-rel-z",
-    "data-rotate-x",
-    "data-rotate-y",
-    "data-rotate-z",
-    "data-rotate",
-    "data-rotate-order",
+IMPRESS_JS_ATTRS = {
+    "data-x", "data-y", "data-z",
+    "data-rel-x", "data-rel-y", "data-rel-z",
+    "data-rotate-x", "data-rotate-y", "data-rotate-z",
+    "data-rotate", "data-rotate-order",
     "data-scale",
 }
+
+ANNOTATION_PREFIX = "annotate://"
+
+ANNOTATION_COLOR_PROPERTY_PREFIX = "--color-annotation-"
+
+ROUGH_NOTATION_URL = "https://unpkg.com/rough-notation/lib/rough-notation.iife.js"  # noqa
+
+ROUGH_NOTATION_ANNOTATE = """
+  function annotate(el, eff, cat) {
+      const c = getComputedStyle(el).getPropertyValue('%(pre)s' + cat);
+      const a = RoughNotation.annotate(el, {type: eff, color: c});
+      a.show();
+  }
+""" % {"pre": ANNOTATION_COLOR_PROPERTY_PREFIX}
+
+ANNOTATION_MARKUP = '<span onclick="annotate(this, \'%(eff)s\', \'%(cat)s\')">'
 
 
 class Writer(HTMLWriter):
@@ -113,7 +111,7 @@ class ImpressJSTranslator(HTMLTranslator):
     script_impressjs_init = HTMLTranslator.script % IMPRESS_JS_INIT
 
     script_rough_notation = HTMLTranslator.script_defer % ROUGH_NOTATION_URL
-    script_rough_notation_annotate = HTMLTranslator.script % ROUGH_NOTATION_ANNOTATE  # noqa
+    script_annotate = HTMLTranslator.script % ROUGH_NOTATION_ANNOTATE
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -135,10 +133,11 @@ class ImpressJSTranslator(HTMLTranslator):
 
     def starttag(self, node, *args, **kwargs):
         styles = node.attributes.pop("styles", {})
-        if "custom" not in node.attributes:
-            node.attributes["custom"] = {}
-        style = " ".join(f"{k}: {v};" for k, v in styles.items())
-        node.attributes["custom"]["style"] = style
+        if len(styles) > 0:
+            if "custom" not in node.attributes:
+                node.attributes["custom"] = {}
+            style = " ".join(f"{k}: {v};" for k, v in styles.items()).strip()
+            node.attributes["custom"]["style"] = style
         return super().starttag(node, *args, **kwargs)
 
     def visit_document(self, node):
@@ -162,15 +161,15 @@ class ImpressJSTranslator(HTMLTranslator):
 
         # add code for loading rough notation
         self.head.append(ImpressJSTranslator.script_rough_notation)
-        self.head.append(ImpressJSTranslator.script_rough_notation_annotate)
+        self.head.append(ImpressJSTranslator.script_annotate)
 
         # add dynamic styles for impress.js
-        impressjs_style = IMPRESSJS_STYLE % {
+        impress_js_style = IMPRESS_JS_STYLE % {
             "width": self.step_width,
             "height": self.step_height,
             "font_size": self.font_size,
         }
-        self.head.append(HTMLTranslator.embedded_stylesheet % impressjs_style)
+        self.head.append(HTMLTranslator.embedded_stylesheet % impress_js_style)
 
     def depart_docinfo(self, node):
         # wrap docinfo in a step with a title
@@ -220,7 +219,7 @@ class ImpressJSTranslator(HTMLTranslator):
         # start a step
         node.attributes["classes"].insert(0, "step")
         impressjs_attrs = {}
-        attr_names = {k for k in self.__fields if k in IMPRESSJS_ATTRS}
+        attr_names = {k for k in self.__fields if k in IMPRESS_JS_ATTRS}
         for name in attr_names:
             impressjs_attrs[name] = self.__fields.pop(name)
         node.attributes["custom"] = impressjs_attrs
@@ -260,14 +259,16 @@ class ImpressJSTranslator(HTMLTranslator):
         super().visit_container(node)
 
     def visit_reference(self, node):
-        # generate '<span>' for annotation
+        # generate clickable '<span>' for annotation
         refuri = node.get("refuri", "")
         annotation = refuri.startswith(ANNOTATION_PREFIX)
         if not annotation:
             super().visit_reference(node)
         else:
-            annotation_type = refuri[len(ANNOTATION_PREFIX):]
-            self.body.append(ANNOTATION_MARKUP % {"type": annotation_type})
+            effect, *rest = refuri[len(ANNOTATION_PREFIX):].split("/")
+            category = rest[0] if len(rest) == 1 else "default"
+            markup = ANNOTATION_MARKUP % {"eff": effect, "cat": category}
+            self.body.append(markup)
         node.attributes["_annotation"] = annotation
 
     def depart_reference(self, node):
