@@ -4,6 +4,10 @@ img {
   display: block;
 }
 
+pre {
+  overflow: auto;
+}
+
 .substep {
   opacity: 0;
 }

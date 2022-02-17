@@ -17,14 +17,23 @@ IMPRESS_JS_URL = "https://impress.js.org/js/impress.js"
 IMPRESS_JS_INIT = """
   window.addEventListener('DOMContentLoaded', () => {
       impress().init();
+
+      const p = parseFloat(getComputedStyle(document.querySelector("div.main")).getPropertyValue("padding-bottom"));
+      document.querySelectorAll("pre").forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          el.style = "max-height: " + (window.innerHeight - p - rect.top) + "px;";
+      });
   }, false);
 """
 
 IMPRESS_JS_STYLE = """
+  :root {
+    font-size: %(font_size)s;
+  }
+
   .step {
     width: %(width)dpx;
     height: %(height)dpx;
-    font-size: %(font_size)s;
   }
 """
 
