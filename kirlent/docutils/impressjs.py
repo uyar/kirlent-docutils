@@ -18,10 +18,13 @@ IMPRESS_JS_INIT = """
   window.addEventListener('DOMContentLoaded', () => {
       impress().init();
 
-      const p = parseFloat(getComputedStyle(document.querySelector("div.main")).getPropertyValue("padding-bottom"));
+      const p = parseFloat(
+          getComputedStyle(document.querySelector("div.main"))
+              .getPropertyValue("padding-bottom")
+      );
       document.querySelectorAll("pre").forEach((el) => {
           const rect = el.getBoundingClientRect();
-          el.style = "max-height: " + (window.innerHeight - p - rect.top) + "px;";
+          el.style.maxHeight = (window.innerHeight - p - rect.top) + "px";
       });
   }, false);
 """

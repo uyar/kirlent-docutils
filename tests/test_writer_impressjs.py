@@ -25,9 +25,14 @@ def test_writer_should_generate_script_for_initialiazing_impress_js():
     assert match_multiline(r'<script>.*\bimpress\(\).init\(\);.*</script>', html["head"])
 
 
+def test_writer_should_generate_style_for_impress_js_root_settings():
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
+    assert match_multiline(r'<style>.*:root {[^}]+}.*</style>', html["head"])
+
+
 def test_writer_should_generate_style_for_impress_js_step_settings():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert match_multiline(r'<style>\s*\.step {[^}]+}\s*</style>', html["head"])
+    assert match_multiline(r'<style>.*\.step {[^}]+}\s*</style>', html["head"])
 
 
 def test_writer_should_generate_root_with_id_impress():
