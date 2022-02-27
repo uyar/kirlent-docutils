@@ -31,7 +31,7 @@ IMPRESS_JS_INIT = """
 
 IMPRESS_JS_STYLE = """
   :root {
-    font-size: %(font_size)s;
+    font-size: %(font_size)dpx;
   }
 
   .step {
@@ -76,7 +76,7 @@ class Writer(HTMLWriter):
     default_stylesheets = ["minimal.css", "impressjs.css"]
 
     default_slide_size = "1920x1080"
-    default_font_size = "45px"
+    default_font_size = 45
 
     settings_spec = frontend.filter_settings_spec(
         HTMLWriter.settings_spec,
@@ -112,6 +112,7 @@ class Writer(HTMLWriter):
                 ["--font-size"],
                 {
                     "default": default_font_size,
+                    "validator": frontend.validate_nonnegative_int,
                 }
             ),
         )

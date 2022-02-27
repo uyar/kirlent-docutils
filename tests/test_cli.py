@@ -119,6 +119,6 @@ def test_impressjs_writer_should_use_default_font_size_on_step_style(capfd):
 
 
 def test_impressjs_writer_should_use_given_font_size_on_step_style(capfd):
-    subprocess.run([kirlent2impressjs, "--font-size=3px", "/dev/null"])
+    subprocess.run([kirlent2impressjs, "--font-size=3", "/dev/null"])
     captured = capfd.readouterr()
     assert 'font-size: 3px;' in compact(captured.out)
