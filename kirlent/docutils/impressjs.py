@@ -5,6 +5,9 @@
 
 """impress.js writer for docutils."""
 
+from pathlib import Path
+from xml.etree import ElementTree
+
 from docutils import frontend
 from docutils.nodes import container
 
@@ -68,6 +71,8 @@ ANNOTATION_MARKUP = '<span onclick="annotate(this, \'%(eff)s\', \'%(cat)s\')">'
 SLIDE_SIZES = {
     "a4": (1125, 795),
 }
+
+SVG_FONT_SIZE = 16
 
 
 class Writer(HTMLWriter):
@@ -287,3 +292,17 @@ class ImpressJSTranslator(HTMLTranslator):
             super().depart_reference(node)
         else:
             self.body.append('</span>')
+
+    def visit_image(self, node):
+        # scale SVG images generated from mermaid.js diagrams
+        # mermaid.js sets width to 100% and height to diagram height
+        if "height" not in node.attributes:
+            uri = node.attributes["uri"]
+            source = Path(self.document.settings._source).parent / uri
+            if source.suffix == ".svg":
+                root = ElementTree.parse(source).getroot()
+                if root.attrib["id"].startswith("mermaid-"):
+                    height = float(root.attrib["height"])
+                    scale = self.font_size / SVG_FONT_SIZE
+                    node.attributes["height"] = str(round(height * scale))
+        super().visit_image(node)
