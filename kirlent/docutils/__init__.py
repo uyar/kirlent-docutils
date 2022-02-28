@@ -1,4 +1,4 @@
-# Copyright 2020-2021 H. Turgut Uyar <uyar@tekir.org>
+# Copyright 2020-2022 H. Turgut Uyar <uyar@tekir.org>
 #
 # kirlent_docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.

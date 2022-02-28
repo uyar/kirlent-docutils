@@ -11,22 +11,27 @@ from .slides import SlidesTranslator
 from .slides import Writer as SlidesWriter
 
 
-REVEAL_JS_URL = "https://cdn.jsdelivr.net/npm/reveal.js@3.7.0/js/reveal.min.js"
+REVEAL_JS_URL = "https://cdn.jsdelivr.net/npm/reveal.js"
 
 REVEAL_JS_INIT = """
   window.addEventListener('DOMContentLoaded', () => {
       Reveal.initialize({
           width: '%(width)d',
-          height: '%(height)d'
+          height: '%(height)d',
+          center: %(center)s,
+          transition: '%(transition)s'
       });
   }, false);
 """
 
 
 class Writer(SlidesWriter):
-    """Writer for generating impress.js output."""
+    """Writer for generating reveal.js output."""
 
     default_stylesheets = ["minimal.css", "revealjs.css"]
+
+    default_transition = "none"
+    default_center_vertical = False
 
     settings_spec = frontend.filter_settings_spec(
         SlidesWriter.settings_spec,
@@ -46,6 +51,30 @@ class Writer(SlidesWriter):
         ),
     )
 
+    settings_spec = settings_spec + (
+        "RevealJS Writer Options",
+        "",
+        (
+            (
+                'Slide transition effect. (default: %s)' % default_transition,
+                ["--transition"],
+                {
+                    "default": default_transition,
+                }
+            ),
+            (
+                'Vertically center slides. (default: %s)' % (
+                    default_center_vertical,
+                ),
+                ["--center-vertical"],
+                {
+                    "default": default_center_vertical,
+                    "validator": frontend.validate_boolean,
+                }
+            ),
+        )
+    )
+
     def __init__(self):
         super().__init__()
         self.translator_class = RevealJSTranslator
@@ -56,6 +85,12 @@ class RevealJSTranslator(SlidesTranslator):
 
     script_revealjs = SlidesTranslator.script_defer % REVEAL_JS_URL
     script_revealjs_init = SlidesTranslator.script % REVEAL_JS_INIT
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.center_vertical = self.document.settings.center_vertical
+        self.transition = self.document.settings.transition
 
     def visit_document(self, node):
         # add attributes for reveal.js
@@ -72,14 +107,9 @@ class RevealJSTranslator(SlidesTranslator):
         self.head.append(RevealJSTranslator.script_revealjs_init % {
             "width": self.slide_width,
             "height": self.slide_height,
+            "center": "true" if self.center_vertical else "false",
+            "transition": self.transition,
         })
-
-    def depart_docinfo(self, node):
-        # wrap docinfo in a slide with a title
-        super().depart_docinfo(node)
-        self.docinfo.insert(0, '<section id="docinfo">\n')
-        self.docinfo.insert(1, f'<h1>{self.title[0]}</h1>\n')
-        self.docinfo.append('</section>\n')
 
     def visit_container(self, node):
         classes = node.attributes["classes"]

@@ -134,18 +134,15 @@ class ImpressJSTranslator(SlidesTranslator):
         self.head.append(ImpressJSTranslator.script_impressjs_init)
 
         # add dynamic styles for impress.js
-        impress_js_style = IMPRESS_JS_STYLE % {
+        style = IMPRESS_JS_STYLE % {
             "width": self.slide_width,
             "height": self.slide_height,
         }
-        self.head.append(SlidesTranslator.embedded_stylesheet % impress_js_style)
+        self.head.append(SlidesTranslator.embedded_stylesheet % style)
 
     def depart_docinfo(self, node):
-        # wrap docinfo in a step with a title
+        node.attributes["_docinfo_class"] = "step"
         super().depart_docinfo(node)
-        self.docinfo.insert(0, '<section class="step" id="docinfo">\n')
-        self.docinfo.insert(1, f'<h1>{self.title[0]}</h1>\n')
-        self.docinfo.append('</section>\n')
 
     def visit_section(self, node):
         # start a step

@@ -28,7 +28,7 @@ SLIDES_INIT = """
   }, false);
 """
 
-SLIDE_STYLE = """
+SLIDES_STYLE = """
   :root {
     font-size: %(font_size)dpx;
   }
@@ -140,12 +140,21 @@ class SlidesTranslator(HTMLTranslator):
 
         self.head.append(SlidesTranslator.script_slides_init)
 
-        slide_style = SLIDE_STYLE % {"font_size": self.font_size}
-        self.head.append(SlidesTranslator.embedded_stylesheet % slide_style)
+        style = SLIDES_STYLE % {"font_size": self.font_size}
+        self.head.append(SlidesTranslator.embedded_stylesheet % style)
 
         # add code for loading rough notation
         self.head.append(SlidesTranslator.script_rough_notation)
         self.head.append(SlidesTranslator.script_annotate)
+
+    def depart_docinfo(self, node):
+        # wrap docinfo in a slide with a title
+        docinfo_class = node.attributes.pop("_docinfo_class", "").strip()
+        super().depart_docinfo(node)
+        class_ = f' class="{docinfo_class}"' if len(docinfo_class) > 0 else ""
+        self.docinfo.insert(0, f'<section id="docinfo"{class_}>\n')
+        self.docinfo.insert(1, f'<h1>{self.title[0]}</h1>\n')
+        self.docinfo.append('</section>\n')
 
     def visit_transition(self, node):
         # suppress '<hr/>'
