@@ -9,7 +9,7 @@ __version__ = "0.1.0"
 
 from docutils.core import publish_cmdline
 
-from . import html5, impressjs
+from . import html5, impressjs, revealjs
 
 
 def publish_cmdline_html5(*args, **kwargs):
@@ -20,3 +20,8 @@ def publish_cmdline_html5(*args, **kwargs):
 def publish_cmdline_impressjs(*args, **kwargs):
     """Run utility for converting an RST file to an impress.js presentation."""
     publish_cmdline(*args, **kwargs, writer=impressjs.Writer())
+
+
+def publish_cmdline_revealjs(*args, **kwargs):
+    """Run utility for converting an RST file to a reveal.js presentation."""
+    publish_cmdline(*args, **kwargs, writer=revealjs.Writer())

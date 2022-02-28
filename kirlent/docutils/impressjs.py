@@ -20,10 +20,6 @@ IMPRESS_JS_INIT = """
 """
 
 IMPRESS_JS_STYLE = """
-  :root {
-    font-size: %(font_size)dpx;
-  }
-
   .step {
     width: %(width)dpx;
     height: %(height)dpx;
@@ -141,7 +137,6 @@ class ImpressJSTranslator(SlidesTranslator):
         impress_js_style = IMPRESS_JS_STYLE % {
             "width": self.slide_width,
             "height": self.slide_height,
-            "font_size": self.font_size,
         }
         self.head.append(SlidesTranslator.embedded_stylesheet % impress_js_style)
 

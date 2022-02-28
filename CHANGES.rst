@@ -3,3 +3,4 @@
 
 - Custom HTML5 writer.
 - impress.js writer.
+- reveal.js writer.

@@ -28,6 +28,12 @@ SLIDES_INIT = """
   }, false);
 """
 
+SLIDE_STYLE = """
+  :root {
+    font-size: %(font_size)dpx;
+  }
+"""
+
 ANNOTATION_PREFIX = "annotate://"
 
 ANNOTATION_COLOR_PROPERTY_PREFIX = "--color-annotation-"
@@ -133,6 +139,9 @@ class SlidesTranslator(HTMLTranslator):
         super().depart_document(node)
 
         self.head.append(SlidesTranslator.script_slides_init)
+
+        slide_style = SLIDE_STYLE % {"font_size": self.font_size}
+        self.head.append(SlidesTranslator.embedded_stylesheet % slide_style)
 
         # add code for loading rough notation
         self.head.append(SlidesTranslator.script_rough_notation)
