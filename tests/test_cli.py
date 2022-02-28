@@ -90,6 +90,42 @@ def test_impressjs_writer_should_use_given_standard_size_on_impress_element(capf
     assert re.search(r'data-height="795".*data-width="1125".*id="impress"', captured.out) is not None
 
 
+def test_impressjs_writer_should_use_default_transition_duration_on_impress_element(capfd):
+    subprocess.run([kirlent2impressjs, "/dev/null"])
+    captured = capfd.readouterr()
+    assert re.search(r'data-transition-duration="0".*id="impress"', captured.out) is not None
+
+
+def test_impressjs_writer_should_use_given_transition_duration_on_impress_element(capfd):
+    subprocess.run([kirlent2impressjs, "--transition-duration=7", "/dev/null"])
+    captured = capfd.readouterr()
+    assert re.search(r'data-transition-duration="7".*id="impress"', captured.out) is not None
+
+
+def test_impressjs_writer_should_use_default_min_scale_on_impress_element(capfd):
+    subprocess.run([kirlent2impressjs, "/dev/null"])
+    captured = capfd.readouterr()
+    assert re.search(r'data-min-scale="1".*id="impress"', captured.out) is not None
+
+
+def test_impressjs_writer_should_use_given_min_scale_on_impress_element(capfd):
+    subprocess.run([kirlent2impressjs, "--min-scale=0", "/dev/null"])
+    captured = capfd.readouterr()
+    assert re.search(r'data-min-scale="0".*id="impress"', captured.out) is not None
+
+
+def test_impressjs_writer_should_use_default_max_scale_on_impress_element(capfd):
+    subprocess.run([kirlent2impressjs, "/dev/null"])
+    captured = capfd.readouterr()
+    assert re.search(r'data-max-scale="1".*id="impress"', captured.out) is not None
+
+
+def test_impressjs_writer_should_use_given_max_scale_on_impress_element(capfd):
+    subprocess.run([kirlent2impressjs, "--max-scale=2", "/dev/null"])
+    captured = capfd.readouterr()
+    assert re.search(r'data-max-scale="2".*id="impress"', captured.out) is not None
+
+
 def test_impressjs_writer_should_use_default_slide_size_on_step_style(capfd):
     subprocess.run([kirlent2impressjs, "/dev/null"])
     captured = capfd.readouterr()

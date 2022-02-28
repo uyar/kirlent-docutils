@@ -87,6 +87,10 @@ class Writer(HTMLWriter):
     default_slide_height = 720
     default_font_size = 0
 
+    default_transition_duration = 0
+    default_min_scale = 1
+    default_max_scale = 1
+
     settings_spec = frontend.filter_settings_spec(
         HTMLWriter.settings_spec,
         stylesheet_path=(
@@ -130,6 +134,30 @@ class Writer(HTMLWriter):
                     "validator": frontend.validate_nonnegative_int,
                 }
             ),
+            (
+                'Slide transition duration in seconds. (default: %d)' % (
+                    default_transition_duration,
+                ),
+                ["--transition-duration"],
+                {
+                    "default": default_transition_duration,
+                    "validator": frontend.validate_nonnegative_int,
+                }
+            ),
+            (
+                'Slide minimum scale. (default: %d)' % default_min_scale,
+                ["--min-scale"],
+                {
+                    "default": default_min_scale,
+                }
+            ),
+            (
+                'Slide maximum scale. (default: %d)' % default_max_scale,
+                ["--max-scale"],
+                {
+                    "default": default_max_scale,
+                }
+            ),
         )
     )
 
@@ -163,6 +191,10 @@ class ImpressJSTranslator(HTMLTranslator):
                 self.step_height // SLIDE_LINES,
             )
 
+        self.transition_duration = self.document.settings.transition_duration
+        self.min_scale = self.document.settings.min_scale
+        self.max_scale = self.document.settings.max_scale
+
         # add attributes to keep track of the field data
         self.__fields = {}
         self.__field_name, self.__field_body = None, None
@@ -176,6 +208,9 @@ class ImpressJSTranslator(HTMLTranslator):
         node.attributes["_custom"] = {
             "data-width": str(self.step_width),
             "data-height": str(self.step_height),
+            "data-transition-duration": str(self.transition_duration),
+            "data-min-scale": str(self.min_scale),
+            "data-max-scale": str(self.max_scale),
         }
         super().visit_document(node)
 
