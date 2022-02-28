@@ -72,6 +72,9 @@ SLIDE_SIZES = {
     "a4": (1125, 795),
 }
 
+SLIDE_LINE_LENGTH = 40
+SLIDE_LINES = 24
+
 SVG_FONT_SIZE = 16
 
 
@@ -80,8 +83,9 @@ class Writer(HTMLWriter):
 
     default_stylesheets = ["minimal.css", "impressjs.css"]
 
-    default_slide_size = "1920x1080"
-    default_font_size = 45
+    default_slide_width = 1280
+    default_slide_height = 720
+    default_font_size = 0
 
     settings_spec = frontend.filter_settings_spec(
         HTMLWriter.settings_spec,
@@ -106,14 +110,20 @@ class Writer(HTMLWriter):
         "",
         (
             (
-                'Slide size. (default: %s)' % default_slide_size,
+                'Slide size in pixels. (default: %dx%d)' % (
+                    default_slide_width, default_slide_height
+                ),
                 ["--slide-size"],
                 {
-                    "default": default_slide_size,
+                    "default": "%dx%d" % (
+                        default_slide_width, default_slide_height
+                    ),
                 }
             ),
             (
-                'Font size. (default: %s)' % default_font_size,
+                'Font size in pixels. 0 means automatic. (default: %d)' % (
+                    default_font_size,
+                ),
                 ["--font-size"],
                 {
                     "default": default_font_size,
@@ -147,6 +157,11 @@ class ImpressJSTranslator(HTMLTranslator):
         self.step_width, self.step_height = slide_size
 
         self.font_size = self.document.settings.font_size
+        if self.font_size == 0:
+            self.font_size = min(
+                self.step_width // SLIDE_LINE_LENGTH,
+                self.step_height // SLIDE_LINES,
+            )
 
         # add attributes to keep track of the field data
         self.__fields = {}

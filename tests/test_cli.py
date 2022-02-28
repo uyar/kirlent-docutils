@@ -1,11 +1,7 @@
 import re
 import subprocess
 import sys
-from functools import partial
 from pathlib import Path
-
-
-compact = partial(re.sub, re.compile(r'\s+'), ' ')
 
 
 rst2kirlenthtml5 = Path(sys.executable).with_name("rst2kirlenthtml5")
@@ -79,46 +75,52 @@ def test_impressjs_writer_should_include_kirlent_impressjs_stylesheet(capfd):
 def test_impressjs_writer_should_use_default_slide_size_on_impress_element(capfd):
     subprocess.run([kirlent2impressjs, "/dev/null"])
     captured = capfd.readouterr()
-    assert 'data-height="1080" data-width="1920" id="impress"' in captured.out
+    assert re.search(r'data-height="720".*data-width="1280".*id="impress"', captured.out) is not None
 
 
 def test_impressjs_writer_should_use_given_slide_size_on_impress_element(capfd):
     subprocess.run([kirlent2impressjs, "--slide-size=42x35", "/dev/null"])
     captured = capfd.readouterr()
-    assert 'data-height="35" data-width="42" id="impress"' in captured.out
+    assert re.search(r'data-height="35".*data-width="42".*id="impress"', captured.out) is not None
 
 
 def test_impressjs_writer_should_use_given_standard_size_on_impress_element(capfd):
     subprocess.run([kirlent2impressjs, "--slide-size=a4", "/dev/null"])
     captured = capfd.readouterr()
-    assert 'data-height="795" data-width="1125" id="impress"' in captured.out
+    assert re.search(r'data-height="795".*data-width="1125".*id="impress"', captured.out) is not None
 
 
 def test_impressjs_writer_should_use_default_slide_size_on_step_style(capfd):
     subprocess.run([kirlent2impressjs, "/dev/null"])
     captured = capfd.readouterr()
-    assert '.step { width: 1920px; height: 1080px;' in compact(captured.out)
+    assert re.search(r'.step {\s+width: 1280px;\s+height: 720px;', captured.out) is not None
 
 
 def test_impressjs_writer_should_use_given_slide_size_on_step_style(capfd):
     subprocess.run([kirlent2impressjs, "--slide-size=42x35", "/dev/null"])
     captured = capfd.readouterr()
-    assert '.step { width: 42px; height: 35px;' in compact(captured.out)
+    assert re.search(r'.step {\s+width: 42px;\s+height: 35px;', captured.out) is not None
 
 
 def test_impressjs_writer_should_use_given_standard_size_on_step_style(capfd):
     subprocess.run([kirlent2impressjs, "--slide-size=a4", "/dev/null"])
     captured = capfd.readouterr()
-    assert '.step { width: 1125px; height: 795px;' in compact(captured.out)
+    assert re.search(r'.step {\s+width: 1125px;\s+height: 795px;', captured.out) is not None
 
 
 def test_impressjs_writer_should_use_default_font_size_on_step_style(capfd):
     subprocess.run([kirlent2impressjs, "/dev/null"])
     captured = capfd.readouterr()
-    assert 'font-size: 45px;' in compact(captured.out)
+    assert 'font-size: 30px;' in captured.out
+
+
+def test_impressjs_writer_should_use_automatic_font_size_on_step_style(capfd):
+    subprocess.run([kirlent2impressjs, "--slide-size=1920x1080", "/dev/null"])
+    captured = capfd.readouterr()
+    assert 'font-size: 45px;' in captured.out
 
 
 def test_impressjs_writer_should_use_given_font_size_on_step_style(capfd):
     subprocess.run([kirlent2impressjs, "--font-size=3", "/dev/null"])
     captured = capfd.readouterr()
-    assert 'font-size: 3px;' in compact(captured.out)
+    assert 'font-size: 3px;' in captured.out
