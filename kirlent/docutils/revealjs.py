@@ -86,6 +86,8 @@ class RevealJSTranslator(SlidesTranslator):
     script_revealjs = SlidesTranslator.script_defer % REVEAL_JS_URL
     script_revealjs_init = SlidesTranslator.script % REVEAL_JS_INIT
 
+    substep_class = "fragment"
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -110,10 +112,3 @@ class RevealJSTranslator(SlidesTranslator):
             "center": "true" if self.center_vertical else "false",
             "transition": self.transition,
         })
-
-    def visit_container(self, node):
-        classes = node.attributes["classes"]
-        if "substep" in classes:
-            classes.remove("substep")
-            classes.append("fragment")
-        super().visit_container(node)
