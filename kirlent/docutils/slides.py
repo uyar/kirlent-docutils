@@ -209,8 +209,9 @@ class SlidesTranslator(HTMLTranslator):
         styles = {}
         layout = self._fields.pop("layout", None)
         if layout is not None:
+            areas = " ".join(f"'{row}'" for row in layout.splitlines())
             styles["display"] = "grid"
-            styles["grid-template-areas"] = f"'{layout}'"
+            styles["grid-template-areas"] = areas
         slide_contents = container()
         slide_contents.attributes["classes"] = ["main"]
         slide_contents.attributes["_styles"] = styles

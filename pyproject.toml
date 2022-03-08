@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "kirlent_docutils"
-version = "0.1.0"
+version = "0.1.1"
 description = "Custom writers for docutils."
 readme = "README.rst"
 
