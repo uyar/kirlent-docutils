@@ -86,7 +86,7 @@ class RevealJSTranslator(SlidesTranslator):
     script_revealjs = SlidesTranslator.script_defer % REVEAL_JS_URL
     script_revealjs_init = SlidesTranslator.script % REVEAL_JS_INIT
 
-    substep_class = "fragment"
+    pause_class = "fragment"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

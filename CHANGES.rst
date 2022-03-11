@@ -1,3 +1,8 @@
+0.1.2 (unreleased)
+------------------
+
+- Change field markup for pauses (substep/fragment).
+
 0.1.1 (2022-03-08)
 ------------------
 

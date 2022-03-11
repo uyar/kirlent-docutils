@@ -109,7 +109,7 @@ class SlidesTranslator(HTMLTranslator):
     script_rough_notation = HTMLTranslator.script_defer % ROUGH_NOTATION_URL
     script_annotate = HTMLTranslator.script % ROUGH_NOTATION_ANNOTATE
 
-    substep_class = ""
+    pause_class = ""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -132,9 +132,9 @@ class SlidesTranslator(HTMLTranslator):
         self._field_name, self._field_body = None, None
 
     def starttag(self, node, *args, **kwargs):
-        substep = self._fields.pop("substep", None)
-        if substep is not None:
-            node.attributes["classes"].append(self.__class__.substep_class)
+        pause = self._fields.pop("pause", None)
+        if pause is not None:
+            node.attributes["classes"].append(self.__class__.pause_class)
         return super().starttag(node, *args, **kwargs)
 
     def visit_document(self, node):

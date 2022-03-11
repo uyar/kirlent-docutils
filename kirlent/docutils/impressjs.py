@@ -104,7 +104,7 @@ class ImpressJSTranslator(SlidesTranslator):
     script_impressjs = SlidesTranslator.script_defer % IMPRESS_JS_URL
     script_impressjs_init = SlidesTranslator.script % IMPRESS_JS_INIT
 
-    substep_class = "substep"
+    pause_class = "substep"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
