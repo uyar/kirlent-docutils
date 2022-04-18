@@ -20,6 +20,8 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.7",
     "Topic :: Text Processing :: Markup",
     "Topic :: Text Processing :: Markup :: HTML"
 ]
@@ -29,15 +31,15 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "~=3.9"
-docutils = ">=0.17"
+python = "~=3.7"
+docutils = ">=0.18"
 
 [tool.poetry.dev-dependencies]
-pytest = ">=5"
-pytest-cov = ">=3"
-flake8 = ">=3"
-flake8-isort = ">=4"
-tox = ">=3"
+pytest = ">=7.1"
+pytest-cov = ">=3.0"
+flake8 = ">=4.0"
+flake8-isort = ">=4.1"
+tox = ">=3.25"
 
 [tool.poetry.scripts]
 rst2kirlenthtml5 = "kirlent.docutils:publish_cmdline_html5"
@@ -52,7 +54,7 @@ sections = "TEST,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py{310,39}, style
+envlist = py{310,39,38,37}, style
 isolated_build = True
 
 [testenv]
