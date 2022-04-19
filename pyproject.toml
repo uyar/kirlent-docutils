@@ -26,10 +26,6 @@ classifiers = [
     "Topic :: Text Processing :: Markup :: HTML"
 ]
 
-packages = [
-    { include = "kirlent" }
-]
-
 [tool.poetry.dependencies]
 python = "~=3.7"
 docutils = ">=0.18"
@@ -42,9 +38,9 @@ flake8-isort = ">=4.1"
 tox = ">=3.25"
 
 [tool.poetry.scripts]
-rst2kirlenthtml5 = "kirlent.docutils:publish_cmdline_html5"
-kirlent2impressjs = "kirlent.docutils:publish_cmdline_impressjs"
-kirlent2revealjs = "kirlent.docutils:publish_cmdline_revealjs"
+rst2kirlenthtml5 = "kirlent_docutils:publish_cmdline_html5"
+kirlent2impressjs = "kirlent_docutils:publish_cmdline_impressjs"
+kirlent2revealjs = "kirlent_docutils:publish_cmdline_revealjs"
 
 [tool.isort]
 lines_after_imports = 2
@@ -68,14 +64,14 @@ deps =
     {[testenv]deps}
     pytest-cov
 commands =
-    pytest --cov={envsitepackagesdir}/kirlent/docutils --cov-report=term-missing tests
+    pytest --cov={envsitepackagesdir}/kirlent_docutils --cov-report=term-missing tests
 
 [testenv:style]
 deps =
     flake8
     flake8-isort
 commands =
-    flake8 kirlent/docutils
+    flake8 kirlent_docutils
 """
 
 [build-system]

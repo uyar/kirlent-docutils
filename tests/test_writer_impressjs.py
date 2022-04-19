@@ -4,7 +4,7 @@ from functools import partial
 from docutils.core import publish_parts
 
 
-publish_html = partial(publish_parts, writer_name="kirlent.docutils.impressjs")
+publish_html = partial(publish_parts, writer_name="kirlent_docutils.impressjs")
 
 
 PREAMBLE = ".. title:: Document Title\n\n:author: Author\n\n"

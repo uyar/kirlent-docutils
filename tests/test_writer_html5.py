@@ -3,7 +3,7 @@ from functools import partial
 from docutils.core import publish_parts
 
 
-publish_html = partial(publish_parts, writer_name="kirlent.docutils.html5")
+publish_html = partial(publish_parts, writer_name="kirlent_docutils.html5")
 
 
 def test_writer_should_not_generate_xml_declaration():
