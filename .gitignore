@@ -13,3 +13,7 @@ build
 dist
 prof
 coverage.xml
+
+package.json
+package-lock.json
+node_modules

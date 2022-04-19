@@ -3,6 +3,7 @@
 
 - Rename package from kirlent.docutils to kirlent_docutils.
 - Change field markup for pauses (substep/fragment).
+- Improve base styles.
 - Restore support for Python 3.7 and 3.8.
 
 0.1.1 (2022-03-08)

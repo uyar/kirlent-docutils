@@ -85,9 +85,12 @@ class HTMLTranslator(HTML5Translator):
         ({"container"}, "container"),
         ({"container", "literal", "transition"}, "docutils"),
         ({"entry"}, "head"),
+        ({"literal_block"}, "literal-block"),
         ({"reference"}, "external"),
         ({"reference"}, "internal"),
         ({"reference"}, "reference"),
+        ({"target"}, "target"),
+        ({"title"}, "title"),
     )
 
     def starttag(self, node, *args, **kwargs):

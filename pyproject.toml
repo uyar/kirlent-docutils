@@ -29,6 +29,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "~=3.7"
 docutils = ">=0.18"
+pygments = ">=2.11"
 
 [tool.poetry.dev-dependencies]
 pytest = ">=7.1"

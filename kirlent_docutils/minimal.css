@@ -8,31 +8,59 @@
 
 body {
   margin: 0;
-  line-height: 1.5;
+  font-family: system-ui, sans-serif;
 }
 
-ul[role='list'],
-ol[role='list'] {
-  padding: 0;
-  list-style-type: none;
+code,
+kbd,
+samp,
+pre,
+span.literal {
+  font-family: ui-monospace, monospace;
 }
 
-img,
-video,
-svg {
+img {
   max-width: 100%;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  ::before,
-  ::after {
-    background-attachment: initial !important;
-    transition-delay: 0s !important;
-    transition-duration: 0s !important;
-    animation-duration: 1ms !important;
-    animation-delay: -1ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-  }
+:where(li, dd, th, td) > * {
+  margin: 0;
+}
+
+ol.arabic {
+  list-style-type: arabic;
+}
+
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+:where(dl.docinfo, dl.field-list) {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+}
+
+:where(dl.docinfo, dl.field-list) dt {
+  font-weight: bold;
+}
+
+thead {
+  border-block-end-style: solid;
+}
+
+th,
+td {
+  padding: 0.25rem 0.5rem;
 }

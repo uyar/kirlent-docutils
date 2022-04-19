@@ -1,14 +1,8 @@
 /* Kirlent plain stylesheet for HTML5 output. */
 
 body {
-  font-family: system-ui, sans-serif;
-}
-
-code,
-kbd,
-samp,
-pre {
-  font-family: ui-monospace, monospace;
+  padding: 1rem;
+  line-height: 1.5;
 }
 
 table {
@@ -19,6 +13,6 @@ th {
   text-align: left;
 }
 
-html:focus-within {
-  scroll-behavior: smooth;
+tbody tr {
+  border-block-end-style: solid;
 }
