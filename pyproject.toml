@@ -1,14 +1,11 @@
-[tool.poetry]
+[project]
 name = "kirlent_docutils"
 version = "0.1.2"
 description = "Custom writers for docutils."
 readme = "README.rst"
 
-authors = ["H. Turgut Uyar <uyar@tekir.org>"]
-license = "BSD-3-Clause"
-
-homepage = "https://tekir.org/kirlent_docutils/"
-repository = "https://repo.tekir.org/kirlent/kirlent_docutils"
+authors = [{name = "H. Turgut Uyar", email = "uyar@tekir.org"}]
+license = {file = "LICENSE.txt"}
 
 keywords = ["markup", "html", "rst", "restructuredtext", "docutils"]
 classifiers = [
@@ -26,22 +23,29 @@ classifiers = [
     "Topic :: Text Processing :: Markup :: HTML"
 ]
 
-[tool.poetry.dependencies]
-python = "~=3.7"
-docutils = ">=0.18"
-pygments = ">=2.11"
+requires-python = "~=3.7"
+dependencies = [
+    "docutils",
+    "pygments",
+]
 
-[tool.poetry.dev-dependencies]
-pytest = ">=7.1"
-pytest-cov = ">=3.0"
-flake8 = ">=4.0"
-flake8-isort = ">=4.1"
-tox = ">=3.25"
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "flake8",
+    "flake8-isort",
+    "tox",
+]
 
-[tool.poetry.scripts]
+[project.scripts]
 rst2kirlenthtml5 = "kirlent_docutils:publish_cmdline_html5"
 kirlent2impressjs = "kirlent_docutils:publish_cmdline_impressjs"
 kirlent2revealjs = "kirlent_docutils:publish_cmdline_revealjs"
+
+[project.urls]
+"Homepage" = "https://tekir.org/kirlent_docutils/"
+"Repository" = "https://repo.tekir.org/kirlent/kirlent_docutils"
 
 [tool.isort]
 lines_after_imports = 2
@@ -76,5 +80,5 @@ commands =
 """
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["flit_core>=3.2"]
+build-backend = "flit_core.buildapi"
