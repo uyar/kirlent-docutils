@@ -34,7 +34,6 @@ class Writer(HTML5Writer):
         "xml_declaration": False,
         "compact_lists": False,
         "compact_field_lists": False,
-        "cloak_email_addresses": False,
     }
 
     settings_spec = frontend.filter_settings_spec(
@@ -45,7 +44,6 @@ class Writer(HTML5Writer):
         "no_compact_lists",
         "compact_field_lists",
         "no_compact_field_lists",
-        "cloak_email_addresses",
         stylesheet_dirs=(
             'Comma-separated list of directories where stylesheets are found. '
             'Used by --stylesheet-path when expanding relative path arguments. '  # noqa

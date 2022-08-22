@@ -8,22 +8,22 @@ publish_html = partial(publish_parts, writer_name="kirlent_docutils.html5")
 
 def test_writer_should_not_generate_xml_declaration():
     html = publish_html("text\n")
-    assert '<?xml' not in html["html_head"]
+    assert '<?xml' not in html["whole"]
 
 
 def test_writer_should_not_generate_xml_attributes():
     html = publish_html("text\n")
-    assert ' xml' not in html["html_head"]
+    assert ' xml' not in html["whole"]
 
 
 def test_writer_should_not_generate_type_attribute_for_stylesheet_link():
     html = publish_html("text\n", settings_overrides={"embed_stylesheet": False})
-    assert 'type=' not in html["html_head"]
+    assert 'type=' not in html["whole"]
 
 
 def test_writer_should_not_generate_type_attribute_for_style():
     html = publish_html("text\n")
-    assert 'type=' not in html["html_head"]
+    assert 'type=' not in html["whole"]
 
 
 def test_writer_should_not_generate_paragraph_for_single_paragraph_list_item():

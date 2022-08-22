@@ -17,10 +17,22 @@ def test_html5_writer_should_not_allow_xml_declaration_option(capfd):
     assert "no such option: --xml-declaration" in captured.err
 
 
+def test_html5_writer_should_not_allow_no_xml_declaration_option(capfd):
+    subprocess.run([rst2kirlenthtml5, "--no-xml-declaration", "/dev/null"])
+    captured = capfd.readouterr()
+    assert "no such option: --no-xml-declaration" in captured.err
+
+
 def test_html5_writer_should_not_allow_compact_lists_option(capfd):
     subprocess.run([rst2kirlenthtml5, "--compact-lists", "/dev/null"])
     captured = capfd.readouterr()
     assert "no such option: --compact-lists" in captured.err
+
+
+def test_html5_writer_should_not_allow_no_compact_lists_option(capfd):
+    subprocess.run([rst2kirlenthtml5, "--no-compact-lists", "/dev/null"])
+    captured = capfd.readouterr()
+    assert "no such option: --no-compact-lists" in captured.err
 
 
 def test_html5_writer_should_not_allow_compact_field_lists_option(capfd):
@@ -29,10 +41,10 @@ def test_html5_writer_should_not_allow_compact_field_lists_option(capfd):
     assert "no such option: --compact-field-lists" in captured.err
 
 
-def test_html5_writer_should_not_allow_cloak_email_addresses_option(capfd):
-    subprocess.run([rst2kirlenthtml5, "--cloak-email-addresses", "/dev/null"])
+def test_html5_writer_should_not_allow_no_compact_field_lists_option(capfd):
+    subprocess.run([rst2kirlenthtml5, "--no-compact-field-lists", "/dev/null"])
     captured = capfd.readouterr()
-    assert "no such option: --cloak-email-addresses" in captured.err
+    assert "no such option: --no-compact-field-lists" in captured.err
 
 
 def test_html5_writer_should_include_kirlent_minimal_stylesheet(capfd):
