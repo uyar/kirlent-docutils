@@ -91,6 +91,8 @@ class HTMLTranslator(HTML5Translator):
         ({"title"}, "title"),
     )
 
+    COLON_SPAN = '<span class="colon">:</span>'
+
     def starttag(self, node, *args, **kwargs):
         # remove custom docutils classes
         classes = kwargs.pop("CLASS", "").split()
@@ -142,3 +144,12 @@ class HTMLTranslator(HTML5Translator):
     def depart_line(self, node):
         # add '<br/>' to end of line
         self.body.append('<br/>\n')
+
+    def visit_docinfo_item(self, node, *args, **kwargs):
+        # suppress '<span class="colon">'
+        super().visit_docinfo_item(node, *args, **kwargs)
+        self.body[-2] = self.body[-2].replace(HTMLTranslator.COLON_SPAN, ':')
+
+    def depart_field_name(self, node):
+        # suppress '<span class="colon">'
+        self.body[-1] = self.body[-1].replace(HTMLTranslator.COLON_SPAN, ':')

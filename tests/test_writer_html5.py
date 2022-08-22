@@ -149,3 +149,13 @@ def test_writer_should_not_generate_literal_block_class_for_pre():
 def test_writer_should_generate_literal_class_for_pre_when_explicit():
     html = publish_html(".. class:: literal-block\n\n::\n\n  text")
     assert '<pre class="literal-block">' in html["html_body"]
+
+
+def test_writer_should_not_generate_colon_class_span_for_docinfo_items():
+    html = publish_html(":author: Author\n\ntext\n")
+    assert '<span class="colon">' not in html["html_body"]
+
+
+def test_writer_should_not_generate_colon_class_span_for_field_names():
+    html = publish_html("text\n\n:author: Author\n\ntext\n")
+    assert '<span class="colon">' not in html["html_body"]
