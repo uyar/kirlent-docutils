@@ -8,27 +8,18 @@
 
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
-}
-
-code,
-kbd,
-samp,
-pre,
-span.literal {
-  font-family: ui-monospace, monospace;
-}
-
-img {
-  max-width: 100%;
 }
 
 :where(li, dd, th, td) > * {
   margin: 0;
 }
 
+img {
+  max-width: 100%;
+}
+
 ol.arabic {
-  list-style-type: arabic;
+  list-style-type: decimal;
 }
 
 ol.loweralpha {
@@ -45,22 +36,4 @@ ol.lowerroman {
 
 ol.upperroman {
   list-style-type: upper-roman;
-}
-
-:where(dl.docinfo, dl.field-list) {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-}
-
-:where(dl.docinfo, dl.field-list) dt {
-  font-weight: bold;
-}
-
-thead {
-  border-block-end-style: solid;
-}
-
-th,
-td {
-  padding: 0.25rem 0.5rem;
 }
