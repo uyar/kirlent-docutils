@@ -38,7 +38,7 @@ ANNOTATION_PREFIX = "annotate://"
 
 ANNOTATION_COLOR_PROPERTY_PREFIX = "--color-annotation-"
 
-ROUGH_NOTATION_URL = "https://unpkg.com/rough-notation/lib/rough-notation.iife.js"  # noqa
+ROUGH_NOTATION_PATH = Path(__file__).parent.joinpath("bundled", "rough-notation.iife.js")
 
 ROUGH_NOTATION_ANNOTATE = """
   function annotate(el, eff, cat) {
@@ -106,7 +106,7 @@ class SlidesTranslator(HTMLTranslator):
 
     script_slides_init = HTMLTranslator.script % SLIDES_INIT
 
-    script_rough_notation = HTMLTranslator.script_defer % ROUGH_NOTATION_URL
+    script_rough_notation = HTMLTranslator.script_defer % ROUGH_NOTATION_PATH
     script_annotate = HTMLTranslator.script % ROUGH_NOTATION_ANNOTATE
 
     pause_class = ""
