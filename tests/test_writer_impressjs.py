@@ -21,39 +21,19 @@ def test_writer_should_generate_script_for_initialiazing_impress_js():
     assert re.search(r'<script>.*\bimpress\(\).init\(\);.*</script>', html["head"], re.DOTALL) is not None
 
 
-def test_writer_should_generate_style_for_impress_js_root_settings():
+def test_writer_should_generate_main_element_with_id_impress():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert re.search(r'<style>.*:root {[^}]+}.*</style>', html["head"], re.DOTALL) is not None
-
-
-def test_writer_should_generate_style_for_impress_js_step_settings():
-    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert re.search(r'<style>.*\.step {[^}]+}\s*</style>', html["head"], re.DOTALL) is not None
-
-
-def test_writer_should_generate_root_with_id_impress():
-    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert re.search(r'<main .*\bid="impress"', html["html_body"]) is not None
-
-
-def test_writer_should_set_default_width_on_root():
-    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert re.search(r'<main .*\bdata-width="1920"', html["html_body"]) is not None
-
-
-def test_writer_should_set_default_height_on_root():
-    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert re.search(r'<main .*\bdata-height="1080"', html["html_body"]) is not None
+    assert re.search(r'<main [^>]*\bid="impress"', html["html_body"]) is not None
 
 
 def test_writer_should_wrap_docinfo_in_a_step():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert re.search(r'<section .*\bid="docinfo".*\bclass="step"', html["html_body"]) is not None
+    assert re.search(r'<section [^>]*\bid="docinfo"[^>]*\bclass="step"', html["html_body"]) is not None
 
 
 def test_writer_should_generate_title_heading_in_docinfo_step():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert '<h1>Document Title</h1>' in html["html_body"]
+    assert '<h1>Document Title</h1>' in html["docinfo"]
 
 
 def test_writer_should_not_generate_markup_for_transition():
