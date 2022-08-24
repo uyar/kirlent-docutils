@@ -1,21 +1,11 @@
 /* Kirlent minimal stylesheet for HTML5 output. */
 
-*,
-::before,
-::after {
-  box-sizing: border-box;
-}
-
-body {
+:where(li, dd, td, th) > * {
   margin: 0;
 }
 
-:where(li, dd, th, td) > * {
-  margin: 0;
-}
-
-img {
-  max-width: 100%;
+span.literal {
+  font-family: monospace;
 }
 
 ol.arabic {

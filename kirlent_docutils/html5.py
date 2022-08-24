@@ -27,6 +27,8 @@ class Writer(HTML5Writer):
 
     supported = ("html", "html5")
 
+    default_stylesheets = ["minimal.css"]
+
     default_stylesheet_dirs = [".", str(Path(__file__).parent)] + \
         HTML5Writer.default_stylesheet_dirs[1:]
 
@@ -44,6 +46,20 @@ class Writer(HTML5Writer):
         "no_compact_lists",
         "compact_field_lists",
         "no_compact_field_lists",
+        stylesheet_path=(
+            'Comma separated list of stylesheet paths. '
+            'Relative paths are expanded if a matching file is found in '
+            'the --stylesheet-dirs. With --link-stylesheet, '
+            'the path is rewritten relative to the output HTML file. '
+            '(default: "%s")' % ','.join(default_stylesheets),
+            ["--stylesheet-path"],
+            {
+                "metavar": "<file[,file,...]>",
+                "overrides": "stylesheet",
+                "validator": frontend.validate_comma_separated_list,
+                "default": default_stylesheets,
+            }
+        ),
         stylesheet_dirs=(
             'Comma-separated list of directories where stylesheets are found. '
             'Used by --stylesheet-path when expanding relative path arguments. '  # noqa

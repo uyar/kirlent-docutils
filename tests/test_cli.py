@@ -53,12 +53,6 @@ def test_html5_writer_should_include_kirlent_minimal_stylesheet(capfd):
     assert "Kirlent minimal stylesheet" in captured.out
 
 
-def test_html5_writer_should_include_kirlent_plain_stylesheet(capfd):
-    subprocess.run([rst2kirlenthtml5, "/dev/null"])
-    captured = capfd.readouterr()
-    assert "Kirlent plain stylesheet" in captured.out
-
-
 kirlent2impressjs = Path(sys.executable).with_name("kirlent2impressjs")
 
 
