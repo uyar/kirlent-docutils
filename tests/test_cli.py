@@ -50,7 +50,7 @@ def test_html5_writer_should_not_allow_no_compact_field_lists_option(capfd):
 def test_html5_writer_should_include_kirlent_minimal_stylesheet(capfd):
     subprocess.run([rst2kirlenthtml5, "/dev/null"])
     captured = capfd.readouterr()
-    assert "Kirlent minimal stylesheet" in captured.out
+    assert "Kirlent minimal stylesheet for HTML5" in captured.out
 
 
 kirlent2impressjs = Path(sys.executable).with_name("kirlent2impressjs")
@@ -63,19 +63,13 @@ def test_installation_should_create_console_script_for_impressjs_writer():
 def test_impressjs_writer_should_include_kirlent_minimal_stylesheet(capfd):
     subprocess.run([kirlent2impressjs, "/dev/null"])
     captured = capfd.readouterr()
-    assert "Kirlent minimal stylesheet" in captured.out
+    assert "Kirlent minimal stylesheet for HTML5" in captured.out
 
 
-def test_impressjs_writer_should_not_include_plain_stylesheet(capfd):
+def test_impressjs_writer_should_include_kirlent_minimal_impressjs_stylesheet(capfd):
     subprocess.run([kirlent2impressjs, "/dev/null"])
     captured = capfd.readouterr()
-    assert "plain" not in captured.out
-
-
-def test_impressjs_writer_should_include_kirlent_impressjs_stylesheet(capfd):
-    subprocess.run([kirlent2impressjs, "/dev/null"])
-    captured = capfd.readouterr()
-    assert "Kirlent stylesheet for impress.js" in captured.out
+    assert "Kirlent minimal stylesheet for impress.js" in captured.out
 
 
 def test_impressjs_writer_should_use_default_slide_size_on_impress_element(capfd):
