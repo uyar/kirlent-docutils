@@ -5,13 +5,15 @@
 
 """impress.js writer for docutils."""
 
+from pathlib import Path
+
 from docutils import frontend
 
 from .slides import SlidesTranslator
 from .slides import Writer as SlidesWriter
 
 
-IMPRESS_JS_URL = "https://impress.js.org/js/impress.js"
+IMPRESS_JS_PATH = Path(__file__).parent.joinpath("bundled", "impress.js")
 
 IMPRESS_JS_INIT = """
   window.addEventListener('DOMContentLoaded', () => {
@@ -101,7 +103,7 @@ class Writer(SlidesWriter):
 class ImpressJSTranslator(SlidesTranslator):
     """Translator for generating impress.js markup."""
 
-    script_impressjs = SlidesTranslator.script_defer % IMPRESS_JS_URL
+    script_impressjs = SlidesTranslator.script_defer % IMPRESS_JS_PATH
     script_impressjs_init = SlidesTranslator.script % IMPRESS_JS_INIT
 
     pause_class = "substep"
