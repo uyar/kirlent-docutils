@@ -5,13 +5,15 @@
 
 """reveal.js writer for docutils."""
 
+from pathlib import Path
+
 from docutils import frontend
 
 from .slides import SlidesTranslator
 from .slides import Writer as SlidesWriter
 
 
-REVEAL_JS_URL = "https://cdn.jsdelivr.net/npm/reveal.js"
+REVEAL_JS_PATH = Path(__file__).parent.joinpath("bundled", "reveal.js")
 
 REVEAL_JS_INIT = """
   window.addEventListener('DOMContentLoaded', () => {
@@ -83,7 +85,7 @@ class Writer(SlidesWriter):
 class RevealJSTranslator(SlidesTranslator):
     """Translator for generating reveal.js markup."""
 
-    script_revealjs = SlidesTranslator.script_defer % REVEAL_JS_URL
+    script_revealjs = SlidesTranslator.script_defer % REVEAL_JS_PATH
     script_revealjs_init = SlidesTranslator.script % REVEAL_JS_INIT
 
     pause_class = "fragment"
