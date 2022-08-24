@@ -79,17 +79,16 @@ class HTMLTranslator(HTML5Translator):
     # no '<p>' under these if single paragraph
     SIMPLE_BLOCKS = {"definition", "entry", "field_body", "list_item"}
 
-    UNWANTED_CLASSES = (
-        ({"container"}, "container"),
-        ({"container", "literal", "transition"}, "docutils"),
-        ({"entry"}, "head"),
-        ({"literal_block"}, "literal-block"),
-        ({"reference"}, "external"),
-        ({"reference"}, "internal"),
-        ({"reference"}, "reference"),
-        ({"target"}, "target"),
-        ({"title"}, "title"),
-    )
+    UNWANTED_CLASSES = {
+        "container": {"container", "docutils"},
+        "entry": {"head"},
+        "literal": {"docutils"},
+        "literal_block": {"literal-block"},
+        "reference": {"external", "internal", "reference"},
+        "target": {"target"},
+        "title": {"title"},
+        "transition": {"docutils"},
+    }
 
     COLON_SPAN = '<span class="colon">:</span>'
 
@@ -99,9 +98,10 @@ class HTMLTranslator(HTML5Translator):
         classes.extend(kwargs.pop("class", "").split())
         classes.extend(kwargs.pop("classes", []))
         if len(classes) > 0:
-            for tagnames, classname in HTMLTranslator.UNWANTED_CLASSES:
-                if (node.tagname in tagnames) and (classname in classes):
-                    classes.remove(classname)
+            unwanted = HTMLTranslator.UNWANTED_CLASSES.get(node.tagname, set())
+            to_remove = [c for c in classes if c in unwanted]
+            for classname in to_remove:
+                classes.remove(classname)
             if len(classes) > 0:
                 kwargs["CLASS"] = " ".join(classes)
 
