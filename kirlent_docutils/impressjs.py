@@ -40,9 +40,9 @@ class Writer(SlidesWriter):
 
     default_stylesheets = ["minimal.css", "impressjs.css"]
 
-    default_transition_duration = 0
-    default_min_scale = 1
-    default_max_scale = 1
+    default_transition_duration = 1000
+    default_min_scale = 0
+    default_max_scale = 3
 
     settings_spec = frontend.filter_settings_spec(
         SlidesWriter.settings_spec,

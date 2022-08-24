@@ -38,12 +38,12 @@ def test_writer_should_generate_root_with_id_impress():
 
 def test_writer_should_set_default_width_on_root():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert re.search(r'<main .*\bdata-width="1280"', html["html_body"]) is not None
+    assert re.search(r'<main .*\bdata-width="1920"', html["html_body"]) is not None
 
 
 def test_writer_should_set_default_height_on_root():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert re.search(r'<main .*\bdata-height="720"', html["html_body"]) is not None
+    assert re.search(r'<main .*\bdata-height="1080"', html["html_body"]) is not None
 
 
 def test_writer_should_wrap_docinfo_in_a_step():
@@ -93,7 +93,7 @@ def test_writer_should_generate_step_for_section():
 
 def test_writer_should_set_default_rel_x_on_first_step():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert re.search(r'<section .*\bdata-rel-x="1280"', html["body"]) is not None
+    assert re.search(r'<section .*\bdata-rel-x="1920"', html["body"]) is not None
 
 
 def test_writer_should_generate_wrap_title_in_header():

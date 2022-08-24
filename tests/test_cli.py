@@ -81,7 +81,7 @@ def test_impressjs_writer_should_include_kirlent_impressjs_stylesheet(capfd):
 def test_impressjs_writer_should_use_default_slide_size_on_impress_element(capfd):
     subprocess.run([kirlent2impressjs, "/dev/null"])
     captured = capfd.readouterr()
-    assert re.search(r'data-height="720".*data-width="1280".*id="impress"', captured.out) is not None
+    assert re.search(r'data-height="1080".*data-width="1920".*id="impress"', captured.out) is not None
 
 
 def test_impressjs_writer_should_use_given_slide_size_on_impress_element(capfd):
@@ -99,7 +99,7 @@ def test_impressjs_writer_should_use_given_standard_size_on_impress_element(capf
 def test_impressjs_writer_should_use_default_transition_duration_on_impress_element(capfd):
     subprocess.run([kirlent2impressjs, "/dev/null"])
     captured = capfd.readouterr()
-    assert re.search(r'data-transition-duration="0".*id="impress"', captured.out) is not None
+    assert re.search(r'data-transition-duration="1000".*id="impress"', captured.out) is not None
 
 
 def test_impressjs_writer_should_use_given_transition_duration_on_impress_element(capfd):
@@ -111,19 +111,19 @@ def test_impressjs_writer_should_use_given_transition_duration_on_impress_elemen
 def test_impressjs_writer_should_use_default_min_scale_on_impress_element(capfd):
     subprocess.run([kirlent2impressjs, "/dev/null"])
     captured = capfd.readouterr()
-    assert re.search(r'data-min-scale="1".*id="impress"', captured.out) is not None
+    assert re.search(r'data-min-scale="0".*id="impress"', captured.out) is not None
 
 
 def test_impressjs_writer_should_use_given_min_scale_on_impress_element(capfd):
-    subprocess.run([kirlent2impressjs, "--min-scale=0", "/dev/null"])
+    subprocess.run([kirlent2impressjs, "--min-scale=1", "/dev/null"])
     captured = capfd.readouterr()
-    assert re.search(r'data-min-scale="0".*id="impress"', captured.out) is not None
+    assert re.search(r'data-min-scale="1".*id="impress"', captured.out) is not None
 
 
 def test_impressjs_writer_should_use_default_max_scale_on_impress_element(capfd):
     subprocess.run([kirlent2impressjs, "/dev/null"])
     captured = capfd.readouterr()
-    assert re.search(r'data-max-scale="1".*id="impress"', captured.out) is not None
+    assert re.search(r'data-max-scale="3".*id="impress"', captured.out) is not None
 
 
 def test_impressjs_writer_should_use_given_max_scale_on_impress_element(capfd):
@@ -135,7 +135,7 @@ def test_impressjs_writer_should_use_given_max_scale_on_impress_element(capfd):
 def test_impressjs_writer_should_use_default_slide_size_on_step_style(capfd):
     subprocess.run([kirlent2impressjs, "/dev/null"])
     captured = capfd.readouterr()
-    assert re.search(r'.step {\s+width: 1280px;\s+height: 720px;', captured.out) is not None
+    assert re.search(r'.step {\s+width: 1920px;\s+height: 1080px;', captured.out) is not None
 
 
 def test_impressjs_writer_should_use_given_slide_size_on_step_style(capfd):
@@ -153,13 +153,13 @@ def test_impressjs_writer_should_use_given_standard_size_on_step_style(capfd):
 def test_impressjs_writer_should_use_default_font_size_on_step_style(capfd):
     subprocess.run([kirlent2impressjs, "/dev/null"])
     captured = capfd.readouterr()
-    assert 'font-size: 30px;' in captured.out
+    assert 'font-size: 45px;' in captured.out
 
 
 def test_impressjs_writer_should_use_automatic_font_size_on_step_style(capfd):
-    subprocess.run([kirlent2impressjs, "--slide-size=1920x1080", "/dev/null"])
+    subprocess.run([kirlent2impressjs, "--slide-size=1024x768", "/dev/null"])
     captured = capfd.readouterr()
-    assert 'font-size: 45px;' in captured.out
+    assert 'font-size: 25px;' in captured.out
 
 
 def test_impressjs_writer_should_use_given_font_size_on_step_style(capfd):

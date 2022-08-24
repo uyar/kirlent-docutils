@@ -64,8 +64,8 @@ SVG_FONT_SIZE = 16
 class Writer(HTMLWriter):
     """Writer for generating HTML5 slides output."""
 
-    default_slide_width = 1280
-    default_slide_height = 720
+    default_slide_width = 1920
+    default_slide_height = 1080
     default_font_size = 0
 
     settings_spec = HTMLWriter.settings_spec + (

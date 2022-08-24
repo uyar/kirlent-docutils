@@ -33,7 +33,7 @@ Flags
 Slide Size
 ==========
 
-- slides are 1280x720 by default
+- slides are 1920x1080 by default
 - can be changed with the ``--slide-size`` flag
 - change font size with the ``--font-size`` flag
 
