@@ -92,6 +92,9 @@ class HTMLTranslator(HTML5Translator):
     script_external = '<script src="%s"></script>\n'
     script_defer = '<script defer src="%s"></script>\n'
 
+    mathjax_script = _remove_type(HTML5Translator.mathjax_script)
+    mathjax_url = "file://%s" % Path(__file__).parent.joinpath("bundled", "MathJax.min.js")
+
     # no '<p>' under these if single paragraph
     SIMPLE_BLOCKS = {"definition", "entry", "field_body", "list_item"}
 

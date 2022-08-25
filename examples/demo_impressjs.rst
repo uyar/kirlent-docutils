@@ -66,3 +66,12 @@ Annotations
 - `click me <annotate://box>`_
 
 - these might miss if the content is scaled
+
+----
+
+Math
+====
+
+.. math::
+
+   -b \pm \frac{\sqrt{b^2-4ac}}{2a}
