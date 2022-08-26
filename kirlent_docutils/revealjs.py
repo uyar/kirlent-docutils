@@ -13,9 +13,11 @@ from .slides import SlidesTranslator
 from .slides import Writer as SlidesWriter
 
 
-REVEAL_JS_PATH = Path(__file__).parent.joinpath("bundled", "reveal.js")
+REVEALJS_URL = "file://%(path)s" % {
+    "path": Path(__file__).parent / "bundled" / "reveal.js",
+}
 
-REVEAL_JS_INIT = """
+REVEALJS_INIT = """
   window.addEventListener('DOMContentLoaded', () => {
       Reveal.initialize({
           width: '%(width)d',
@@ -42,7 +44,9 @@ class Writer(SlidesWriter):
             'Relative paths are expanded if a matching file is found in '
             'the --stylesheet-dirs. With --link-stylesheet, '
             'the path is rewritten relative to the output HTML file. '
-            '(default: "%s")' % ','.join(default_stylesheets),
+            '(default: "%(sheets)s")' % {
+                "sheets": ','.join(default_stylesheets),
+            },
             ["--stylesheet-path"],
             {
                 "metavar": "<file[,file,...]>",
@@ -58,16 +62,18 @@ class Writer(SlidesWriter):
         "",
         (
             (
-                'Slide transition effect. (default: %s)' % default_transition,
+                'Transition effect. (default: %(effect)s)' % {
+                    "effect": default_transition
+                },
                 ["--transition"],
                 {
                     "default": default_transition,
                 }
             ),
             (
-                'Vertically center slides. (default: %s)' % (
-                    default_center_vertical,
-                ),
+                'Vertically center slides. (default: %(center)s)' % {
+                    "center": default_center_vertical,
+                },
                 ["--center-vertical"],
                 {
                     "default": default_center_vertical,
@@ -85,8 +91,8 @@ class Writer(SlidesWriter):
 class RevealJSTranslator(SlidesTranslator):
     """Translator for generating reveal.js markup."""
 
-    script_revealjs = SlidesTranslator.script_defer % REVEAL_JS_PATH
-    script_revealjs_init = SlidesTranslator.script % REVEAL_JS_INIT
+    script_revealjs = SlidesTranslator.script_defer % {"src": REVEALJS_URL}
+    script_revealjs_init = SlidesTranslator.script % {"code": REVEALJS_INIT}
 
     pause_class = "fragment"
 

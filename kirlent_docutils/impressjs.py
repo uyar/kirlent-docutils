@@ -13,22 +13,24 @@ from .slides import SlidesTranslator
 from .slides import Writer as SlidesWriter
 
 
-IMPRESS_JS_PATH = Path(__file__).parent.joinpath("bundled", "impress.js")
+IMPRESSJS_URL = "file://%(path)s" % {
+    "path": Path(__file__).parent / "bundled" / "impress.js",
+}
 
-IMPRESS_JS_INIT = """
+IMPRESSJS_INIT = """
   window.addEventListener('DOMContentLoaded', () => {
       impress().init();
   }, false);
 """
 
-IMPRESS_JS_STYLE = """
+IMPRESSJS_STYLE = """
   .step {
     width: %(width)dpx;
     height: %(height)dpx;
   }
 """
 
-IMPRESS_JS_ATTRS = {
+IMPRESSJS_ATTRS = {
     "data-x", "data-y", "data-z",
     "data-rel-x", "data-rel-y", "data-rel-z",
     "data-rotate-x", "data-rotate-y", "data-rotate-z",
@@ -69,9 +71,9 @@ class Writer(SlidesWriter):
         "",
         (
             (
-                'Slide transition duration in seconds. (default: %d)' % (
-                    default_transition_duration,
-                ),
+                'Transition duration in miliseconds. (default: %(td)d)' % {
+                    "td": default_transition_duration,
+                },
                 ["--transition-duration"],
                 {
                     "default": default_transition_duration,
@@ -79,14 +81,18 @@ class Writer(SlidesWriter):
                 }
             ),
             (
-                'Slide minimum scale. (default: %d)' % default_min_scale,
+                'Minimum scale. (default: %(min)d)' % {
+                    "min": default_min_scale,
+                },
                 ["--min-scale"],
                 {
                     "default": default_min_scale,
                 }
             ),
             (
-                'Slide maximum scale. (default: %d)' % default_max_scale,
+                'Maximum scale. (default: %(max)d)' % {
+                    "max": default_max_scale,
+                },
                 ["--max-scale"],
                 {
                     "default": default_max_scale,
@@ -103,8 +109,8 @@ class Writer(SlidesWriter):
 class ImpressJSTranslator(SlidesTranslator):
     """Translator for generating impress.js markup."""
 
-    script_impressjs = SlidesTranslator.script_defer % IMPRESS_JS_PATH
-    script_impressjs_init = SlidesTranslator.script % IMPRESS_JS_INIT
+    script_impressjs = SlidesTranslator.script_defer % {"src": IMPRESSJS_URL}
+    script_impressjs_init = SlidesTranslator.script % {"code": IMPRESSJS_INIT}
 
     pause_class = "substep"
 
@@ -138,7 +144,7 @@ class ImpressJSTranslator(SlidesTranslator):
         self.head.append(ImpressJSTranslator.script_impressjs_init)
 
         # add dynamic styles for impress.js
-        style = IMPRESS_JS_STYLE % {
+        style = IMPRESSJS_STYLE % {
             "width": self.slide_width,
             "height": self.slide_height,
         }
@@ -152,7 +158,7 @@ class ImpressJSTranslator(SlidesTranslator):
         # start a step
         node.attributes["classes"].insert(0, "step")
         step_attrs = {}
-        attr_names = {k for k in self._fields if k in IMPRESS_JS_ATTRS}
+        attr_names = {k for k in self._fields if k in IMPRESSJS_ATTRS}
         for name in attr_names:
             step_attrs[name] = self._fields.pop(name)
         node.attributes["_custom"] = step_attrs

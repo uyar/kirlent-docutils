@@ -5,7 +5,7 @@
 
 """Custom HTML5 writer for docutils.
 
-This writer modifies the html5_polyglot writer in docutils.
+This writer modifies the html5_polyglot writer.
 The differences are:
 
 - Uses "br" instead of line-block and line "div"s.
@@ -51,7 +51,9 @@ class Writer(HTML5Writer):
             'Relative paths are expanded if a matching file is found in '
             'the --stylesheet-dirs. With --link-stylesheet, '
             'the path is rewritten relative to the output HTML file. '
-            '(default: "%s")' % ','.join(default_stylesheets),
+            '(default: "%(sheets)s")' % {
+                "sheets": ','.join(default_stylesheets),
+            },
             ["--stylesheet-path"],
             {
                 "metavar": "<file[,file,...]>",
@@ -63,7 +65,9 @@ class Writer(HTML5Writer):
         stylesheet_dirs=(
             'Comma-separated list of directories where stylesheets are found. '
             'Used by --stylesheet-path when expanding relative path arguments. '  # noqa
-            '(default: "%s")' % ','.join(default_stylesheet_dirs),
+            '(default: "%(dirs)s")' % {
+                "dirs": ','.join(default_stylesheet_dirs),
+            },
             ["--stylesheet-dirs"],
             {
                 "metavar": "<dir[,dir,...]>",
@@ -88,12 +92,14 @@ class HTMLTranslator(HTML5Translator):
     stylesheet_link = _remove_type(HTML5Translator.stylesheet_link)
     embedded_stylesheet = _remove_type(HTML5Translator.embedded_stylesheet)
 
-    script = '<script>%s</script>\n'
-    script_external = '<script src="%s"></script>\n'
-    script_defer = '<script defer src="%s"></script>\n'
+    script = '<script>%(code)s</script>\n'
+    script_external = '<script src="%(src)s"></script>\n'
+    script_defer = '<script defer src="%(src)s"></script>\n'
 
     mathjax_script = _remove_type(HTML5Translator.mathjax_script)
-    mathjax_url = "file://%s" % Path(__file__).parent.joinpath("bundled", "MathJax.min.js")
+    mathjax_url = "file://%(path)s" % {
+        "path": Path(__file__).parent / "bundled" / "MathJax.min.js",
+    }
 
     # no '<p>' under these if single paragraph
     SIMPLE_BLOCKS = {"definition", "entry", "field_body", "list_item"}

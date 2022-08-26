@@ -38,7 +38,9 @@ ANNOTATION_PREFIX = "annotate://"
 
 ANNOTATION_COLOR_PROPERTY_PREFIX = "--color-annotation-"
 
-ROUGH_NOTATION_PATH = Path(__file__).parent.joinpath("bundled", "rough-notation.iife.js")
+ROUGH_NOTATION_URL = "file://%(path)s" % {
+    "path": Path(__file__).parent / "bundled" / "rough-notation.iife.js",
+}
 
 ROUGH_NOTATION_ANNOTATE = """
   function annotate(el, eff, cat) {
@@ -73,20 +75,22 @@ class Writer(HTMLWriter):
         "",
         (
             (
-                'Slide size in pixels. (default: %dx%d)' % (
-                    default_slide_width, default_slide_height
-                ),
+                'Slide size in pixels. (default: %(width)dx%(height)d)' % {
+                    "width": default_slide_width,
+                    "height": default_slide_height,
+                },
                 ["--slide-size"],
                 {
-                    "default": "%dx%d" % (
-                        default_slide_width, default_slide_height
-                    ),
+                    "default": "%(width)dx%(height)d" % {
+                        "width": default_slide_width,
+                        "height": default_slide_height,
+                    },
                 }
             ),
             (
-                'Font size in pixels. 0 means automatic. (default: %d)' % (
-                    default_font_size,
-                ),
+                'Font size in pixels. 0 for auto. (default: %(size)d)' % {
+                    "size": default_font_size,
+                },
                 ["--font-size"],
                 {
                     "default": default_font_size,
@@ -104,10 +108,12 @@ class Writer(HTMLWriter):
 class SlidesTranslator(HTMLTranslator):
     """Translator for generating HTML5 slides markup."""
 
-    script_slides_init = HTMLTranslator.script % SLIDES_INIT
+    script_slides_init = HTMLTranslator.script % {"code": SLIDES_INIT}
 
-    script_rough_notation = HTMLTranslator.script_defer % ROUGH_NOTATION_PATH
-    script_annotate = HTMLTranslator.script % ROUGH_NOTATION_ANNOTATE
+    script_rough_notation = HTMLTranslator.script_defer % {
+        "src": ROUGH_NOTATION_URL,
+    }
+    script_annotate = HTMLTranslator.script % {"code": ROUGH_NOTATION_ANNOTATE}
 
     pause_class = ""
 
