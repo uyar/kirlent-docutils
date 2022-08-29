@@ -29,6 +29,7 @@ def test_installation_should_create_console_script_for_html5_writer():
         "--no-compact-lists",
         "--compact-field-lists",
         "--no-compact-field-lists",
+        "--table-style",
     ])
 def test_html5_writer_should_not_allow_removed_option(capfd, option):
     execute(rst2kirlenthtml5, option, content="")

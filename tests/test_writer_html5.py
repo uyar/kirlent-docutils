@@ -132,7 +132,7 @@ def test_writer_should_not_generate_internal_reference_classes_for_internal_refe
 
 
 def test_writer_should_not_generate_target_class_for_internal_reference():
-    html = publish_html("_`text`")
+    html = publish_html("_`text`\n")
     assert '<span id="text">' in html["html_body"]
 
 
@@ -142,20 +142,35 @@ def test_writer_should_not_generate_external_reference_classes_for_external_refe
 
 
 def test_writer_should_not_generate_literal_block_class_for_pre():
-    html = publish_html("::\n\n  text")
+    html = publish_html("::\n\n  text\n")
     assert '<pre>' in html["html_body"]
 
 
 def test_writer_should_generate_literal_class_for_pre_when_explicit():
-    html = publish_html(".. class:: literal-block\n\n::\n\n  text")
+    html = publish_html(".. class:: literal-block\n\n::\n\n  text\n")
     assert '<pre class="literal-block">' in html["html_body"]
 
 
-def test_writer_should_not_generate_colon_class_span_for_docinfo_items():
+def test_writer_should_not_generate_colon_class_for_docinfo_items():
     html = publish_html(":author: Author\n\ntext\n")
-    assert '<span class="colon">' not in html["html_body"]
+    assert 'class="colon"' not in html["html_body"]
 
 
-def test_writer_should_not_generate_colon_class_span_for_field_names():
+def test_writer_should_not_generate_colon_class_for_field_names():
     html = publish_html("text\n\n:author: Author\n\ntext\n")
-    assert '<span class="colon">' not in html["html_body"]
+    assert 'class="colon"' not in html["html_body"]
+
+
+def test_writer_should_not_generate_classes_for_table():
+    html = publish_html(".. table::\n\n   +-------+\n   | entry |\n   +-------+\n")
+    assert '<table>' in html["html_body"]
+
+
+def test_writer_should_not_generate_colgroup_for_table():
+    html = publish_html(".. table::\n\n   +-------+\n   | entry |\n   +-------+\n")
+    assert '<colgroup>' not in html["html_body"]
+
+
+def test_writer_should_generate_colgroup_for_table_when_given_widths():
+    html = publish_html(".. table::\n   :widths: 100\n\n   +-------+\n   | entry |\n   +-------+\n")
+    assert '<colgroup>' in html["html_body"]

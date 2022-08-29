@@ -34,6 +34,7 @@ class Writer(HTML5Writer):
         "xml_declaration": False,
         "compact_lists": False,
         "compact_field_lists": False,
+        "table_style": "colwidths-auto",
     }
 
     settings_spec = frontend.filter_settings_spec(
@@ -44,6 +45,7 @@ class Writer(HTML5Writer):
         "no_compact_lists",
         "compact_field_lists",
         "no_compact_field_lists",
+        "table_style",
         stylesheet_dirs=(
             'Comma-separated list of directories where stylesheets are found. '
             'Used by --stylesheet-path when expanding relative path arguments. '  # noqa
