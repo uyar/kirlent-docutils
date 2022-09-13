@@ -1,5 +1,15 @@
 /* Kirlent minimal stylesheet for HTML5 output. */
 
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
 :where(li, dd, td, th) > * {
   margin: 0;
 }

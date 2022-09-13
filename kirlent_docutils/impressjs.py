@@ -42,7 +42,7 @@ IMPRESSJS_ATTRS = {
 class Writer(SlidesWriter):
     """Writer for generating impress.js output."""
 
-    default_stylesheets = ["minimal.css", "impressjs-minimal.css"]
+    default_stylesheets = SlidesWriter.default_stylesheets + ["impressjs.css"]
 
     default_transition_duration = 1000
     default_min_scale = 0

@@ -1,5 +1,30 @@
 /* Kirlent plain stylesheet for HTML5 output. */
 
+img, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
 table {
   border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    transition-duration: 0s !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }

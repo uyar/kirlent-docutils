@@ -60,22 +60,13 @@ def test_installation_should_create_console_script_for_impressjs_writer():
 @pytest.mark.parametrize(
     ("sheet", "output"), [
         ("minimal", "HTML5"),
+        ("plain", "HTML5"),
         ("minimal", "impress.js"),
     ])
 def test_impressjs_writer_should_include_impressjs_stylesheet(capfd, sheet, output):
     execute(kirlent2impressjs, content="")
     captured = capfd.readouterr()
     assert f"Kirlent {sheet} stylesheet for {output}" in captured.out
-
-
-@pytest.mark.parametrize(
-    ("sheet", "output"), [
-        ("plain", "HTML5"),
-    ])
-def test_impressjs_writer_should_not_include_extra_stylesheets(capfd, sheet, output):
-    execute(kirlent2impressjs, content="")
-    captured = capfd.readouterr()
-    assert f"Kirlent {sheet} stylesheet for {output}" not in captured.out
 
 
 @pytest.mark.parametrize(
