@@ -8,31 +8,11 @@
 from pathlib import Path
 from xml.etree import ElementTree
 
-from docutils import frontend
 from docutils.nodes import container
 
 from .html5 import HTMLTranslator
 from .html5 import Writer as HTMLWriter
 
-
-SLIDES_INIT = """
-  window.addEventListener('DOMContentLoaded', () => {
-      const p = parseFloat(
-          getComputedStyle(document.querySelector("div.main"))
-              .getPropertyValue("padding-bottom")
-      );
-      document.querySelectorAll("pre").forEach((el) => {
-          const rect = el.getBoundingClientRect();
-          el.style.maxHeight = (window.innerHeight - p - rect.top) + "px";
-      });
-  }, false);
-"""
-
-SLIDES_STYLE = """
-  :root {
-    font-size: %(font_size)dpx;
-  }
-"""
 
 ANNOTATION_PREFIX = "annotate://"
 
@@ -57,18 +37,14 @@ SLIDE_SIZES = {
     "a4": (1125, 795),
 }
 
-SLIDE_LINE_LENGTH = 40
-SLIDE_LINES = 24
-
-SVG_FONT_SIZE = 16
-
 
 class Writer(HTMLWriter):
     """Writer for generating HTML5 slides output."""
 
+    default_stylesheets = HTMLWriter.default_stylesheets + ["slides.css"]
+
     default_slide_width = 1920
     default_slide_height = 1080
-    default_font_size = 0
 
     settings_spec = HTMLWriter.settings_spec + (
         "HTML5 slides writer Options",
@@ -87,16 +63,6 @@ class Writer(HTMLWriter):
                     },
                 }
             ),
-            (
-                'Font size in pixels. 0 for auto. (default: %(size)d)' % {
-                    "size": default_font_size,
-                },
-                ["--font-size"],
-                {
-                    "default": default_font_size,
-                    "validator": frontend.validate_nonnegative_int,
-                }
-            ),
         )
     )
 
@@ -107,8 +73,6 @@ class Writer(HTMLWriter):
 
 class SlidesTranslator(HTMLTranslator):
     """Translator for generating HTML5 slides markup."""
-
-    script_slides_init = HTMLTranslator.script % {"code": SLIDES_INIT}
 
     script_rough_notation = HTMLTranslator.script_defer % {
         "src": ROUGH_NOTATION_URL,
@@ -125,13 +89,6 @@ class SlidesTranslator(HTMLTranslator):
         if slide_size is None:
             slide_size = map(int, slide_size_key.split("x"))
         self.slide_width, self.slide_height = slide_size
-
-        self.font_size = self.document.settings.font_size
-        if self.font_size == 0:
-            self.font_size = min(
-                self.slide_width // SLIDE_LINE_LENGTH,
-                self.slide_height // SLIDE_LINES,
-            )
 
         # add attributes to keep track of the field data
         self._fields = {}
@@ -152,21 +109,14 @@ class SlidesTranslator(HTMLTranslator):
     def depart_document(self, node):
         super().depart_document(node)
 
-        self.head.append(SlidesTranslator.script_slides_init)
-
-        style = SLIDES_STYLE % {"font_size": self.font_size}
-        self.head.append(SlidesTranslator.embedded_stylesheet % style)
-
         # add code for loading rough notation
         self.head.append(SlidesTranslator.script_rough_notation)
         self.head.append(SlidesTranslator.script_annotate)
 
     def depart_docinfo(self, node):
         # wrap docinfo in a slide with a title
-        docinfo_class = node.attributes.pop("_docinfo_class", "").strip()
         super().depart_docinfo(node)
-        class_ = f' class="{docinfo_class}"' if len(docinfo_class) > 0 else ""
-        self.docinfo.insert(0, f'<section id="docinfo"{class_}>\n')
+        self.docinfo.insert(0, '<section id="docinfo" class="slide">\n')
         self.docinfo.insert(1, f'<h1>{self.title[0]}</h1>\n')
         self.docinfo.append('</section>\n')
 
@@ -220,22 +170,21 @@ class SlidesTranslator(HTMLTranslator):
         super().depart_title(node)
         self.body.append('</header>\n')
 
-        # wrap the slide main contents in a div
+        # wrap the slide contents in a div
         styles = {}
         layout = self._fields.pop("layout", None)
         if layout is not None:
             areas = " ".join(f"'{row}'" for row in layout.splitlines())
-            styles["display"] = "grid"
             styles["grid-template-areas"] = areas
         slide_contents = container()
-        slide_contents.attributes["classes"] = ["main"]
+        slide_contents.attributes["classes"] = ["content"]
         slide_contents.attributes["_styles"] = styles
         self.visit_container(slide_contents)
 
     def visit_container(self, node):
+        prefix = "layout-"
         classes = node.attributes["classes"]
         for class_ in classes:
-            prefix = "layout-"
             if class_.startswith(prefix):
                 area = class_[len(prefix):]
                 node.attributes["_styles"] = {"grid-area": area}
@@ -272,6 +221,6 @@ class SlidesTranslator(HTMLTranslator):
                 root = ElementTree.parse(source).getroot()
                 if root.attrib["id"].startswith("mermaid-"):
                     height = float(root.attrib["height"])
-                    scale = self.font_size / SVG_FONT_SIZE
+                    scale = 3
                     node.attributes["height"] = str(round(height * scale))
         super().visit_image(node)

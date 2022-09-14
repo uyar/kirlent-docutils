@@ -12,6 +12,7 @@ Usage
 .. code::
 
    kirlent2impressjs demo.rst demo-impress.html
+
    kirlent2revealjs demo.rst demo-reveal.html
 
 ----
@@ -35,7 +36,6 @@ Slide Size
 
 - slides are 1920x1080 by default
 - can be changed with the ``--slide-size`` flag
-- change font size with the ``--font-size`` flag
 
 ----
 

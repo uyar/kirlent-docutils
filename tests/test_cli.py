@@ -61,31 +61,13 @@ def test_installation_should_create_console_script_for_impressjs_writer():
     ("sheet", "output"), [
         ("minimal", "HTML5"),
         ("plain", "HTML5"),
+        ("base", "slides"),
         ("base", "impress.js"),
     ])
 def test_impressjs_writer_should_include_impressjs_stylesheet(capfd, sheet, output):
     execute(kirlent2impressjs, content="")
     captured = capfd.readouterr()
     assert f"Kirlent {sheet} stylesheet for {output}" in captured.out
-
-
-@pytest.mark.parametrize(
-    ("option", "value"), [
-        (None, "45"),
-        ("--slide-size=1024x768", "25"),
-        ("--font-size=3", "3"),
-    ]
-)
-def test_impressjs_writer_should_set_font_size_on_root_style(capfd, option, value):
-    if option is None:
-        execute(kirlent2impressjs, content="")
-    else:
-        execute(kirlent2impressjs, option, content="")
-    captured = capfd.readouterr()
-    assert re.search(
-        fr'<style>\s*:root {{\s*font-size: {value}px;\s*}}\s*</style>',
-        captured.out,
-    ) is not None
 
 
 @pytest.mark.parametrize(
@@ -159,31 +141,13 @@ def test_installation_should_create_console_script_for_revealjs_writer():
     ("sheet", "output"), [
         ("minimal", "HTML5"),
         ("plain", "HTML5"),
+        ("base", "slides"),
         ("base", "reveal.js"),
     ])
 def test_revealjs_writer_should_include_revealjs_stylesheet(capfd, sheet, output):
     execute(kirlent2revealjs, content="")
     captured = capfd.readouterr()
     assert f"Kirlent {sheet} stylesheet for {output}" in captured.out
-
-
-@pytest.mark.parametrize(
-    ("option", "value"), [
-        (None, "45"),
-        ("--slide-size=1024x768", "25"),
-        ("--font-size=3", "3"),
-    ]
-)
-def test_revealjs_writer_should_set_font_size_on_root_style(capfd, option, value):
-    if option is None:
-        execute(kirlent2revealjs, content="")
-    else:
-        execute(kirlent2revealjs, option, content="")
-    captured = capfd.readouterr()
-    assert re.search(
-        fr'<style>\s*:root {{\s*font-size: {value}px;\s*}}\s*</style>',
-        captured.out,
-    ) is not None
 
 
 @pytest.mark.parametrize(

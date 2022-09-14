@@ -1,0 +1,9 @@
+/* Kirlent base stylesheet for slides output. */
+
+:root {
+  font-size: 3vw;
+}
+
+section.slide {
+  display: grid;
+}

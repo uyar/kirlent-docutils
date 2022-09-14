@@ -156,7 +156,8 @@ class ImpressJSTranslator(SlidesTranslator):
 
     def visit_section(self, node):
         # start a step
-        node.attributes["classes"].insert(0, "step")
+        node.attributes["classes"].insert(0, "slide")
+        node.attributes["classes"].insert(1, "step")
         step_attrs = {}
         attr_names = {k for k in self._fields if k in IMPRESSJS_ATTRS}
         for name in attr_names:

@@ -26,12 +26,12 @@ def test_writer_should_generate_main_element_with_id_impress():
     assert re.search(r'<main [^>]*\bid="impress"', html["html_body"]) is not None
 
 
-def test_writer_should_wrap_docinfo_in_a_step():
+def test_writer_should_wrap_docinfo_in_a_slide():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert re.search(r'<section [^>]*\bid="docinfo"[^>]*\bclass="step"', html["html_body"]) is not None
+    assert re.search(r'<section [^>]*\bid="docinfo"[^>]*\bclass="slide"', html["html_body"]) is not None
 
 
-def test_writer_should_generate_title_heading_in_docinfo_step():
+def test_writer_should_generate_title_heading_in_docinfo_slide():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
     assert '<h1>Document Title</h1>' in html["docinfo"]
 
@@ -66,12 +66,12 @@ def test_writer_should_not_generate_text_for_field_body():
     assert 'val' not in html["body"]
 
 
-def test_writer_should_generate_step_for_section():
+def test_writer_should_generate_slide_step_for_section():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert re.search(r'<section .*\bclass="step"', html["body"]) is not None
+    assert re.search(r'<section .*\bclass="slide step"', html["body"]) is not None
 
 
-def test_writer_should_set_default_rel_x_on_first_step():
+def test_writer_should_set_default_rel_x_on_first_slide():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
     assert re.search(r'<section .*\bdata-rel-x="1920"', html["body"]) is not None
 
@@ -81,9 +81,9 @@ def test_writer_should_generate_wrap_title_in_header():
     assert '<header>\n<h2>Slide Title 1</h2>\n</header>\n' in html["body"]
 
 
-def test_writer_should_generate_div_main_for_slide_contents():
+def test_writer_should_generate_div_content_for_slide_contents():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert '</header>\n<div class="main"' in html["body"]
+    assert '</header>\n<div class="content"' in html["body"]
 
 
 # def test_writer_should_generate_perspective_for_slide_contents():
