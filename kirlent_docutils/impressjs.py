@@ -30,14 +30,6 @@ IMPRESSJS_STYLE = """
   }
 """
 
-IMPRESSJS_ATTRS = {
-    "data-x", "data-y", "data-z",
-    "data-rel-x", "data-rel-y", "data-rel-z",
-    "data-rotate-x", "data-rotate-y", "data-rotate-z",
-    "data-rotate", "data-rotate-order",
-    "data-scale",
-}
-
 
 class Writer(SlidesWriter):
     """Writer for generating impress.js output."""
@@ -114,6 +106,14 @@ class ImpressJSTranslator(SlidesTranslator):
 
     pause_class = "substep"
 
+    data_attrs = {
+        "data-x", "data-y", "data-z",
+        "data-rel-x", "data-rel-y", "data-rel-z",
+        "data-rotate-x", "data-rotate-y", "data-rotate-z",
+        "data-rotate", "data-rotate-order",
+        "data-scale",
+    }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -151,16 +151,13 @@ class ImpressJSTranslator(SlidesTranslator):
         self.head.append(SlidesTranslator.embedded_stylesheet % style)
 
     def depart_docinfo(self, node):
-        node.attributes["_docinfo_class"] = "step"
         super().depart_docinfo(node)
+        self.docinfo[0] = self.docinfo[0].replace(
+            'class="slide"',
+            'class="slide step"'
+        )
 
     def visit_section(self, node):
         # start a step
-        node.attributes["classes"].insert(0, "slide")
-        node.attributes["classes"].insert(1, "step")
-        step_attrs = {}
-        attr_names = {k for k in self._fields if k in IMPRESSJS_ATTRS}
-        for name in attr_names:
-            step_attrs[name] = self._fields.pop(name)
-        node.attributes["_custom"] = step_attrs
+        node.attributes["classes"].insert(0, "step")
         super().visit_section(node)

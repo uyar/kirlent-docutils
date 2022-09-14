@@ -50,6 +50,25 @@ def test_html5_writer_should_include_bundled_mathjax_as_fallback(capfd):
     assert str(Path("bundled/MathJax.min.js")) in captured.out
 
 
+kirlent2slides = Path(sys.executable).with_name("kirlent2slides")
+
+
+def test_installation_should_create_console_script_for_slides_writer():
+    assert kirlent2slides.exists()
+
+
+@pytest.mark.parametrize(
+    ("sheet", "output"), [
+        ("minimal", "HTML5"),
+        ("plain", "HTML5"),
+        ("base", "slides"),
+    ])
+def test_slides_writer_should_include_slides_stylesheet(capfd, sheet, output):
+    execute(kirlent2slides, content="")
+    captured = capfd.readouterr()
+    assert f"Kirlent {sheet} stylesheet for {output}" in captured.out
+
+
 kirlent2impressjs = Path(sys.executable).with_name("kirlent2impressjs")
 
 

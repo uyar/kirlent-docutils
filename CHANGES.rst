@@ -2,6 +2,7 @@
 ------------------
 
 - Rename package from kirlent.docutils to kirlent_docutils.
+- Add a simple HTML5 slides writer.
 - Change field markup for pauses (substep/fragment).
 - Improve base styles.
 - Restore support for Python 3.7 and 3.8.

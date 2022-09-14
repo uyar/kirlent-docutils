@@ -8,6 +8,7 @@
 from pathlib import Path
 from xml.etree import ElementTree
 
+from docutils import frontend
 from docutils.nodes import container
 
 from .html5 import HTMLTranslator
@@ -46,7 +47,25 @@ class Writer(HTMLWriter):
     default_slide_width = 1920
     default_slide_height = 1080
 
-    settings_spec = HTMLWriter.settings_spec + (
+    settings_spec = frontend.filter_settings_spec(
+        HTMLWriter.settings_spec,
+        stylesheet_path=(
+            'Comma separated list of stylesheet paths. '
+            'Relative paths are expanded if a matching file is found in '
+            'the --stylesheet-dirs. With --link-stylesheet, '
+            'the path is rewritten relative to the output HTML file. '
+            '(default: "%s")' % ','.join(default_stylesheets),
+            ["--stylesheet-path"],
+            {
+                "metavar": "<file[,file,...]>",
+                "overrides": "stylesheet",
+                "validator": frontend.validate_comma_separated_list,
+                "default": default_stylesheets,
+            }
+        ),
+    )
+
+    settings_spec = settings_spec + (
         "HTML5 slides writer Options",
         "",
         (
@@ -74,12 +93,14 @@ class Writer(HTMLWriter):
 class SlidesTranslator(HTMLTranslator):
     """Translator for generating HTML5 slides markup."""
 
+    pause_class = ""
+
+    data_attrs = set()
+
     script_rough_notation = HTMLTranslator.script_defer % {
         "src": ROUGH_NOTATION_URL,
     }
     script_annotate = HTMLTranslator.script % {"code": ROUGH_NOTATION_ANNOTATE}
-
-    pause_class = ""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -158,8 +179,16 @@ class SlidesTranslator(HTMLTranslator):
         else:
             super().visit_Text(node)
 
+    def visit_section(self, node):
+        node.attributes["classes"].insert(0, "slide")
+        attrs = {}
+        for attr in self.__class__.data_attrs.intersection(self._fields):
+            attrs[attr] = self._fields.pop(attr)
+        node.attributes["_custom"] = attrs
+        super().visit_section(node)
+
     def depart_section(self, node):
-        self.body.append('</div>\n')  # close the slide main contents div
+        self.body.append('</div>\n')  # close the slide contents div
         super().depart_section(node)
 
     def visit_title(self, node):
