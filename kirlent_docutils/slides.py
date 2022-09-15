@@ -13,6 +13,7 @@ from docutils.nodes import container
 
 from .html5 import HTMLTranslator
 from .html5 import Writer as HTMLWriter
+from .utils import stylesheet_path_option
 
 
 ANNOTATION_PREFIX = "annotate://"
@@ -49,20 +50,7 @@ class Writer(HTMLWriter):
 
     settings_spec = frontend.filter_settings_spec(
         HTMLWriter.settings_spec,
-        stylesheet_path=(
-            'Comma separated list of stylesheet paths. '
-            'Relative paths are expanded if a matching file is found in '
-            'the --stylesheet-dirs. With --link-stylesheet, '
-            'the path is rewritten relative to the output HTML file. '
-            '(default: "%s")' % ','.join(default_stylesheets),
-            ["--stylesheet-path"],
-            {
-                "metavar": "<file[,file,...]>",
-                "overrides": "stylesheet",
-                "validator": frontend.validate_comma_separated_list,
-                "default": default_stylesheets,
-            }
-        ),
+        stylesheet_path=stylesheet_path_option(default_stylesheets),
     )
 
     settings_spec = settings_spec + (

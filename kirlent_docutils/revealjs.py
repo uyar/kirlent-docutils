@@ -11,6 +11,7 @@ from docutils import frontend
 
 from .slides import SlidesTranslator
 from .slides import Writer as SlidesWriter
+from .utils import stylesheet_path_option
 
 
 REVEALJS_URL = "file://%(path)s" % {
@@ -39,22 +40,7 @@ class Writer(SlidesWriter):
 
     settings_spec = frontend.filter_settings_spec(
         SlidesWriter.settings_spec,
-        stylesheet_path=(
-            'Comma separated list of stylesheet paths. '
-            'Relative paths are expanded if a matching file is found in '
-            'the --stylesheet-dirs. With --link-stylesheet, '
-            'the path is rewritten relative to the output HTML file. '
-            '(default: "%(sheets)s")' % {
-                "sheets": ','.join(default_stylesheets),
-            },
-            ["--stylesheet-path"],
-            {
-                "metavar": "<file[,file,...]>",
-                "overrides": "stylesheet",
-                "validator": frontend.validate_comma_separated_list,
-                "default": default_stylesheets,
-            }
-        ),
+        stylesheet_path=stylesheet_path_option(default_stylesheets),
     )
 
     settings_spec = settings_spec + (
