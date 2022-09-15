@@ -8,14 +8,19 @@
 
 body {
   margin: 0;
+  font-family: var(--font-family, system-ui);
+}
+
+code,
+kbd,
+samp,
+pre
+span.literal {
+  font-family: var(--font-family-mono, ui-monospace);
 }
 
 :where(li, dd, td, th) > * {
   margin: 0;
-}
-
-span.literal {
-  font-family: monospace;
 }
 
 ol.arabic {

@@ -9,14 +9,19 @@
 
 body {
   margin: 0;
+  font-family: var(--font-family, system-ui);
+}
+
+code,
+kbd,
+samp,
+pre
+span.literal {
+  font-family: var(--font-family-mono, ui-monospace);
 }
 
 :where(li, dd, td, th) > * {
   margin: 0;
-}
-
-span.literal {
-  font-family: monospace;
 }
 
 ol.arabic {
@@ -41,10 +46,16 @@ ol.upperroman {
 
 /* Kirlent plain stylesheet for HTML5 output. */
 
+body {
+  line-height: var(--line-height, 1.5);
+}
+
 img, svg {
   display: block;
   max-width: 100%;
   height: auto;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 table {
@@ -72,10 +83,15 @@ html:focus-within {
 
 /* Kirlent base stylesheet for slides output. */
 
-:root {
-  font-size: 3vw;
+body {
+  font-size: var(--font-size, 2rem);
 }
 
-section.slide {
+em {
+  color: var(--color-emphasis, red);
+  font-style: normal;
+}
+
+.slide .content {
   display: grid;
 }

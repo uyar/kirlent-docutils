@@ -1,4 +1,4 @@
-0.1.2 (unreleased)
+0.1.2 (2022-09-15)
 ------------------
 
 - Rename package from kirlent.docutils to kirlent_docutils.

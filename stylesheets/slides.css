@@ -1,9 +1,14 @@
 /* Kirlent base stylesheet for slides output. */
 
-:root {
-  font-size: 3vw;
+body {
+  font-size: var(--font-size, 2rem);
 }
 
-section.slide {
+em {
+  color: var(--color-emphasis, red);
+  font-style: normal;
+}
+
+.slide .content {
   display: grid;
 }
