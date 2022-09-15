@@ -29,7 +29,7 @@ class Writer(HTML5Writer):
 
     supported = ("html", "html5")
 
-    default_stylesheets = ["minimal.css", "plain.css"]
+    default_stylesheets = ["kirlent_html5.css"]
 
     default_stylesheet_dirs = [".", str(Path(__file__).parent)] + \
         HTML5Writer.default_stylesheet_dirs[1:]

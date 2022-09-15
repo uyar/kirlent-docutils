@@ -1,0 +1,81 @@
+
+/* Kirlent minimal stylesheet for HTML5 output. */
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+:where(li, dd, td, th) > * {
+  margin: 0;
+}
+
+span.literal {
+  font-family: monospace;
+}
+
+ol.arabic {
+  list-style-type: decimal;
+}
+
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+/* Kirlent plain stylesheet for HTML5 output. */
+
+img, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    transition-duration: 0s !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Kirlent base stylesheet for slides output. */
+
+:root {
+  font-size: 3vw;
+}
+
+section.slide {
+  display: grid;
+}
