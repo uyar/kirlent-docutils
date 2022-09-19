@@ -69,6 +69,7 @@ def test_installation_should_create_console_script_for_slides_writer():
         ("minimal", "HTML5"),
         ("plain", "HTML5"),
         ("base", "slides"),
+        ("simple", "slides"),
         ("custom", "all"),
     ])
 def test_slides_writer_should_include_slides_stylesheet(capfd, sheet, output):

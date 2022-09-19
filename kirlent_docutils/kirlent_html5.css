@@ -47,6 +47,7 @@ ol.upperroman {
 /* Kirlent plain stylesheet for HTML5 output. */
 
 body {
+  padding: var(--padding-content, 1rem);
   line-height: var(--line-height, 1.5);
 }
 

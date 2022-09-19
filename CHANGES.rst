@@ -1,6 +1,7 @@
 0.1.3 (unreleased)
 ------------------
 
+- Add stylesheet for simple HTML5 slides.
 - Add stylesheets for customization.
 
 0.1.2 (2022-09-15)
