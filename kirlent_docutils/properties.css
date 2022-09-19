@@ -1,0 +1,7 @@
+/* Kirlent properties stylesheet for all outputs. */
+
+:root {
+  --font-family: system-ui, sans-serif;
+  --font-family-mono: ui-monospace, monospace;
+  --line-height: 1.5;
+}

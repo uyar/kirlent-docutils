@@ -35,7 +35,10 @@ IMPRESSJS_STYLE = """
 class Writer(SlidesWriter):
     """Writer for generating impress.js output."""
 
-    default_stylesheets = ["kirlent_impressjs.css"]
+    default_stylesheets = [
+        s.replace("kirlent_slides", "kirlent_impressjs")
+        for s in SlidesWriter.default_stylesheets
+    ]
 
     default_transition_duration = 1000
     default_min_scale = 0

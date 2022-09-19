@@ -43,7 +43,10 @@ SLIDE_SIZES = {
 class Writer(HTMLWriter):
     """Writer for generating HTML5 slides output."""
 
-    default_stylesheets = ["kirlent_slides.css"]
+    default_stylesheets = [
+        s.replace("kirlent_html5", "kirlent_slides")
+        for s in HTMLWriter.default_stylesheets
+    ]
 
     default_slide_width = 1920
     default_slide_height = 1080

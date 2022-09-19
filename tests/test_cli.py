@@ -37,11 +37,17 @@ def test_html5_writer_should_not_allow_removed_option(capfd, option):
     assert f"no such option: {option}" in captured.err
 
 
-@pytest.mark.parametrize("sheet", ["minimal", "plain"])
-def test_html5_writer_should_include_html5_stylesheet(capfd, sheet):
+@pytest.mark.parametrize(
+    ("sheet", "output"), [
+        ("properties", "all"),
+        ("minimal", "HTML5"),
+        ("plain", "HTML5"),
+        ("custom", "all"),
+    ])
+def test_html5_writer_should_include_html5_stylesheet(capfd, sheet, output):
     execute(rst2kirlenthtml5, content="")
     captured = capfd.readouterr()
-    assert f"Kirlent {sheet} stylesheet for HTML5" in captured.out
+    assert f"Kirlent {sheet} stylesheet for {output}" in captured.out
 
 
 def test_html5_writer_should_include_bundled_mathjax_as_fallback(capfd):
@@ -59,9 +65,11 @@ def test_installation_should_create_console_script_for_slides_writer():
 
 @pytest.mark.parametrize(
     ("sheet", "output"), [
+        ("properties", "all"),
         ("minimal", "HTML5"),
         ("plain", "HTML5"),
         ("base", "slides"),
+        ("custom", "all"),
     ])
 def test_slides_writer_should_include_slides_stylesheet(capfd, sheet, output):
     execute(kirlent2slides, content="")
@@ -78,10 +86,12 @@ def test_installation_should_create_console_script_for_impressjs_writer():
 
 @pytest.mark.parametrize(
     ("sheet", "output"), [
+        ("properties", "all"),
         ("minimal", "HTML5"),
         ("plain", "HTML5"),
         ("base", "slides"),
         ("base", "impress.js"),
+        ("custom", "all"),
     ])
 def test_impressjs_writer_should_include_impressjs_stylesheet(capfd, sheet, output):
     execute(kirlent2impressjs, content="")
@@ -158,10 +168,12 @@ def test_installation_should_create_console_script_for_revealjs_writer():
 
 @pytest.mark.parametrize(
     ("sheet", "output"), [
+        ("properties", "all"),
         ("minimal", "HTML5"),
         ("plain", "HTML5"),
         ("base", "slides"),
         ("base", "reveal.js"),
+        ("custom", "all"),
     ])
 def test_revealjs_writer_should_include_revealjs_stylesheet(capfd, sheet, output):
     execute(kirlent2revealjs, content="")
