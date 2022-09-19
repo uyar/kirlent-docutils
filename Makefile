@@ -4,9 +4,9 @@ OUTPUT = kirlent_docutils
 CONCAT = awk 'FNR==1{print ""}{print}'
 
 html5 = $(STYLES)/minimal.css $(STYLES)/plain.css
-slides = $(html5) $(STYLES)/slides.css
-impressjs = $(slides) $(STYLES)/impressjs.css
-revealjs = $(slides) $(STYLES)/revealjs.css
+slides = $(html5) $(STYLES)/slides_base.css
+impressjs = $(html5) $(STYLES)/slides_base.css $(STYLES)/impressjs.css
+revealjs = $(html5) $(STYLES)/slides_base.css $(STYLES)/revealjs.css
 
 all: $(OUTPUT)/kirlent_html5.css $(OUTPUT)/kirlent_slides.css $(OUTPUT)/kirlent_impressjs.css $(OUTPUT)/kirlent_revealjs.css
 
