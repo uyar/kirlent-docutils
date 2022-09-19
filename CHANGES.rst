@@ -1,4 +1,4 @@
-0.1.3 (unreleased)
+0.1.3 (2022-09-19)
 ------------------
 
 - Add stylesheet for simple HTML5 slides.

@@ -1,6 +1,6 @@
 [project]
 name = "kirlent_docutils"
-version = "0.1.2"
+version = "0.1.3"
 description = "Custom writers for docutils."
 readme = "README.rst"
 
