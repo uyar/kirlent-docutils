@@ -11,7 +11,7 @@ from docutils import frontend
 
 from .slides import SlidesTranslator
 from .slides import Writer as SlidesWriter
-from .utils import stylesheet_path_option
+from .utils import SCREEN_SIZES, stylesheet_path_option
 
 
 IMPRESSJS_URL = "file://%(path)s" % {
@@ -40,6 +40,7 @@ class Writer(SlidesWriter):
         for s in SlidesWriter.default_stylesheets
     ]
 
+    default_slide_size = "1920x1080"
     default_transition_duration = 1000
     default_min_scale = 0
     default_max_scale = 3
@@ -53,6 +54,15 @@ class Writer(SlidesWriter):
         "ImpressJS Writer Options",
         "",
         (
+            (
+                'Slide size in pixels. (default: %(size)s)' % {
+                    "size": default_slide_size,
+                },
+                ["--slide-size"],
+                {
+                    "default": default_slide_size,
+                }
+            ),
             (
                 'Transition duration in miliseconds. (default: %(td)d)' % {
                     "td": default_transition_duration,
@@ -107,6 +117,10 @@ class ImpressJSTranslator(SlidesTranslator):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        size_key = self.document.settings.slide_size.lower()
+        slide_size = SCREEN_SIZES.get(size_key, map(int, size_key.split("x")))
+        self.slide_width, self.slide_height = slide_size
 
         self.transition_duration = self.document.settings.transition_duration
         self.min_scale = self.document.settings.min_scale

@@ -1,3 +1,8 @@
+0.2 (2022-09-28)
+----------------
+
+- Remove slide size from simple slides writer.
+
 0.1.3 (2022-09-19)
 ------------------
 

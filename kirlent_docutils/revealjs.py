@@ -11,7 +11,7 @@ from docutils import frontend
 
 from .slides import SlidesTranslator
 from .slides import Writer as SlidesWriter
-from .utils import stylesheet_path_option
+from .utils import SCREEN_SIZES, stylesheet_path_option
 
 
 REVEALJS_URL = "file://%(path)s" % {
@@ -38,6 +38,7 @@ class Writer(SlidesWriter):
         for s in SlidesWriter.default_stylesheets
     ]
 
+    default_slide_size = "1920x1080"
     default_transition = "none"
     default_center_vertical = False
 
@@ -50,6 +51,15 @@ class Writer(SlidesWriter):
         "RevealJS Writer Options",
         "",
         (
+            (
+                'Slide size in pixels. (default: %(size)s)' % {
+                    "size": default_slide_size,
+                },
+                ["--slide-size"],
+                {
+                    "default": default_slide_size,
+                }
+            ),
             (
                 'Transition effect. (default: %(effect)s)' % {
                     "effect": default_transition
@@ -87,6 +97,10 @@ class RevealJSTranslator(SlidesTranslator):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        size_key = self.document.settings.slide_size.lower()
+        slide_size = SCREEN_SIZES.get(size_key, map(int, size_key.split("x")))
+        self.slide_width, self.slide_height = slide_size
 
         self.center_vertical = self.document.settings.center_vertical
         self.transition = self.document.settings.transition

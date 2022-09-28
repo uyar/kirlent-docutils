@@ -35,11 +35,6 @@ ROUGH_NOTATION_ANNOTATE = """
 ANNOTATION_MARKUP = '<span onclick="annotate(this, \'%(eff)s\', \'%(cat)s\')">'
 
 
-SLIDE_SIZES = {
-    "a4": (1125, 795),
-}
-
-
 class Writer(HTMLWriter):
     """Writer for generating HTML5 slides output."""
 
@@ -48,32 +43,9 @@ class Writer(HTMLWriter):
         for s in HTMLWriter.default_stylesheets
     ]
 
-    default_slide_width = 1920
-    default_slide_height = 1080
-
     settings_spec = frontend.filter_settings_spec(
         HTMLWriter.settings_spec,
         stylesheet_path=stylesheet_path_option(default_stylesheets),
-    )
-
-    settings_spec = settings_spec + (
-        "HTML5 slides writer Options",
-        "",
-        (
-            (
-                'Slide size in pixels. (default: %(width)dx%(height)d)' % {
-                    "width": default_slide_width,
-                    "height": default_slide_height,
-                },
-                ["--slide-size"],
-                {
-                    "default": "%(width)dx%(height)d" % {
-                        "width": default_slide_width,
-                        "height": default_slide_height,
-                    },
-                }
-            ),
-        )
     )
 
     def __init__(self):
@@ -95,12 +67,6 @@ class SlidesTranslator(HTMLTranslator):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        slide_size_key = self.document.settings.slide_size.lower()
-        slide_size = SLIDE_SIZES.get(slide_size_key)
-        if slide_size is None:
-            slide_size = map(int, slide_size_key.split("x"))
-        self.slide_width, self.slide_height = slide_size
 
         # add attributes to keep track of the field data
         self._fields = {}

@@ -6,6 +6,11 @@
 from docutils import frontend
 
 
+SCREEN_SIZES = {
+    "a4": (1125, 795),
+}
+
+
 def stylesheet_path_option(sheets):
     return (
         'Comma separated list of stylesheet paths. '
