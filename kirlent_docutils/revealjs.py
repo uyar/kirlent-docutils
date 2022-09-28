@@ -39,6 +39,7 @@ class Writer(SlidesWriter):
     ]
 
     default_slide_size = "1920x1080"
+    transition_options = ["none", "fade", "slide", "convex", "concave", "zoom"]
     default_transition = "none"
     default_center_vertical = False
 
@@ -61,11 +62,13 @@ class Writer(SlidesWriter):
                 }
             ),
             (
-                'Transition effect. (default: %(effect)s)' % {
-                    "effect": default_transition
+                'Transition effect. (default: %(effect)s, one of %(opts)s)' % {
+                    "effect": default_transition,
+                    "opts": "/".join(transition_options),
                 },
                 ["--transition"],
                 {
+                    "choices": transition_options,
                     "default": default_transition,
                 }
             ),
