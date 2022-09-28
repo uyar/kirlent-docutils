@@ -1,10 +1,12 @@
 /* Kirlent properties stylesheet for all outputs. */
 
+/*
 :root {
-  --font-family: system-ui, sans-serif;
-  --font-family-mono: ui-monospace, monospace;
-  /* --font-size: 1rem; */
-  --padding-content: 1rem;
-  --line-height: 1.5;
-  /* --color-emphasis: red; */
+  --font-family: ...;
+  --font-family-mono: ...;
+  --font-size: ...;
+  --padding-content: ...;
+  --line-height: ...;
+  --color-emphasis: ...;
 }
+*/

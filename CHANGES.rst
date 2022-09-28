@@ -1,4 +1,4 @@
-0.2 (2022-09-28)
+0.2 (unreleased)
 ----------------
 
 - Remove slide size from simple slides writer.
