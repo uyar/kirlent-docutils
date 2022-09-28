@@ -8,31 +8,26 @@
 from pathlib import Path
 from xml.etree import ElementTree
 
-from docutils import frontend
-from docutils.nodes import container
+from docutils import frontend, nodes
 
 from .html5 import HTMLTranslator
 from .html5 import Writer as HTMLWriter
 from .utils import stylesheet_path_option
 
 
-ANNOTATION_PREFIX = "annotate://"
-
-ANNOTATION_COLOR_PROPERTY_PREFIX = "--color-annotation-"
-
 ROUGH_NOTATION_URL = "file://%(path)s" % {
     "path": Path(__file__).parent / "bundled" / "rough-notation.iife.js",
 }
 
-ROUGH_NOTATION_ANNOTATE = """
-  function annotate(el, eff, cat) {
-      const c = getComputedStyle(el).getPropertyValue('%(pre)s' + cat);
-      const a = RoughNotation.annotate(el, {type: eff, color: c});
-      a.show();
-  }
-""" % {"pre": ANNOTATION_COLOR_PROPERTY_PREFIX}
-
-ANNOTATION_MARKUP = '<span onclick="annotate(this, \'%(eff)s\', \'%(cat)s\')">'
+ROUGH_NOTATION_SCRIPT = """
+  window.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.annotation').forEach((el) =>
+          el.addEventListener('click', (event) => {
+              const a = RoughNotation.annotate(el, {type: "underline"});
+              a.show();
+          }, false));
+  }, false);
+"""
 
 
 class Writer(HTMLWriter):
@@ -58,12 +53,16 @@ class SlidesTranslator(HTMLTranslator):
 
     pause_class = ""
 
+    annotation_types = {
+        "_": "underline",
+    }
+
     data_attrs = set()
 
     script_rough_notation = HTMLTranslator.script_defer % {
         "src": ROUGH_NOTATION_URL,
     }
-    script_annotate = HTMLTranslator.script % {"code": ROUGH_NOTATION_ANNOTATE}
+    script_annotate = HTMLTranslator.script % {"code": ROUGH_NOTATION_SCRIPT}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -162,7 +161,7 @@ class SlidesTranslator(HTMLTranslator):
         if layout is not None:
             areas = " ".join(f"'{row}'" for row in layout.splitlines())
             styles["grid-template-areas"] = areas
-        slide_contents = container()
+        slide_contents = nodes.container()
         slide_contents.attributes["classes"] = ["content"]
         slide_contents.attributes["_styles"] = styles
         self.visit_container(slide_contents)
@@ -177,25 +176,28 @@ class SlidesTranslator(HTMLTranslator):
                 classes.remove(class_)
         super().visit_container(node)
 
-    def visit_reference(self, node):
-        # generate clickable '<span>' for annotation
-        refuri = node.get("refuri", "")
-        annotation = refuri.startswith(ANNOTATION_PREFIX)
-        if not annotation:
-            super().visit_reference(node)
+    def visit_emphasis(self, node):
+        assert len(node.children) == 1
+        assert isinstance(node.children[0], nodes.Text)
+        text = node.children[0].astext()
+        if text[0] == text[-1]:
+            annotation_type = SlidesTranslator.annotation_types.get(text[0])
+            if annotation_type is not None:
+                tag = f'<span class="annotation annotation-{annotation_type}">'
+                self.body.append(tag)
+                child = nodes.Text(text[1:-1])
+                child.parent = node
+                node.children = [child]
+                node.attributes["_annotation"] = True
         else:
-            effect, *rest = refuri[len(ANNOTATION_PREFIX):].split("/")
-            category = rest[0] if len(rest) == 1 else "default"
-            markup = ANNOTATION_MARKUP % {"eff": effect, "cat": category}
-            self.body.append(markup)
-        node.attributes["_annotation"] = annotation
+            super().visit_emphasis(node)
 
-    def depart_reference(self, node):
+    def depart_emphasis(self, node):
         annotation = node.attributes.pop("_annotation", False)
-        if not annotation:
-            super().depart_reference(node)
-        else:
+        if annotation:
             self.body.append('</span>')
+        else:
+            super().depart_emphasis(node)
 
     def visit_image(self, node):
         # scale SVG images generated from mermaid.js diagrams

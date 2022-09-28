@@ -1,6 +1,7 @@
 0.2 (unreleased)
 ----------------
 
+- Change annotation syntax to use customized emphasis.
 - Remove slide size from simple slides writer.
 
 0.1.3 (2022-09-19)

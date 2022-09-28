@@ -68,17 +68,17 @@ def test_writer_should_generate_script_for_rough_notation():
 
 def test_writer_should_generate_script_for_annotating_elements():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}))
-    assert re.search(r'<script>\s*function annotate\(.*</script>', html["head"], re.DOTALL) is not None
+    assert re.search(r'<script>.*RoughNotation.annotate\(.*</script>', html["head"], re.DOTALL) is not None
 
 
-def test_writer_should_generate_onclick_event_for_reference_with_annotation():
-    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "`Tekir <annotate://box>`_\n")
-    assert '<span onclick="annotate(this, \'box\', \'default\')">Tekir</span>' in html["body"]
+def test_writer_should_generate_span_for_annotation_emphasis():
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "*_Tekir_*\n")
+    assert '<span class="annotation annotation-underline">Tekir</span>' in html["body"]
 
 
-def test_writer_should_generate_onclick_event_for_reference_with_annotation_category():
-    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "`Tekir <annotate://box/callout>`_\n")
-    assert '<span onclick="annotate(this, \'box\', \'callout\')">Tekir</span>' in html["body"]
+def test_writer_should_not_generate_span_for_regular_emphasis():
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "*Tekir*\n")
+    assert '<em>Tekir</em>' in html["body"]
 
 
 def test_writer_should_generate_regular_link_for_reference_without_annotation():

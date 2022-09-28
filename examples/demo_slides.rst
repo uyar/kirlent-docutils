@@ -63,9 +63,11 @@ Annotations
 
 ..
 
-- `click me <annotate://box>`_
+- *_underlined annotation_*
 
-- these might miss if the content is scaled
+:pause:
+
+- *these might miss if the content is scaled*
 
 ----
 
