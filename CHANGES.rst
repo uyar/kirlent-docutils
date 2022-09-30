@@ -1,4 +1,4 @@
-0.2 (unreleased)
+0.2 (2022-09-30)
 ----------------
 
 - Change annotation syntax to use customized emphasis.
