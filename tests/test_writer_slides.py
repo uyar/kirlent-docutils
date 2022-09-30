@@ -72,7 +72,7 @@ def test_writer_should_generate_script_for_annotating_elements():
 
 
 def test_writer_should_generate_span_for_annotation_emphasis():
-    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "*_Tekir_*\n")
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "*>_Tekir_<*\n")
     assert '<span class="annotation annotation-underline">Tekir</span>' in html["body"]
 
 

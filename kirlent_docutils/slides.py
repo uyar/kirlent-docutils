@@ -180,12 +180,13 @@ class SlidesTranslator(HTMLTranslator):
         assert len(node.children) == 1
         assert isinstance(node.children[0], nodes.Text)
         text = node.children[0].astext()
-        if text[0] == text[-1]:
-            annotation_type = SlidesTranslator.annotation_types.get(text[0])
+        if (len(text) > 4) and (text[0] == ">") and (text[-1] == "<") \
+                and (text[1] == text[-2]):
+            annotation_type = SlidesTranslator.annotation_types.get(text[1])
             if annotation_type is not None:
                 tag = f'<span class="annotation annotation-{annotation_type}">'
                 self.body.append(tag)
-                child = nodes.Text(text[1:-1])
+                child = nodes.Text(text[2:-2])
                 child.parent = node
                 node.children = [child]
                 node.attributes["_annotation"] = True

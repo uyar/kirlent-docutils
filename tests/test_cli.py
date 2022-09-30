@@ -204,7 +204,7 @@ def test_revealjs_writer_should_set_slide_size_on_initialization(capfd, size, wi
 @pytest.mark.parametrize(
     ("attr", "option", "value"), [
         ("transition", None, "none"),
-        ("transition", "42", "42"),
+        ("transition", "concave", "concave"),
         ("center-vertical", None, "false"),
         ("center-vertical", "true", "true"),
     ]

@@ -157,9 +157,9 @@ class HTMLTranslator(HTML5Translator):
         self.body[-1] = self.body[-1].replace(HTMLTranslator.COLON_SPAN, ':')
 
     def visit_math(self, node, *args, **kwargs):
-       if self.math_output == 'mathjax' and not self.math_header:
+        if self.math_output == 'mathjax' and not self.math_header:
             try:
                 self.mathjax_url = self.math_output_options[0]
             except IndexError:
                 self.math_output_options = [self.mathjax_url]
-       super().visit_math(node, *args, **kwargs)
+        super().visit_math(node, *args, **kwargs)
