@@ -23,7 +23,14 @@ ROUGH_NOTATION_SCRIPT = """
   window.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.annotation').forEach((el) =>
           el.addEventListener('click', (event) => {
-              const a = RoughNotation.annotate(el, {type: "underline"});
+              var a_type = "underline";
+              for (let i = 0; i < el.classList.length; i++) {
+                  const c = el.classList.item(i);
+                  if (c.startsWith('annotation-')) {
+                      a_type = c.slice(11);
+                  }
+              }
+              const a = RoughNotation.annotate(el, {type: a_type});
               a.show();
           }, false));
   }, false);
@@ -54,7 +61,13 @@ class SlidesTranslator(HTMLTranslator):
     pause_class = ""
 
     annotation_types = {
-        "_": "underline",
+        "__": "underline",
+        "||": "box",
+        "()": "circle",
+        "!!": "highlight",
+        "~~": "strike-through",
+        "++": "crossed-off",
+        "[]": "bracket",
     }
 
     data_attrs = set()
@@ -180,9 +193,9 @@ class SlidesTranslator(HTMLTranslator):
         assert len(node.children) == 1
         assert isinstance(node.children[0], nodes.Text)
         text = node.children[0].astext()
-        if (len(text) > 4) and (text[0] == ">") and (text[-1] == "<") \
-                and (text[1] == text[-2]):
-            annotation_type = SlidesTranslator.annotation_types.get(text[1])
+        if (len(text) > 4) and (text[0] == ">") and (text[-1] == "<"):
+            annotator = text[1] + text[-2]
+            annotation_type = SlidesTranslator.annotation_types.get(annotator)
             if annotation_type is not None:
                 tag = f'<span class="annotation annotation-{annotation_type}">'
                 self.body.append(tag)

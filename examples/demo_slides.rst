@@ -9,11 +9,10 @@ Usage
 
 - run the commands:
 
-.. code::
+  .. code::
 
-   kirlent2impressjs demo.rst demo-impress.html
-
-   kirlent2revealjs demo.rst demo-reveal.html
+     kirlent2impressjs demo.rst demo-impress.html
+     kirlent2revealjs demo.rst demo-reveal.html
 
 ----
 
@@ -22,12 +21,10 @@ Flags
 
 - use docutils HTML writer flags, like:
 
-..
-
-- ``--stylesheet``
-- ``--link-stylesheet``
-- ``--math-output`` (for mathjax for example)
-- ``--help``
+  - ``--stylesheet``
+  - ``--link-stylesheet``
+  - ``--math-output mathjax``
+  - ``--help``
 
 ----
 
@@ -56,18 +53,36 @@ Multicolumn
 
 ----
 
+:layout:
+  s1  s1
+  s21 s22
+  s3  s3
+
 Annotations
 ===========
 
-- annotations use Rough Notation
+.. container:: layout-s1
 
-..
+   - annotations use Rough Notation
 
-- *_underlined annotation_*
+.. container:: layout-s21
+
+   - *>_underline annotation_<*
+   - *>|box annotation|<*
+   - *>(circle annotation)<*
+   - *>!highlight annotation!<*
+
+.. container:: layout-s22
+
+   - *>~strike-through annotation~<*
+   - *>+crossed-off annotation+<*
+   - *>[bracket annotation]<*
 
 :pause:
 
-- *these might miss if the content is scaled*
+.. container:: layout-s3
+
+   - *these might miss if the content is scaled*
 
 ----
 

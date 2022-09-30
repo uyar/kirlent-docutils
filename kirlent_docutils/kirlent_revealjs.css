@@ -15,7 +15,8 @@ code,
 kbd,
 samp,
 pre
-span.literal {
+.literal,
+.pre {
   font-family: var(--font-family-mono, ui-monospace);
 }
 

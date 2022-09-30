@@ -71,9 +71,39 @@ def test_writer_should_generate_script_for_annotating_elements():
     assert re.search(r'<script>.*RoughNotation.annotate\(.*</script>', html["head"], re.DOTALL) is not None
 
 
-def test_writer_should_generate_span_for_annotation_emphasis():
+def test_writer_should_generate_span_for_underline_annotation_emphasis():
     html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "*>_Tekir_<*\n")
     assert '<span class="annotation annotation-underline">Tekir</span>' in html["body"]
+
+
+def test_writer_should_generate_span_for_box_annotation_emphasis():
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "*>|Tekir|<*\n")
+    assert '<span class="annotation annotation-box">Tekir</span>' in html["body"]
+
+
+def test_writer_should_generate_span_for_circle_annotation_emphasis():
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "*>(Tekir)<*\n")
+    assert '<span class="annotation annotation-circle">Tekir</span>' in html["body"]
+
+
+def test_writer_should_generate_span_for_highlight_annotation_emphasis():
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "*>!Tekir!<*\n")
+    assert '<span class="annotation annotation-highlight">Tekir</span>' in html["body"]
+
+
+def test_writer_should_generate_span_for_strike_through_annotation_emphasis():
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "*>~Tekir~<*\n")
+    assert '<span class="annotation annotation-strike-through">Tekir</span>' in html["body"]
+
+
+def test_writer_should_generate_span_for_crossed_off_annotation_emphasis():
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "*>+Tekir+<*\n")
+    assert '<span class="annotation annotation-crossed-off">Tekir</span>' in html["body"]
+
+
+def test_writer_should_generate_span_for_bracket_annotation_emphasis():
+    html = publish_html(PREAMBLE + (SLIDE % {"n": 1, "f": ""}) + "*>[Tekir]<*\n")
+    assert '<span class="annotation annotation-bracket">Tekir</span>' in html["body"]
 
 
 def test_writer_should_not_generate_span_for_regular_emphasis():
