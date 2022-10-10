@@ -25,16 +25,17 @@ ROUGH_NOTATION_SCRIPT = """
           el.addEventListener('click', (event) => {
               var a_type = "underline";
               for (let i = 0; i < el.classList.length; i++) {
-                  const c = el.classList.item(i);
-                  if (c.startsWith('annotation-')) {
-                      a_type = c.slice(11);
+                  const cl = el.classList.item(i);
+                  if (cl.startsWith('annotation-')) {
+                      a_type = cl.slice(11);
                   }
               }
-              const a = RoughNotation.annotate(el, {type: a_type});
+              const c = getComputedStyle(el).getPropertyValue('--color-annotation');
+              const a = RoughNotation.annotate(el, {type: a_type, color: c});
               a.show();
           }, false));
   }, false);
-"""
+"""  # noqa
 
 
 class Writer(HTMLWriter):
