@@ -15,11 +15,12 @@ classifiers = [
     "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Text Processing :: Markup",
@@ -33,12 +34,18 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = [
+tests = [
     "pytest",
     "pytest-cov",
+]
+lint = [
     "flake8",
     "flake8-isort",
+]
+dev = [
+    "kirlent_docutils[tests,lint]",
     "tox",
+    "build",
 ]
 
 [project.scripts]
@@ -48,8 +55,8 @@ kirlent2impressjs = "kirlent_docutils:publish_cmdline_impressjs"
 kirlent2revealjs = "kirlent_docutils:publish_cmdline_revealjs"
 
 [project.urls]
-"Homepage" = "https://tekir.org/kirlent_docutils/"
-"Repository" = "https://repo.tekir.org/kirlent/kirlent_docutils"
+homepage = "https://tekir.org/kirlent_docutils/"
+repository = "https://repo.tekir.org/kirlent/kirlent_docutils"
 
 [tool.isort]
 lines_after_imports = 2
@@ -59,26 +66,20 @@ sections = "TEST,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py{311,310,39,38,37}, pypy{39,38,37}, style
+envlist = py{37,38,39,310,311}, pypy{37,38,39}, style
 isolated_build = True
 
 [testenv]
-deps =
-    pytest
+extras = tests
 commands =
     pytest {posargs:tests}
 
 [testenv:coverage]
-deps =
-    {[testenv]deps}
-    pytest-cov
 commands =
     pytest --cov={envsitepackagesdir}/kirlent_docutils --cov-report=term-missing tests
 
 [testenv:style]
-deps =
-    flake8
-    flake8-isort
+extras = lint
 commands =
     flake8 kirlent_docutils
 """
