@@ -16,7 +16,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -27,7 +26,7 @@ classifiers = [
     "Topic :: Text Processing :: Markup :: HTML"
 ]
 
-requires-python = "~=3.7"
+requires-python = "~=3.8"
 dependencies = [
     "docutils>=0.18",
     "pygments",
@@ -66,7 +65,7 @@ sections = "TEST,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py{37,38,39,310,311}, pypy{37,38,39}, style
+envlist = py{38,39,310,311}, pypy{38,39}, style
 isolated_build = True
 
 [testenv]
