@@ -8,16 +8,11 @@
 
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
 }
 
-code,
-kbd,
-samp,
-pre
-.literal,
-.pre {
-  font-family: ui-monospace, monospace;
+img, svg {
+  max-width: 100%;
+  height: auto;
 }
 
 :where(li, dd, td, th) > * {
@@ -42,4 +37,19 @@ ol.lowerroman {
 
 ol.upperroman {
   list-style-type: upper-roman;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    transition-duration: 0s !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }

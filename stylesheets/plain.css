@@ -1,11 +1,16 @@
 /* Kirlent plain stylesheet for HTML5 output. */
 
-img, svg {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  margin-top: 1em;
-  margin-bottom: 1em;
+body {
+  font-family: system-ui, sans-serif;
+}
+
+code,
+kbd,
+samp,
+pre
+.literal,
+.pre {
+  font-family: ui-monospace, monospace;
 }
 
 table {
@@ -14,19 +19,4 @@ table {
 
 th {
   text-align: left;
-}
-
-html:focus-within {
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  ::before,
-  ::after {
-    transition-duration: 0s !important;
-    animation-duration: 1ms !important;
-    animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-  }
 }

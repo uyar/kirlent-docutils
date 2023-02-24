@@ -11,4 +11,5 @@ em {
 
 .slide .content {
   display: grid;
+  grid-gap: 1em;
 }

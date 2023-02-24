@@ -8,16 +8,11 @@
 
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
 }
 
-code,
-kbd,
-samp,
-pre
-.literal,
-.pre {
-  font-family: ui-monospace, monospace;
+img, svg {
+  max-width: 100%;
+  height: auto;
 }
 
 :where(li, dd, td, th) > * {
@@ -44,24 +39,6 @@ ol.upperroman {
   list-style-type: upper-roman;
 }
 
-/* Kirlent plain stylesheet for HTML5 output. */
-
-img, svg {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-
-table {
-  border-collapse: collapse;
-}
-
-th {
-  text-align: left;
-}
-
 html:focus-within {
   scroll-behavior: smooth;
 }
@@ -75,4 +52,27 @@ html:focus-within {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Kirlent plain stylesheet for HTML5 output. */
+
+body {
+  font-family: system-ui, sans-serif;
+}
+
+code,
+kbd,
+samp,
+pre
+.literal,
+.pre {
+  font-family: ui-monospace, monospace;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
 }
