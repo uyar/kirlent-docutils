@@ -1,11 +1,11 @@
 /* Kirlent base stylesheet for slides output. */
 
 body {
-  font-size: var(--font-size, 2rem);
+  font-size: 2em;
 }
 
 em {
-  color: var(--color-emphasis, red);
+  color: red;
   font-style: normal;
 }
 

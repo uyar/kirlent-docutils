@@ -8,7 +8,7 @@
 
 body {
   margin: 0;
-  font-family: var(--font-family, system-ui);
+  font-family: system-ui, sans-serif;
 }
 
 code,
@@ -17,7 +17,7 @@ samp,
 pre
 .literal,
 .pre {
-  font-family: var(--font-family-mono, ui-monospace);
+  font-family: ui-monospace, monospace;
 }
 
 :where(li, dd, td, th) > * {
@@ -45,11 +45,6 @@ ol.upperroman {
 }
 
 /* Kirlent plain stylesheet for HTML5 output. */
-
-body {
-  padding: var(--padding-content, 1rem);
-  line-height: var(--line-height, 1.5);
-}
 
 img, svg {
   display: block;
@@ -85,11 +80,11 @@ html:focus-within {
 /* Kirlent base stylesheet for slides output. */
 
 body {
-  font-size: var(--font-size, 2rem);
+  font-size: 2em;
 }
 
 em {
-  color: var(--color-emphasis, red);
+  color: red;
   font-style: normal;
 }
 
@@ -669,7 +664,6 @@ body {
   padding: 5px;
   color: #fff;
   font-size: 12px;
-  font-family: Helvetica, sans-serif;
   line-height: 1;
   background-color: rgba(0, 0, 0, 0.4);
 }
@@ -1703,7 +1697,6 @@ body {
   overflow: auto;
   color: #222;
   font-size: 18px;
-  font-family: Helvetica, sans-serif;
   line-height: 1.4;
   text-align: left;
   background-color: #f5f5f5;

@@ -8,7 +8,7 @@
 
 body {
   margin: 0;
-  font-family: var(--font-family, system-ui);
+  font-family: system-ui, sans-serif;
 }
 
 code,
@@ -17,7 +17,7 @@ samp,
 pre
 .literal,
 .pre {
-  font-family: var(--font-family-mono, ui-monospace);
+  font-family: ui-monospace, monospace;
 }
 
 :where(li, dd, td, th) > * {

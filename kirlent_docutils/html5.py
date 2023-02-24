@@ -1,4 +1,4 @@
-# Copyright 2020-2022 H. Turgut Uyar <uyar@tekir.org>
+# Copyright 2020-2023 H. Turgut Uyar <uyar@tekir.org>
 #
 # kirlent_docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
@@ -29,7 +29,7 @@ class Writer(HTML5Writer):
 
     supported = ("html", "html5")
 
-    default_stylesheets = ["properties.css", "kirlent_html5.css", "custom.css"]
+    default_stylesheets = ["kirlent_html5.css"]
 
     default_stylesheet_dirs = [".", str(Path(__file__).parent)] + \
         HTML5Writer.default_stylesheet_dirs[1:]

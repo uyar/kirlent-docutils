@@ -1,6 +1,7 @@
 0.3 (unreleased)
 ----------------
 
+- Remove properties and custom stylesheets.
 - Drop support for Python 3.7.
 
 0.2 (2022-09-30)

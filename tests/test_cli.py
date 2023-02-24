@@ -39,10 +39,8 @@ def test_html5_writer_should_not_allow_removed_option(capfd, option):
 
 @pytest.mark.parametrize(
     ("sheet", "output"), [
-        ("properties", "all"),
         ("minimal", "HTML5"),
         ("plain", "HTML5"),
-        ("custom", "all"),
     ])
 def test_html5_writer_should_include_html5_stylesheet(capfd, sheet, output):
     execute(rst2kirlenthtml5, content="")
@@ -65,12 +63,10 @@ def test_installation_should_create_console_script_for_slides_writer():
 
 @pytest.mark.parametrize(
     ("sheet", "output"), [
-        ("properties", "all"),
         ("minimal", "HTML5"),
         ("plain", "HTML5"),
         ("base", "slides"),
         ("simple", "slides"),
-        ("custom", "all"),
     ])
 def test_slides_writer_should_include_slides_stylesheet(capfd, sheet, output):
     execute(kirlent2slides, content="")
@@ -87,12 +83,10 @@ def test_installation_should_create_console_script_for_impressjs_writer():
 
 @pytest.mark.parametrize(
     ("sheet", "output"), [
-        ("properties", "all"),
         ("minimal", "HTML5"),
         ("plain", "HTML5"),
         ("base", "slides"),
         ("base", "impress.js"),
-        ("custom", "all"),
     ])
 def test_impressjs_writer_should_include_impressjs_stylesheet(capfd, sheet, output):
     execute(kirlent2impressjs, content="")
@@ -169,12 +163,10 @@ def test_installation_should_create_console_script_for_revealjs_writer():
 
 @pytest.mark.parametrize(
     ("sheet", "output"), [
-        ("properties", "all"),
         ("minimal", "HTML5"),
         ("plain", "HTML5"),
         ("base", "slides"),
         ("base", "reveal.js"),
-        ("custom", "all"),
     ])
 def test_revealjs_writer_should_include_revealjs_stylesheet(capfd, sheet, output):
     execute(kirlent2revealjs, content="")
