@@ -1,4 +1,4 @@
-# Copyright 2020-2022 H. Turgut Uyar <uyar@tekir.org>
+# Copyright 2020-2023 H. Turgut Uyar <uyar@tekir.org>
 #
 # kirlent_docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
@@ -41,10 +41,8 @@ ROUGH_NOTATION_SCRIPT = """
 class Writer(HTMLWriter):
     """Writer for generating HTML5 slides output."""
 
-    default_stylesheets = [
-        s.replace("kirlent_html5", "kirlent_slides")
-        for s in HTMLWriter.default_stylesheets
-    ]
+    base_stylesheets = HTMLWriter.default_stylesheets + ["slides_base.css"]
+    default_stylesheets = base_stylesheets + ["slides.css"]
 
     settings_spec = frontend.filter_settings_spec(
         HTMLWriter.settings_spec,

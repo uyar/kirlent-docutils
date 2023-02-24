@@ -1,4 +1,4 @@
-# Copyright 2020-2022 H. Turgut Uyar <uyar@tekir.org>
+# Copyright 2020-2023 H. Turgut Uyar <uyar@tekir.org>
 #
 # kirlent_docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
@@ -35,10 +35,7 @@ IMPRESSJS_STYLE = """
 class Writer(SlidesWriter):
     """Writer for generating impress.js output."""
 
-    default_stylesheets = [
-        s.replace("kirlent_slides", "kirlent_impressjs")
-        for s in SlidesWriter.default_stylesheets
-    ]
+    default_stylesheets = SlidesWriter.base_stylesheets + ["impressjs.css"]
 
     default_slide_size = "1920x1080"
     default_transition_duration = 1000

@@ -1,4 +1,4 @@
-# Copyright 2022 H. Turgut Uyar <uyar@tekir.org>
+# Copyright 2023 H. Turgut Uyar <uyar@tekir.org>
 #
 # kirlent_docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
@@ -33,10 +33,7 @@ REVEALJS_INIT = """
 class Writer(SlidesWriter):
     """Writer for generating reveal.js output."""
 
-    default_stylesheets = [
-        s.replace("kirlent_slides", "kirlent_revealjs")
-        for s in SlidesWriter.default_stylesheets
-    ]
+    default_stylesheets = SlidesWriter.base_stylesheets + ["revealjs.css"]
 
     default_slide_size = "1920x1080"
     transition_options = ["none", "fade", "slide", "convex", "concave", "zoom"]
