@@ -1,3 +1,8 @@
+0.4 (unreleased)
+----------------
+
+- Improve styles for the simple HTML slides writer.
+
 0.3 (2023-03-01)
 ----------------
 

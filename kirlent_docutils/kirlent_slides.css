@@ -113,12 +113,11 @@ em {
 /* Kirlent simple stylesheet for slides output. */
 
 body {
-  min-height: 100vh;
+  max-height: 100vh;
 }
 
 body,
-main,
-.slide {
+main {
   display: grid;
 }
 
