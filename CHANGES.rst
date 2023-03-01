@@ -1,4 +1,4 @@
-0.3 (unreleased)
+0.3 (2023-03-01)
 ----------------
 
 - Remove properties and custom stylesheets.
