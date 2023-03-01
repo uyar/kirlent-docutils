@@ -33,7 +33,7 @@ REVEALJS_INIT = """
 class Writer(SlidesWriter):
     """Writer for generating reveal.js output."""
 
-    default_stylesheets = SlidesWriter.base_stylesheets + ["revealjs.css"]
+    default_stylesheets = ["kirlent_revealjs.css"]
 
     default_slide_size = "1920x1080"
     transition_options = ["none", "fade", "slide", "convex", "concave", "zoom"]

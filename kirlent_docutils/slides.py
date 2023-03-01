@@ -41,8 +41,7 @@ ROUGH_NOTATION_SCRIPT = """
 class Writer(HTMLWriter):
     """Writer for generating HTML5 slides output."""
 
-    base_stylesheets = HTMLWriter.default_stylesheets + ["slides_base.css"]
-    default_stylesheets = base_stylesheets + ["slides.css"]
+    default_stylesheets = ["kirlent_slides.css"]
 
     settings_spec = frontend.filter_settings_spec(
         HTMLWriter.settings_spec,

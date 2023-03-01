@@ -21,13 +21,15 @@ from docutils import frontend
 from docutils.writers.html5_polyglot import HTMLTranslator as HTML5Translator
 from docutils.writers.html5_polyglot import Writer as HTML5Writer
 
-from .utils import stylesheet_dirs_option
+from .utils import stylesheet_dirs_option, stylesheet_path_option
 
 
 class Writer(HTML5Writer):
     """Writer for generating HTML5 output."""
 
     supported = ("html", "html5")
+
+    default_stylesheets = ["kirlent_html5.css"]
 
     default_stylesheet_dirs = [".", str(Path(__file__).parent)] + \
         HTML5Writer.default_stylesheet_dirs[1:]
@@ -48,6 +50,7 @@ class Writer(HTML5Writer):
         "compact_field_lists",
         "no_compact_field_lists",
         "table_style",
+        stylesheet_path=stylesheet_path_option(default_stylesheets),
         stylesheet_dirs=stylesheet_dirs_option(default_stylesheet_dirs),
     )
 

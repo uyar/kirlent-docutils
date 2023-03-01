@@ -1,0 +1,105 @@
+/* Kirlent minimal stylesheet for HTML5 output. */
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+img, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+:where(li, dd, td, th) > * {
+  margin: 0;
+}
+
+ol.arabic {
+  list-style-type: decimal;
+}
+
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    transition-duration: 0s !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Kirlent plain stylesheet for HTML5 output. */
+
+body {
+  font-family: system-ui, sans-serif;
+}
+
+code,
+kbd,
+samp,
+pre
+.literal,
+.pre {
+  font-family: ui-monospace, monospace;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+}
+
+/* Kirlent base stylesheet for slides output. */
+
+body {
+  font-size: 2em;
+}
+
+em {
+  color: red;
+  font-style: normal;
+}
+
+.slide .content {
+  display: grid;
+  grid-gap: 1em;
+}
+
+/* Kirlent base stylesheet for impress.js output. */
+
+.substep {
+  opacity: 0;
+}
+
+.substep.substep-visible {
+  opacity: 1;
+  transition: opacity 1s;
+}
