@@ -136,9 +136,9 @@ def test_impressjs_writer_should_set_slide_size_on_impress_element(capfd, size, 
     ("attr", "option", "value"), [
         ("transition-duration", None, "1000"),
         ("transition-duration", "0", "0"),
-        ("min-scale", None, "0"),
-        ("min-scale", "1", "1"),
-        ("max-scale", None, "3"),
+        ("min-scale", None, "1"),
+        ("min-scale", "0", "0"),
+        ("max-scale", None, "1"),
         ("max-scale", "2", "2"),
     ]
 )
@@ -188,13 +188,23 @@ def test_revealjs_writer_should_set_slide_size_on_initialization(capfd, size, wi
         execute(kirlent2revealjs, f"--slide-size={size}", content="")
     captured = capfd.readouterr()
     assert re.search(
-        fr"Reveal.initialize\({{\s*width: '{width}',\s*height: '{height}',",
+        fr"Reveal.initialize\({{\s*width: {width},\s*height: {height},",
         captured.out,
     ) is not None
 
 
+REVEALJS_ATTRS = {
+    "min-scale": "minScale",
+    "max-scale": "maxScale",
+    "center-vertical": "center",
+}
+
 @pytest.mark.parametrize(
     ("attr", "option", "value"), [
+        ("min-scale", None, "1"),
+        ("min-scale", "0", "0"),
+        ("max-scale", None, "1"),
+        ("max-scale", "2", "2"),
         ("transition", None, "none"),
         ("transition", "concave", "concave"),
         ("center-vertical", None, "false"),
@@ -207,8 +217,8 @@ def test_revealjs_writer_should_set_attr_on_initialization(capfd, attr, option, 
     else:
         execute(kirlent2revealjs, f"--{attr}={option}", content="")
     captured = capfd.readouterr()
-    attr_name = "center" if attr == "center-vertical" else attr
-    attr_value = f"'{value}'" if attr != "center-vertical" else f"{value}"
+    attr_name = REVEALJS_ATTRS.get(attr, attr)
+    attr_value = f"'{value}'" if attr == "transition" else f"{value}"
     assert re.search(
         fr"Reveal.initialize\({{(\s*.*,)*\s*{attr_name}: {attr_value}",
         captured.out,

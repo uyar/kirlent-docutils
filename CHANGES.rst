@@ -3,6 +3,7 @@
 
 - Remove properties and custom stylesheets.
 - Add configurable custom properties to stylesheets.
+- Add scaling options to RevealJS writer.
 - Drop support for Python 3.7.
 
 0.2 (2022-09-30)

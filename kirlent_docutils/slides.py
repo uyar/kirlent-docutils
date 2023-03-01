@@ -12,7 +12,7 @@ from docutils import frontend, nodes
 
 from .html5 import HTMLTranslator
 from .html5 import Writer as HTMLWriter
-from .utils import stylesheet_path_option
+from .utils import SCREEN_SIZES, stylesheet_path_option
 
 
 ROUGH_NOTATION_URL = "file://%(path)s" % {
@@ -43,9 +43,47 @@ class Writer(HTMLWriter):
 
     default_stylesheets = ["kirlent_slides.css"]
 
+    default_slide_size = "1920x1080"
+    default_min_scale = 1
+    default_max_scale = 1
+
     settings_spec = frontend.filter_settings_spec(
         HTMLWriter.settings_spec,
         stylesheet_path=stylesheet_path_option(default_stylesheets),
+    )
+
+    settings_spec = settings_spec + (
+        "Slides Writer Options",
+        "",
+        (
+            (
+                'Slide size in pixels. (default: %(size)s)' % {
+                    "size": default_slide_size,
+                },
+                ["--slide-size"],
+                {
+                    "default": default_slide_size,
+                }
+            ),
+            (
+                'Minimum scale. (default: %(min)d)' % {
+                    "min": default_min_scale,
+                },
+                ["--min-scale"],
+                {
+                    "default": default_min_scale,
+                }
+            ),
+            (
+                'Maximum scale. (default: %(max)d)' % {
+                    "max": default_max_scale,
+                },
+                ["--max-scale"],
+                {
+                    "default": default_max_scale,
+                }
+            ),
+        )
     )
 
     def __init__(self):
@@ -77,6 +115,13 @@ class SlidesTranslator(HTMLTranslator):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        size_key = self.document.settings.slide_size.lower()
+        slide_size = SCREEN_SIZES.get(size_key, map(int, size_key.split("x")))
+        self.slide_width, self.slide_height = slide_size
+
+        self.min_scale = self.document.settings.min_scale
+        self.max_scale = self.document.settings.max_scale
 
         # add attributes to keep track of the field data
         self._fields = {}

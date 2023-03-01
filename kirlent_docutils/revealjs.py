@@ -11,7 +11,7 @@ from docutils import frontend
 
 from .slides import SlidesTranslator
 from .slides import Writer as SlidesWriter
-from .utils import SCREEN_SIZES, stylesheet_path_option
+from .utils import stylesheet_path_option
 
 
 REVEALJS_URL = "file://%(path)s" % {
@@ -21,8 +21,10 @@ REVEALJS_URL = "file://%(path)s" % {
 REVEALJS_INIT = """
   window.addEventListener('DOMContentLoaded', () => {
       Reveal.initialize({
-          width: '%(width)d',
-          height: '%(height)d',
+          width: %(width)d,
+          height: %(height)d,
+          minScale: %(minScale)s,
+          maxScale: %(maxScale)s,
           center: %(center)s,
           transition: '%(transition)s'
       });
@@ -35,7 +37,6 @@ class Writer(SlidesWriter):
 
     default_stylesheets = ["kirlent_revealjs.css"]
 
-    default_slide_size = "1920x1080"
     transition_options = ["none", "fade", "slide", "convex", "concave", "zoom"]
     default_transition = "none"
     default_center_vertical = False
@@ -49,15 +50,6 @@ class Writer(SlidesWriter):
         "RevealJS Writer Options",
         "",
         (
-            (
-                'Slide size in pixels. (default: %(size)s)' % {
-                    "size": default_slide_size,
-                },
-                ["--slide-size"],
-                {
-                    "default": default_slide_size,
-                }
-            ),
             (
                 'Transition effect. (default: %(effect)s, one of %(opts)s)' % {
                     "effect": default_transition,
@@ -98,10 +90,6 @@ class RevealJSTranslator(SlidesTranslator):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        size_key = self.document.settings.slide_size.lower()
-        slide_size = SCREEN_SIZES.get(size_key, map(int, size_key.split("x")))
-        self.slide_width, self.slide_height = slide_size
-
         self.center_vertical = self.document.settings.center_vertical
         self.transition = self.document.settings.transition
 
@@ -120,6 +108,8 @@ class RevealJSTranslator(SlidesTranslator):
         self.head.append(RevealJSTranslator.script_revealjs_init % {
             "width": self.slide_width,
             "height": self.slide_height,
+            "minScale": self.min_scale,
+            "maxScale": self.max_scale,
             "center": "true" if self.center_vertical else "false",
             "transition": self.transition,
         })

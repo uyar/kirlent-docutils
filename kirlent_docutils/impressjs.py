@@ -11,7 +11,7 @@ from docutils import frontend
 
 from .slides import SlidesTranslator
 from .slides import Writer as SlidesWriter
-from .utils import SCREEN_SIZES, stylesheet_path_option
+from .utils import stylesheet_path_option
 
 
 IMPRESSJS_URL = "file://%(path)s" % {
@@ -37,10 +37,7 @@ class Writer(SlidesWriter):
 
     default_stylesheets = ["kirlent_impressjs.css"]
 
-    default_slide_size = "1920x1080"
     default_transition_duration = 1000
-    default_min_scale = 0
-    default_max_scale = 3
 
     settings_spec = frontend.filter_settings_spec(
         SlidesWriter.settings_spec,
@@ -52,15 +49,6 @@ class Writer(SlidesWriter):
         "",
         (
             (
-                'Slide size in pixels. (default: %(size)s)' % {
-                    "size": default_slide_size,
-                },
-                ["--slide-size"],
-                {
-                    "default": default_slide_size,
-                }
-            ),
-            (
                 'Transition duration in miliseconds. (default: %(td)d)' % {
                     "td": default_transition_duration,
                 },
@@ -68,24 +56,6 @@ class Writer(SlidesWriter):
                 {
                     "default": default_transition_duration,
                     "validator": frontend.validate_nonnegative_int,
-                }
-            ),
-            (
-                'Minimum scale. (default: %(min)d)' % {
-                    "min": default_min_scale,
-                },
-                ["--min-scale"],
-                {
-                    "default": default_min_scale,
-                }
-            ),
-            (
-                'Maximum scale. (default: %(max)d)' % {
-                    "max": default_max_scale,
-                },
-                ["--max-scale"],
-                {
-                    "default": default_max_scale,
                 }
             ),
         )
@@ -115,13 +85,7 @@ class ImpressJSTranslator(SlidesTranslator):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        size_key = self.document.settings.slide_size.lower()
-        slide_size = SCREEN_SIZES.get(size_key, map(int, size_key.split("x")))
-        self.slide_width, self.slide_height = slide_size
-
         self.transition_duration = self.document.settings.transition_duration
-        self.min_scale = self.document.settings.min_scale
-        self.max_scale = self.document.settings.max_scale
 
         # use a default horizontal step of one step width
         self._fields["data-rel-x"] = self.slide_width
