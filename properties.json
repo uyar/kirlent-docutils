@@ -1,0 +1,46 @@
+{
+  "plain": {
+    "ff": {
+      "desc": "body font family",
+      "default": "sans-serif"
+    },
+    "cf": {
+      "desc": "code font family",
+      "default": "monospace"
+    },
+    "fs": {
+      "desc": "body font size",
+      "default": "1rem"
+    },
+    "lh": {
+      "desc": "body line height",
+      "default": "1.25"
+    },
+    "pb": {
+      "desc": "body padding block",
+      "default": "1rem"
+    },
+    "pi": {
+      "desc": "body padding inline",
+      "default": "1rem"
+    },
+    "cpb": {
+      "desc": "table cell padding block",
+      "default": "0.25rem"
+    },
+    "cpi": {
+      "desc": "table cell padding inline",
+      "default": "0.5rem"
+    }
+  },
+  "slides_base": {
+    "emc": {
+      "desc": "emphasis color",
+      "default": "red"
+    },
+    "cgg": {
+      "desc": "slide content grid gap",
+      "default": "1em"
+    }
+  }
+}

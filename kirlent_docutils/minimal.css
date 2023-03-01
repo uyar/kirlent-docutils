@@ -19,6 +19,14 @@ img, svg {
   margin: 0;
 }
 
+table {
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+}
+
 ol.arabic {
   list-style-type: decimal;
 }

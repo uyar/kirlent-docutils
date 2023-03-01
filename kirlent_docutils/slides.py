@@ -167,14 +167,17 @@ class SlidesTranslator(HTMLTranslator):
         self.body.append('</header>\n')
 
         # wrap the slide contents in a div
+        slide_contents = nodes.container()
+        slide_contents.attributes["classes"] = ["content"]
+
         styles = {}
         layout = self._fields.pop("layout", None)
         if layout is not None:
+            slide_contents.attributes["classes"].append("grid")
             areas = " ".join(f"'{row}'" for row in layout.splitlines())
             styles["grid-template-areas"] = areas
-        slide_contents = nodes.container()
-        slide_contents.attributes["classes"] = ["content"]
         slide_contents.attributes["_styles"] = styles
+
         self.visit_container(slide_contents)
 
     def visit_container(self, node):

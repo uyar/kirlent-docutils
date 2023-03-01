@@ -1,15 +1,25 @@
 /* Kirlent base stylesheet for slides output. */
 
-body {
-  font-size: 2em;
+p,
+li {
+  line-height: calc(1.333 * var(--lh, 1.5));
 }
 
 em {
-  color: red;
+  color: var(--emc, red);
   font-style: normal;
 }
 
+.code {
+  overflow: auto;
+}
+
 .slide .content {
+  max-height: var(--cmh, 100%);
+  overflow: auto;
+}
+
+.slide .content.grid {
   display: grid;
-  grid-gap: 1em;
+  grid-gap: var(--cgg, 1em);
 }

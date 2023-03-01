@@ -2,6 +2,7 @@
 ----------------
 
 - Remove properties and custom stylesheets.
+- Add configurable custom properties to stylesheets.
 - Drop support for Python 3.7.
 
 0.2 (2022-09-30)

@@ -19,6 +19,14 @@ img, svg {
   margin: 0;
 }
 
+table {
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+}
+
 ol.arabic {
   list-style-type: decimal;
 }
@@ -57,40 +65,49 @@ html:focus-within {
 /* Kirlent plain stylesheet for HTML5 output. */
 
 body {
-  font-family: system-ui, sans-serif;
+  padding: var(--pb, 1rem) var(--pi, 1rem);
+  font-family: var(--ff, sans-serif);
+  font-size: var(--fs, 1rem);
+  line-height: var(--lh, 1.5);
 }
 
 code,
 kbd,
 samp,
-pre
-.literal,
-.pre {
-  font-family: ui-monospace, monospace;
+pre,
+.literal {
+  font-family: var(--cf, monospace);
 }
 
-table {
-  border-collapse: collapse;
-}
-
+td,
 th {
-  text-align: left;
+  padding: var(--cpb, 0.25rem) var(--cpi, 0.5rem);
 }
 
 /* Kirlent base stylesheet for slides output. */
 
-body {
-  font-size: 2em;
+p,
+li {
+  line-height: calc(1.333 * var(--lh, 1.5));
 }
 
 em {
-  color: red;
+  color: var(--emc, red);
   font-style: normal;
 }
 
+.code {
+  overflow: auto;
+}
+
 .slide .content {
+  max-height: var(--cmh, 100%);
+  overflow: auto;
+}
+
+.slide .content.grid {
   display: grid;
-  grid-gap: 1em;
+  grid-gap: var(--cgg, 1em);
 }
 
 /* Kirlent simple stylesheet for slides output. */
