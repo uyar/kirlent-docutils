@@ -136,9 +136,9 @@ def test_impressjs_writer_should_set_slide_size_on_impress_element(capfd, size, 
     ("attr", "option", "value"), [
         ("transition-duration", None, "1000"),
         ("transition-duration", "0", "0"),
-        ("min-scale", None, "1"),
-        ("min-scale", "0", "0"),
-        ("max-scale", None, "1"),
+        ("min-scale", None, "0"),
+        ("min-scale", "1", "1"),
+        ("max-scale", None, "3"),
         ("max-scale", "2", "2"),
     ]
 )
@@ -174,6 +174,15 @@ def test_revealjs_writer_should_include_revealjs_stylesheet(capfd, sheet, output
     assert f"Kirlent {sheet} stylesheet for {output}" in captured.out
 
 
+def test_revealjs_writer_should_activate_notes_plugin_on_initialization(capfd):
+    execute(kirlent2revealjs, content="")
+    captured = capfd.readouterr()
+    assert re.search(
+        r"Reveal.initialize\({(\s*.*,)*\s*plugins: \[RevealNotes\]",
+        captured.out,
+    ) is not None
+
+
 @pytest.mark.parametrize(
     ("size", "width", "height"), [
         (None, "1920", "1080"),
@@ -188,7 +197,7 @@ def test_revealjs_writer_should_set_slide_size_on_initialization(capfd, size, wi
         execute(kirlent2revealjs, f"--slide-size={size}", content="")
     captured = capfd.readouterr()
     assert re.search(
-        fr"Reveal.initialize\({{\s*width: {width},\s*height: {height},",
+        fr"Reveal.initialize\({{(\s*.*,)*\s*width: {width},\s*height: {height}",
         captured.out,
     ) is not None
 
@@ -199,11 +208,12 @@ REVEALJS_ATTRS = {
     "center-vertical": "center",
 }
 
+
 @pytest.mark.parametrize(
     ("attr", "option", "value"), [
-        ("min-scale", None, "1"),
-        ("min-scale", "0", "0"),
-        ("max-scale", None, "1"),
+        ("min-scale", None, "0"),
+        ("min-scale", "1", "1"),
+        ("max-scale", None, "3"),
         ("max-scale", "2", "2"),
         ("transition", None, "none"),
         ("transition", "concave", "concave"),

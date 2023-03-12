@@ -1,6 +1,8 @@
 0.4 (unreleased)
 ----------------
 
+- Add the RevealJS speaker notes plugin.
+- Set default minimum and maximum scales to 0 and 3.
 - Improve styles for the simple HTML slides writer.
 
 0.3 (2023-03-01)

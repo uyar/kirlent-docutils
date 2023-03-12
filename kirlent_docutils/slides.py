@@ -44,8 +44,8 @@ class Writer(HTMLWriter):
     default_stylesheets = ["kirlent_slides.css"]
 
     default_slide_size = "1920x1080"
-    default_min_scale = 1
-    default_max_scale = 1
+    default_min_scale = 0
+    default_max_scale = 3
 
     settings_spec = frontend.filter_settings_spec(
         HTMLWriter.settings_spec,

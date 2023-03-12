@@ -18,9 +18,14 @@ REVEALJS_URL = "file://%(path)s" % {
     "path": Path(__file__).parent / "bundled" / "reveal.js",
 }
 
+REVEALJS_NOTES_URL = "file://%(path)s" % {
+    "path": Path(__file__).parent / "bundled" / "reveal-notes.js",
+}
+
 REVEALJS_INIT = """
   window.addEventListener('DOMContentLoaded', () => {
       Reveal.initialize({
+          plugins: [RevealNotes],
           width: %(width)d,
           height: %(height)d,
           minScale: %(minScale)s,
@@ -83,6 +88,9 @@ class RevealJSTranslator(SlidesTranslator):
     """Translator for generating reveal.js markup."""
 
     script_revealjs = SlidesTranslator.script_defer % {"src": REVEALJS_URL}
+    script_revealjs_notes = SlidesTranslator.script_defer % {
+        "src": REVEALJS_NOTES_URL,
+    }
     script_revealjs_init = SlidesTranslator.script % {"code": REVEALJS_INIT}
 
     pause_class = "fragment"
@@ -105,6 +113,7 @@ class RevealJSTranslator(SlidesTranslator):
 
         # add code for reveal.js
         self.head.append(RevealJSTranslator.script_revealjs)
+        self.head.append(RevealJSTranslator.script_revealjs_notes)
         self.head.append(RevealJSTranslator.script_revealjs_init % {
             "width": self.slide_width,
             "height": self.slide_height,
