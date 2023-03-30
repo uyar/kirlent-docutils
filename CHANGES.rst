@@ -1,4 +1,4 @@
-0.4 (unreleased)
+0.4 (2023-03-30)
 ----------------
 
 - Add the RevealJS speaker notes plugin.
