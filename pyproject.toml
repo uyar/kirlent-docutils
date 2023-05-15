@@ -37,12 +37,12 @@ tests = [
     "pytest",
     "pytest-cov",
 ]
-lint = [
+style = [
     "flake8",
     "flake8-isort",
 ]
 dev = [
-    "kirlent_docutils[tests,lint]",
+    "kirlent_docutils[tests,style]",
     "tox",
     "build",
 ]
@@ -57,8 +57,19 @@ kirlent2revealjs = "kirlent_docutils:publish_cmdline_revealjs"
 homepage = "https://tekir.org/kirlent_docutils/"
 repository = "https://repo.tekir.org/kirlent/kirlent_docutils"
 
+[tool.setuptools]
+packages = ["kirlent_docutils"]
+
+[tool.coverage.run]
+source_pkgs = ["kirlent_docutils"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
 [tool.isort]
 lines_after_imports = 2
+multi_line_output = 2
 known_test = "pytest,unittest"
 sections = "TEST,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
 
@@ -71,18 +82,22 @@ isolated_build = True
 [testenv]
 extras = tests
 commands =
-    pytest {posargs:tests}
+    pytest tests
 
 [testenv:coverage]
+extras = tests
 commands =
-    pytest --cov={envsitepackagesdir}/kirlent_docutils --cov-report=term-missing tests
+    pytest tests --cov
 
 [testenv:style]
-extras = lint
+skip_install = true
+deps =
+    flake8
+    flake8-isort
 commands =
     flake8 kirlent_docutils
 """
 
 [build-system]
-requires = ["flit_core>=3.2"]
-build-backend = "flit_core.buildapi"
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
