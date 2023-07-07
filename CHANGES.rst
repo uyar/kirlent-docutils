@@ -1,3 +1,8 @@
+0.5 (unreleased)
+----------------
+
+- Rename package from kirlent_docutils to kirlent-docutils.
+
 0.4 (2023-03-30)
 ----------------
 

@@ -1,5 +1,5 @@
 [project]
-name = "kirlent_docutils"
+name = "kirlent-docutils"
 version = "0.4"
 description = "Custom writers for docutils."
 readme = "README.rst"
@@ -27,24 +27,16 @@ classifiers = [
 ]
 
 requires-python = "~=3.8"
-dependencies = [
-    "docutils>=0.18",
-    "pygments",
-]
+dependencies = ["docutils>=0.18", "pygments"]
 
 [project.optional-dependencies]
-tests = [
-    "pytest",
-    "pytest-cov",
-]
-style = [
-    "flake8",
-    "flake8-isort",
-]
+tests = ["pytest", "pytest-cov"]
+style = ["flake8", "flake8-isort"]
 dev = [
-    "kirlent_docutils[tests,style]",
-    "tox",
+    "kirlent-docutils[tests,style]",
     "build",
+    "twine",
+    "tox",
 ]
 
 [project.scripts]
@@ -57,8 +49,8 @@ kirlent2revealjs = "kirlent_docutils:publish_cmdline_revealjs"
 homepage = "https://tekir.org/kirlent_docutils/"
 repository = "https://repo.tekir.org/kirlent/kirlent_docutils"
 
-[tool.setuptools]
-packages = ["kirlent_docutils"]
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [tool.coverage.run]
 source_pkgs = ["kirlent_docutils"]
@@ -76,18 +68,19 @@ sections = "TEST,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py{38,39,310,311}, pypy{38,39}, style
+envlist = py3{8,9,10,11}, pypy3{8,9}, style
 isolated_build = True
 
 [testenv]
 extras = tests
+package = wheel
+wheel_build_env = .pkg
 commands =
-    pytest tests
+    pytest
 
 [testenv:coverage]
-extras = tests
 commands =
-    pytest tests --cov
+    pytest --cov
 
 [testenv:style]
 skip_install = true
@@ -96,8 +89,18 @@ deps =
     flake8-isort
 commands =
     flake8 kirlent_docutils
+
+[testenv:package]
+skip_install = true
+deps =
+    build
+    twine
+commands =
+    python -c "import shutil; shutil.rmtree('dist', ignore_errors=True)"
+    python -m build
+    twine check dist/*
 """
 
 [build-system]
-requires = ["setuptools", "setuptools-scm"]
+requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
