@@ -5,8 +5,6 @@
 
 """Custom writers for docutils."""
 
-__version__ = "0.4"
-
 from docutils.core import publish_cmdline
 
 from . import html5, impressjs, revealjs, slides

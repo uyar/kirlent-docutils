@@ -1,4 +1,4 @@
-kirlent_docutils is a set of tools
+kirlent-docutils is a set of tools
 for generating impress.js and reveal.js presentations
 from restructured text documents.
 

@@ -40,10 +40,10 @@ dev = [
 ]
 
 [project.scripts]
-rst2kirlenthtml5 = "kirlent_docutils:publish_cmdline_html5"
-kirlent2slides = "kirlent_docutils:publish_cmdline_slides"
-kirlent2impressjs = "kirlent_docutils:publish_cmdline_impressjs"
-kirlent2revealjs = "kirlent_docutils:publish_cmdline_revealjs"
+rst2kirlenthtml5 = "kirlent_docutils.cli:publish_cmdline_html5"
+kirlent2slides = "kirlent_docutils.cli:publish_cmdline_slides"
+kirlent2impressjs = "kirlent_docutils.cli:publish_cmdline_impressjs"
+kirlent2revealjs = "kirlent_docutils.cli:publish_cmdline_revealjs"
 
 [project.urls]
 homepage = "https://tekir.org/kirlent_docutils/"
