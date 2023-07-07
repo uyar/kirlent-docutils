@@ -105,6 +105,15 @@ deps =
 commands =
     ruff kirlent_docutils
 
+[testenv:flake8]
+skip_install = true
+deps =
+    flake8
+    flake8-isort
+commands =
+    flake8 kirlent_docutils
+    flake8 tests
+
 [testenv:package]
 skip_install = true
 deps =
