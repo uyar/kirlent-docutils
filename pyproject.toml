@@ -49,6 +49,9 @@ kirlent2revealjs = "kirlent_docutils.cli:publish_cmdline_revealjs"
 homepage = "https://tekir.org/kirlent_docutils/"
 repository = "https://repo.tekir.org/kirlent/kirlent_docutils"
 
+[tool.setuptools.package-data]
+kirlent_docutils = ["bundled/*.*"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
@@ -79,7 +82,7 @@ section-order = [
 ]
 
 [tool.ruff.isort.sections]
-"test" = ["pytest", "unittest"]
+test = ["pytest", "unittest"]
 
 [tool.tox]
 legacy_tox_ini = """
@@ -103,7 +106,7 @@ skip_install = true
 deps =
     ruff
 commands =
-    ruff kirlent_docutils
+    ruff kirlent_docutils tests
 
 [testenv:flake8]
 skip_install = true
@@ -111,8 +114,7 @@ deps =
     flake8
     flake8-isort
 commands =
-    flake8 kirlent_docutils
-    flake8 tests
+    flake8 kirlent_docutils tests
 
 [testenv:package]
 skip_install = true
