@@ -67,16 +67,16 @@ Annotations
 
 .. container:: layout-s21
 
-   - *>_underline annotation_<*
-   - *>|box annotation|<*
-   - *>(circle annotation)<*
-   - *>!highlight annotation!<*
+   - *>_underline_<*
+   - *>|box|<*
+   - *>(circle)<*
+   - *>!highlight!<*
 
 .. container:: layout-s22
 
-   - *>~strike-through annotation~<*
-   - *>+crossed-off annotation+<*
-   - *>[bracket annotation]<*
+   - *>~strike-through~<*
+   - *>+crossed-off+<*
+   - *>[bracket]<*
 
 :pause:
 
@@ -92,3 +92,17 @@ Math
 .. math::
 
    -b \pm \frac{\sqrt{b^2-4ac}}{2a}
+
+----
+
+Source Code
+===========
+
+.. code:: c
+
+   #include <stdio.h>
+
+   int main(int argc, char* argv[]) {
+       printf("Hello, world!\n");
+       return 0;
+   }

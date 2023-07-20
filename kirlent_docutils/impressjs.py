@@ -35,7 +35,7 @@ IMPRESSJS_STYLE = """
 class Writer(SlidesWriter):
     """Writer for generating impress.js output."""
 
-    default_stylesheets = ["kirlent_impressjs.css"]
+    default_stylesheets = ["minimal.css", "slides-base.css", "impressjs.css"]
 
     default_transition_duration = 1000
 
@@ -75,10 +75,17 @@ class ImpressJSTranslator(SlidesTranslator):
     pause_class = "substep"
 
     data_attrs = {
-        "data-x", "data-y", "data-z",
-        "data-rel-x", "data-rel-y", "data-rel-z",
-        "data-rotate-x", "data-rotate-y", "data-rotate-z",
-        "data-rotate", "data-rotate-order",
+        "data-x",
+        "data-y",
+        "data-z",
+        "data-rel-x",
+        "data-rel-y",
+        "data-rel-z",
+        "data-rotate-x",
+        "data-rotate-y",
+        "data-rotate-z",
+        "data-rotate",
+        "data-rotate-order",
         "data-scale",
     }
 

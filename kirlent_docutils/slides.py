@@ -41,7 +41,7 @@ ROUGH_NOTATION_SCRIPT = """
 class Writer(HTMLWriter):
     """Writer for generating HTML5 slides output."""
 
-    default_stylesheets = ["kirlent_slides.css"]
+    default_stylesheets = ["minimal.css", "slides-base.css", "slides.css"]
 
     default_slide_size = "1920x1080"
     default_min_scale = 0

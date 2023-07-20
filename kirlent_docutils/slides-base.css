@@ -1,0 +1,42 @@
+:root {
+  font-size: 3vw;
+}
+
+body {
+  line-height: 2;
+}
+
+.slide {
+  padding-inline: max(1rem, calc(50dvw - 12rem));
+  overflow: hidden;
+}
+
+.slide header {
+  height: 4.5rem;
+}
+
+.slide .content {
+  max-height: calc(100dvh - 6rem);
+}
+
+.slide :where(header, .content) {
+  overflow: auto;
+}
+
+.slide :where(h2, .content) {
+  margin: 0;
+  padding: 0.5rem;
+}
+
+.slide .content.grid {
+  display: grid;
+}
+
+em {
+  color: red;
+  font-style: normal;
+}
+
+.code {
+  line-height: 1.5;
+}

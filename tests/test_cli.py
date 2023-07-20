@@ -37,15 +37,11 @@ def test_html5_writer_should_not_allow_removed_option(capfd, option):
     assert f"no such option: {option}" in captured.err
 
 
-@pytest.mark.parametrize(
-    ("sheet", "output"), [
-        ("minimal", "HTML5"),
-        ("plain", "HTML5"),
-    ])
-def test_html5_writer_should_include_html5_stylesheet(capfd, sheet, output):
-    execute(rst2kirlenthtml5, content="")
+@pytest.mark.parametrize("sheet", ["minimal", "plain"])
+def test_html5_writer_should_include_html5_stylesheet(capfd, sheet):
+    execute(rst2kirlenthtml5, "--link-stylesheet", content="")
     captured = capfd.readouterr()
-    assert f"Kirlent {sheet} stylesheet for {output}" in captured.out
+    assert f"{sheet}.css" in captured.out
 
 
 def test_html5_writer_should_include_bundled_mathjax_as_fallback(capfd):
@@ -61,17 +57,11 @@ def test_installation_should_create_console_script_for_slides_writer():
     assert kirlent2slides.exists()
 
 
-@pytest.mark.parametrize(
-    ("sheet", "output"), [
-        ("minimal", "HTML5"),
-        ("plain", "HTML5"),
-        ("base", "slides"),
-        ("simple", "slides"),
-    ])
-def test_slides_writer_should_include_slides_stylesheet(capfd, sheet, output):
-    execute(kirlent2slides, content="")
+@pytest.mark.parametrize("sheet", ["minimal", "slides-base", "slides"])
+def test_slides_writer_should_include_slides_stylesheet(capfd, sheet):
+    execute(kirlent2slides, "--link-stylesheet", content="")
     captured = capfd.readouterr()
-    assert f"Kirlent {sheet} stylesheet for {output}" in captured.out
+    assert f"{sheet}.css" in captured.out
 
 
 kirlent2impressjs = Path(sys.executable).with_name("kirlent2impressjs")
@@ -81,17 +71,11 @@ def test_installation_should_create_console_script_for_impressjs_writer():
     assert kirlent2impressjs.exists()
 
 
-@pytest.mark.parametrize(
-    ("sheet", "output"), [
-        ("minimal", "HTML5"),
-        ("plain", "HTML5"),
-        ("base", "slides"),
-        ("base", "impress.js"),
-    ])
-def test_impressjs_writer_should_include_impressjs_stylesheet(capfd, sheet, output):
-    execute(kirlent2impressjs, content="")
+@pytest.mark.parametrize("sheet", ["minimal", "slides-base", "impressjs"])
+def test_impressjs_writer_should_include_impressjs_stylesheet(capfd, sheet):
+    execute(kirlent2impressjs, "--link-stylesheet", content="")
     captured = capfd.readouterr()
-    assert f"Kirlent {sheet} stylesheet for {output}" in captured.out
+    assert f"{sheet}.css" in captured.out
 
 
 @pytest.mark.parametrize(
@@ -161,17 +145,11 @@ def test_installation_should_create_console_script_for_revealjs_writer():
     assert kirlent2revealjs.exists()
 
 
-@pytest.mark.parametrize(
-    ("sheet", "output"), [
-        ("minimal", "HTML5"),
-        ("plain", "HTML5"),
-        ("base", "slides"),
-        ("base", "reveal.js"),
-    ])
-def test_revealjs_writer_should_include_revealjs_stylesheet(capfd, sheet, output):
-    execute(kirlent2revealjs, content="")
+@pytest.mark.parametrize("sheet", ["minimal", "slides-base", "revealjs"])
+def test_revealjs_writer_should_include_revealjs_stylesheet(capfd, sheet):
+    execute(kirlent2revealjs, "--link-stylesheet", content="")
     captured = capfd.readouterr()
-    assert f"Kirlent {sheet} stylesheet for {output}" in captured.out
+    assert f"{sheet}.css" in captured.out
 
 
 def test_revealjs_writer_should_activate_notes_plugin_on_initialization(capfd):

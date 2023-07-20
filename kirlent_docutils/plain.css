@@ -1,21 +1,4 @@
-/* Kirlent plain stylesheet for HTML5 output. */
-
 body {
-  padding: var(--pb, 1rem) var(--pi, 1rem);
-  font-family: var(--ff, sans-serif);
-  font-size: var(--fs, 1rem);
-  line-height: var(--lh, 1.5);
-}
-
-code,
-kbd,
-samp,
-pre,
-.literal {
-  font-family: var(--cf, monospace);
-}
-
-td,
-th {
-  padding: var(--cpb, 0.25rem) var(--cpi, 0.5rem);
+  padding: 1rem;
+  line-height: 1.5;
 }

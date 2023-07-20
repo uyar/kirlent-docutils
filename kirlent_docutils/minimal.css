@@ -1,16 +1,24 @@
-/* Kirlent minimal stylesheet for HTML5 output. */
-
 *,
-::before,
-::after {
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  font-family: system-ui, sans-serif;
 }
 
-img, svg {
+code,
+kbd,
+samp,
+pre,
+.literal {
+  font-family: ui-monospace, monospace;
+}
+
+img,
+svg {
   max-width: 100%;
   height: auto;
 }
@@ -25,6 +33,11 @@ table {
 
 th {
   text-align: left;
+}
+
+td,
+th {
+  padding: 0.25em 0.5em;
 }
 
 ol.arabic {
@@ -53,8 +66,8 @@ html:focus-within {
 
 @media (prefers-reduced-motion: reduce) {
   *,
-  ::before,
-  ::after {
+  *::before,
+  *::after {
     transition-duration: 0s !important;
     animation-duration: 1ms !important;
     animation-iteration-count: 1 !important;
