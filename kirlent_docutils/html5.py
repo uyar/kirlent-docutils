@@ -31,7 +31,7 @@ class Writer(HTML5Writer):
 
     default_stylesheets = ["minimal.css", "plain.css"]
 
-    default_stylesheet_dirs = [".", str(Path(__file__).parent)] + \
+    default_stylesheet_dirs = [".", str(Path(__file__).parent / "css")] + \
         HTML5Writer.default_stylesheet_dirs[1:]
 
     settings_default_overrides = {

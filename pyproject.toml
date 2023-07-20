@@ -49,7 +49,7 @@ kirlent2revealjs = "kirlent_docutils.cli:publish_cmdline_revealjs"
 repository = "https://repo.tekir.org/kirlent/kirlent-docutils"
 
 [tool.setuptools.package-data]
-kirlent_docutils = ["bundled/*.*"]
+kirlent_docutils = ["css/*.*", "bundled/*.*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
