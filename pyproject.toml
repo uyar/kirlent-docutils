@@ -46,8 +46,7 @@ kirlent2impressjs = "kirlent_docutils.cli:publish_cmdline_impressjs"
 kirlent2revealjs = "kirlent_docutils.cli:publish_cmdline_revealjs"
 
 [project.urls]
-homepage = "https://tekir.org/kirlent_docutils/"
-repository = "https://repo.tekir.org/kirlent/kirlent_docutils"
+repository = "https://repo.tekir.org/kirlent/kirlent-docutils"
 
 [tool.setuptools.package-data]
 kirlent_docutils = ["bundled/*.*"]

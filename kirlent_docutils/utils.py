@@ -1,6 +1,6 @@
 # Copyright 2022 H. Turgut Uyar <uyar@tekir.org>
 #
-# kirlent_docutils is released under the BSD license.
+# kirlent-docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
 
 from docutils import frontend
