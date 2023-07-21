@@ -14,15 +14,12 @@ classifiers = [
     "Intended Audience :: End Users/Desktop",
     "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
-    "Topic :: Text Processing :: Markup",
     "Topic :: Text Processing :: Markup :: HTML"
 ]
 
@@ -47,6 +44,10 @@ kirlent2revealjs = "kirlent_docutils.cli:publish_cmdline_revealjs"
 
 [project.urls]
 repository = "https://repo.tekir.org/kirlent/kirlent-docutils"
+
+[tool.setuptools]
+packages = ["kirlent_docutils"]
+include-package-data = false
 
 [tool.setuptools.package-data]
 kirlent_docutils = ["css/*.*", "bundled/*.*"]
