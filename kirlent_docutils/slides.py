@@ -3,7 +3,7 @@
 # kirlent-docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
 
-"""Generic HTML5 slides writer for docutils."""
+"""Generic HTML5 slides writer."""
 
 from pathlib import Path
 from xml.etree import ElementTree

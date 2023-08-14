@@ -3,7 +3,7 @@
 # kirlent-docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
 
-from docutils import frontend
+import docutils
 
 
 SCREEN_SIZES = {
@@ -22,7 +22,7 @@ def stylesheet_path_option(sheets):
         {
             "metavar": "<file[,file,...]>",
             "overrides": "stylesheet",
-            "validator": frontend.validate_comma_separated_list,
+            "validator": docutils.frontend.validate_comma_separated_list,
             "default": sheets,
         }
     )
@@ -36,7 +36,7 @@ def stylesheet_dirs_option(dirs):
         ["--stylesheet-dirs"],
         {
             "metavar": "<dir[,dir,...]>",
-            "validator": frontend.validate_comma_separated_list,
+            "validator": docutils.frontend.validate_comma_separated_list,
             "default": dirs,
         }
     )

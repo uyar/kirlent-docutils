@@ -3,7 +3,7 @@
 # kirlent-docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
 
-"""impress.js writer for docutils."""
+"""impress.js writer."""
 
 from pathlib import Path
 

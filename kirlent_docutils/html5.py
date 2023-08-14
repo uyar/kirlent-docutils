@@ -3,7 +3,7 @@
 # kirlent-docutils is released under the BSD license.
 # Read the included LICENSE.txt file for details.
 
-"""Custom HTML5 writer for docutils.
+"""HTML5 writer.
 
 This writer modifies the html5_polyglot writer.
 The differences are:
